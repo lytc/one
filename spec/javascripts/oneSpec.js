@@ -1,6 +1,6 @@
-describe('one', function() {
+describe('$', function() {
   // $.extend()
-  describe('$.extend()', function() {
+  describe('extend()', function() {
     var object = {one: 1, two: 2}
     it('should be returned an copied object', function() {
       expect($.extend({}, object)).toEqual(object)
@@ -18,7 +18,7 @@ describe('one', function() {
   })
   
   // $.noop
-  describe('$.noop', function() {
+  describe('noop', function() {
     it('noop should be a function', function() {
       expect(typeof $.noop).toEqual('function')
     })
@@ -29,7 +29,7 @@ describe('one', function() {
   })
   
   // $.sequence()
-  describe('$.sequence()', function() {
+  describe('sequence()', function() {
     it('increase 1 when call', function() {
       var sequence = $.sequence()
       expect($.sequence()).toEqual(sequence + 1)
@@ -42,7 +42,7 @@ describe('one', function() {
   })
   
   // $.error()
-  describe('$.error()', function() {
+  describe('error()', function() {
     it('return new Error when call', function() {
       var message = 'this is an error'
           ,error = $.error(message)
@@ -53,7 +53,7 @@ describe('one', function() {
   })
   
   // $.getType()
-  describe('$.getType()', function() {
+  describe('getType()', function() {
     it('should be type string', function() {
       expect($.getType('this is a string')).toEqual('String')
     })
@@ -74,7 +74,7 @@ describe('one', function() {
   })
   
   // $.isString()
-  describe('$.isString()', function() {
+  describe('isString()', function() {
     it('should be truthy', function() {
       expect($.isString('it me!')).toBeTruthy()
     })
@@ -84,7 +84,7 @@ describe('one', function() {
   })
   
   // $.isNumber()
-  describe('$.isNumber()', function() {
+  describe('isNumber()', function() {
     it('should be truthy', function() {
       expect($.isNumber(1)).toBeTruthy()
     })
@@ -94,7 +94,7 @@ describe('one', function() {
   })
   
   // $.isFunction()
-  describe('$.isFunction()', function() {
+  describe('isFunction()', function() {
     it('should be truthy', function() {
       expect($.isFunction(function(){})).toBeTruthy()
     })
@@ -104,7 +104,7 @@ describe('one', function() {
   })
   
   // $.isLikeArray()
-  describe('$.isLikeArray()', function() {
+  describe('isLikeArray()', function() {
     it('should be truthy', function() {
       expect($.isLikeArray([])).toBeTruthy()
       expect($.isLikeArray(arguments)).toBeTruthy()
@@ -115,7 +115,7 @@ describe('one', function() {
   })
   
   // $.isObject()
-  describe('$.isObject()', function() {
+  describe('isObject()', function() {
     it('shold be truthy', function() {
       expect($.isObject({})).toBeTruthy()
       expect($.isObject(new function(){})).toBeTruthy()
@@ -126,7 +126,7 @@ describe('one', function() {
   })
   
   // $.isPlainObject()
-  describe('$.isPlainObject()', function() {
+  describe('isPlainObject()', function() {
     it('should be truthy', function() {
       expect($.isPlainObject({})).toBeTruthy()
     })
@@ -136,7 +136,7 @@ describe('one', function() {
   })
   
   // $.isNode()
-  describe('$.isNode()', function() {
+  describe('isNode()', function() {
     it('should be truthy', function() {
       expect($.isNode(document)).toBeTruthy()
     })
@@ -146,7 +146,7 @@ describe('one', function() {
   })
   
   // $.isElement()
-  describe('$.isElement()', function() {
+  describe('isElement()', function() {
     it('should be truthy', function() {
       expect($.isElement(document.querySelector('*'))).toBeTruthy()
     })
@@ -156,7 +156,7 @@ describe('one', function() {
   })
   
   // $.isNodeList()
-  describe('$.isNodeList()', function() {
+  describe('isNodeList()', function() {
     it('should be truthy', function() {
       expect($.isNodeList(document.querySelectorAll('*'))).toBeTruthy()
     })
@@ -166,7 +166,7 @@ describe('one', function() {
   })
   
   // $.isHtmlCollection()
-  describe('$.isHtmlCollection()', function() {
+  describe('isHtmlCollection()', function() {
     it('should be truthy', function() {
       expect($.isHtmlCollection(document.forms)).toBeTruthy()
     })
@@ -175,8 +175,31 @@ describe('one', function() {
     })
   })
   
+  // $.isDefined()
+  describe('isDefined()', function() {
+    it('should be return true with defined variable', function() {
+      expect($.isDefined(this)).toBeTruthy()
+    })
+    
+    window._testIsDefined = {foo: {bar: 1}}
+    it('should be return true with defined object property with default context', function() {
+      expect($.isDefined('_testIsDefined.foo.bar')).toBeTruthy()
+    })
+    it('should be return false with undefined pbject property with default context', function() {
+      expect($.isDefined('undefined_variable.bar.baz')).toBeFalsy()
+    })
+    
+    var foo = {bar: {baz: 1}}
+    it('should be return true with defined object property with custom context', function() {
+      expect($.isDefined('bar.baz', foo)).toBeTruthy()
+    })
+    it('should be return false with undefined object property with custom context', function() {
+      expect($.isDefined('bar.bar', foo)).toBeFalsy()
+    })
+  })
+  
   // $.each()
-  describe('$.each()', function() {
+  describe('each()', function() {
     describe('each with array', function() {
       var arr = [1, 2, 3]
           ,spy
@@ -274,7 +297,7 @@ describe('one', function() {
   })
   
   // $.map()
-  describe('$.map()', function() {
+  describe('map()', function() {
     it('map with array', function() {
       var result = $.map([1, 2, 3], function() {
         return this + 1
@@ -290,7 +313,7 @@ describe('one', function() {
   })
   
   // $.createObject()
-  describe('$.createObject()', function() {
+  describe('createObject()', function() {
     it('should created a new object', function() {
       expect($.createObject('foo.bar.baz')).toEqual({})
     })
@@ -307,7 +330,7 @@ describe('one', function() {
   })
   
   // $.createElement()
-  describe('$.createElement()', function() {
+  describe('createElement()', function() {
     it('should be created a new element', function() {
       var el = $.createElement('div')
       expect($.isElement(el)).toBeTruthy()
@@ -319,7 +342,7 @@ describe('one', function() {
   })
   
   // $.toArray()
-  describe('$.toArray()', function() {
+  describe('toArray()', function() {
     it('should be return an array', function() {
       expect($.isArray($.toArray(arguments))).toBeTruthy()
     })
@@ -331,7 +354,7 @@ describe('one', function() {
   })
   
   // $.ready()
-  describe('$.ready()', function() {
+  describe('ready()', function() {
     
     
     it('tracks that callback was called', function() {
@@ -350,7 +373,7 @@ describe('one', function() {
   })
   
   // $.query()
-  describe('$.query()', function() {
+  describe('query()', function() {
     var id = $.sequence('id')
         ,div = document.createElement('div')
         ,div1 = document.createElement('div')
@@ -443,7 +466,7 @@ describe('one', function() {
   })
   
   // $.vendorPrefix
-  describe('$.vendorPrefix', function() {
+  describe('vendorPrefix', function() {
     it('should be in the list', function() {
       expect(['' ,'moz', 'webkit', 'o']).toContain($.vendorPrefix)
     })

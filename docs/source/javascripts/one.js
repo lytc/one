@@ -11,7 +11,7 @@ one = (function() {
       if (/\<\w+(.*)\>/.test(what)) {
         tmpNode || (tmpNode = $.createElement('div'))
         tmpNode.innerHTML = what
-        what = tmpNode.children
+        what = tmpNode.childNodes
       } else {
         parent = scope || document
         what = parent.querySelectorAll(what)
@@ -21,7 +21,7 @@ one = (function() {
     }
     
     if ($.isNode(what) || $.isNodeList(what) || $.isHtmlCollection(what) || $.isArray(what)) {
-      return new $.NodeList(what)
+      return $.NodeList(what)
     }
   }
   
@@ -46,7 +46,9 @@ $.extend = function(target/*, sources*//*, recusive*/) {
         if (recusive && item instanceof Object && item.__proto__ == Object.prototype) {
           target[key] = $.extend({}, item, true)
         } else {          
-          target[key] = item
+          if (source.hasOwnProperty(key)) {            
+            target[key] = item
+          }
         }
       }
     })
@@ -98,7 +100,11 @@ $.extend = function(target/*, sources*//*, recusive*/) {
       if (!o) {
         return false
       }
-      return $.isArray(o) || $.isNodeList(o) || $.isHtmlCollection(o) || o.callee
+      return $.isArray(o) 
+            || $.isNodeList(o) 
+            || $.isHtmlCollection(o) 
+            || o instanceof DOMTokenList 
+            || $.getType(o) == 'Arguments'
     }
     
     ,isObject: function(o) {
@@ -117,12 +123,33 @@ $.extend = function(target/*, sources*//*, recusive*/) {
       return o instanceof Element
     }
     
+    ,isTextNode: function(o) {
+      return o instanceof Text
+    }
+    
     ,isNodeList: function(o) {
       return o instanceof NodeList
     }
     
     ,isHtmlCollection: function(o) {
       return o instanceof HTMLCollection
+    }
+    
+    ,isDefined: function(what, context) {
+      context || (context = window)
+      if ($.isString(what) && /\./.test(what)) {
+        var parts = what.split('.')
+          ,tmp = context
+          for (var i = 0, len = parts.length; i < len; ++i) {
+            if (undefined === tmp[parts[i]]) {
+              return false
+            }
+            tmp = tmp[parts[i]]
+          }
+      } else {
+        return context[what] === undefined
+      }
+      return true
     }
     
     ,each: function(o, callback) {
@@ -180,25 +207,33 @@ $.extend = function(target/*, sources*//*, recusive*/) {
     
     ,createElement: function(name, properties) {
       var dom = document.createElement(name)
-      if (properties) {
-        for (var property in properties) {
-          dom.setAttribute(property, properties[property])
-        }
+      
+      properties || (properties = {})
+      
+      if (properties.html) {
+        dom.innerHTML = properties.html
+        delete properties.html
       }
+      
+      if (properties.cls) {
+        dom.className = properties.cls
+        delete properties.cls
+      }
+      
+      for (var property in properties) {
+        dom.setAttribute(property, properties[property])
+      }
+      
+      document.createDocumentFragment().appendChild(dom)
       return dom
     }
     
     ,toArray: function(o) {
       if (!$.isLikeArray(o)) {
-        o = arguments
-        console.log(o)
+        return [].slice.call(arguments)
       }
       
-      var result = []
-      for (var i = 0, len = o.length; i < len; ++i) {
-        result.push(o[i])
-      }
-      return result
+      return [].slice.call(o)
     }
     
     ,ready: function() {
@@ -257,6 +292,7 @@ $.extend = function(target/*, sources*//*, recusive*/) {
             }
             return result
           }
+          break;
           
         default:
           return root.querySelectorAll(selector)

@@ -1,40 +1,106 @@
 (function($) {
-  var NodeList = function(nodes) {
-    if ($.isNode(nodes)) {
-      nodes = [nodes]
+  var flattenArgs = function(args, useSpace) {
+    var a = []
+      ,_a
+      
+    for (var i = 0; i < args.length; ++i) {
+      _a = args[i]
+      if (!$.isArray(_a)) {
+        if (useSpace) {
+          _a = _a.trim().replace(/\s+/g, ' ').split(' ')
+        } else {
+          _a = [_a]
+        }
+      }
+      a = a.concat(_a)
     }
-    
-    if (!$.isArray(nodes)) {
-      nodes = $.toArray(nodes)
-    }
-    
-    this.nodes = nodes
+    return a
   }
   
-  $.extend(NodeList.prototype, {
+  var NodeList = function(nodes) {
+    nodes || (nodes = [])
+    nodes = $.toArray(nodes)
+    
+    $.extend(nodes, NodeList.fn)
+    
+    return nodes
+  }
+  
+  NodeList.fn = {
     index: function() {
-      if (!this.nodes[0]) {
+      if (!this[0]) {
         return -1
       }
+      return [].indexOf.call(this[0].parentElement.children, this[0])
+    }
+    
+    ,get: function(index, acceptTextNode) {
+      var nodes = this
+      if (!acceptTextNode) {
+        nodes = this.filter(function() {
+          return !$.isTextNode(this)
+        })
+      }
       
-      return [].indexOf.call(this.nodes[0].parentElement.children, this.nodes[0])
+      index > -1 || (index = nodes.length + index)
+      return nodes[index]
     }
     
-    ,get: function(index) {
-      index > -1 || (index = this.nodes.length + index)
-      return this.nodes[index]
+    ,item: function(index, acceptTextNode) {
+      return NodeList(this.get(index, acceptTextNode))
     }
     
-    ,item: function(index) {
-      return new NodeList(this.get(index))
+    ,first: function(acceptTextNode) {
+      return this.item(0, acceptTextNode)
     }
     
-    ,first: function() {
-      return this.item(0)
+    ,last: function(acceptTextNode) {
+      return this.item(-1, acceptTextNode)
     }
     
-    ,last: function() {
-      return this.item(-1)
+    ,each: function(callback) {
+      this.forEach(function(node, index, nodes) {
+        return callback.call(node, index, nodes, node)
+      })
+      return this
+    }
+    
+    ,filter: function(callback) {
+      var result = []
+      
+      this.forEach(function(node, index, nodes) {
+        if (callback.call(node, index, nodes, node)) {
+          result.push(node)
+        }
+      })
+      
+      return NodeList(result)
+      //return NodeList([].filter.call(this, callback))
+    }
+    
+    ,matches: function(selector) {
+      return this.filter(function() {
+        return this[$.vendorPrefix? $.vendorPrefix + 'MatchesSelector' : 'matchesSelector'](selector)
+      })
+    }
+    
+    ,is: function(what) {
+      if ($.isString(what)) {
+        return !!this.matches(what).length
+      }
+      
+      if ($.isElement(what)) {
+        what = [what]
+      }
+      
+      if ($.isLikeArray(what)) {
+        for (var i = 0, len = what.length; i < len; ++i) {
+          if (-1 != this.indexOf(what[i])) {
+            return true
+          }
+        }
+      }
+      return false
     }
     
     ,ancestors: function(level, selector) {
@@ -70,47 +136,11 @@
         }
       })
       
-      return new NodeList(nodes)
+      return NodeList(nodes)
     }
     
     ,parent: function(selector) {
       return this.ancestors(selector)
-    }
-    
-    ,each: function(callback) {
-      this.nodes.forEach(function(node, index, nodes) {
-        return callback.call(node, node, index, nodes)
-      })
-      return this
-    }
-    
-    ,filter: function(callback) {
-      return new NodeList(this.nodes.filter(callback))
-    }
-    
-    ,matches: function(selector) {
-      return this.filter(function(node) {
-        return node[$.vendorPrefix? $.vendorPrefix + 'MatchesSelector' : 'matchesSelector'](selector)
-      })
-    }
-    
-    ,is: function(what) {
-      if ($.isString(what)) {
-        return !!this.matches(what).nodes.length
-      }
-      
-      if ($.isElement(what)) {
-        what = [what]
-      }
-      
-      if ($.isLikeArray(what)) {
-        for (var i = 0, len = what.length; i < len; ++i) {
-          if (-1 != this.nodes.indexOf(what[i])) {
-            return true
-          }
-        }
-      }
-      return false
     }
     
     ,find: function(selector) {
@@ -121,7 +151,7 @@
           nodes.push(n)
         })
       })
-      return new NodeList(nodes)
+      return NodeList(nodes)
     }
     
     ,children: function(selector) {
@@ -136,7 +166,7 @@
     
     ,prev: function(selector) {
       selector || (selector = '*')
-      return this.find('-' + selector)
+      return this.find('-> ' + selector)
     }
     
     ,nextSiblings: function(selector) {
@@ -146,7 +176,7 @@
     
     ,prevSiblings: function(selector) {
       selector || (selector = '*')
-      return this.find('<~' + selector)
+      return this.find('<~>' + selector)
     }
     
     ,append: function(what) {
@@ -155,9 +185,11 @@
           this.innerHTML += what
         })
       } else {
-        this.each(function(node) {
-          $(what).each(function(n) {
-            node.appendChild(n)
+        this.each(function() {
+          var node = this
+          $(what).each(function() {
+            var child = this
+            node.appendChild(child)
           })
         })
       }
@@ -170,9 +202,15 @@
           this.innerHTML = what + this.innerHTML
         })
       } else {
-        this.each(function(node) {
-          what.each(function(n) {
-            node.insertBefore(n, node.firstElementChild)
+        this.each(function() {
+          var node = this
+            ,children = $(what)
+          
+          children.reverse()
+            
+          $(children).each(function() {
+            var child = this
+            node.insertBefore(child, node.firstChild)
           })
         })
       }
@@ -180,22 +218,36 @@
     }
     
     ,before: function(el) {
+      var node
+          ,nodes
       this.each(function() {
-        this.parentElement.insertBefore($(el).nodes[0], this)
+          node = this
+          nodes = $(el)
+        
+        nodes.each(function() {
+            node.parentNode.insertBefore(this, node)
+        })
       })
       return this
     }
     
     ,after: function(el) {
+      var node
+          ,nodes
       this.each(function() {
-        this.parentElement.insertBefore($(el).nodes[0], $(this).next().nodes[0])
+        node = this
+        nodes = $(el) 
+        nodes.reverse()
+        nodes.each(function() {
+            node.parentNode.insertBefore(this, node.nextSibling)
+        })     
       })
       return this
     }
     
     ,clone: function() {
       var node
-      return $.map(this.nodes, function() {
+      return $.map(this, function() {
         node = this.cloneNode(true)
         node.removeAttribute('id')
         return node
@@ -208,12 +260,12 @@
       $.each(arguments, function(index, item) {
         if ($.isString(item)) {
           me.concat.apply(me, $.query(item))
+        
         } else if ($.isLikeArray(item)) {
           me.concat.apply(me, item)
-        } else if (item instanceof NodeList) {
-          me.concat.apply(me, item.nodes)
-        } else if ($.isElement(item)) {
-          me.nodes.push(item)
+        
+        } else if ($.isNode(item)) {
+          me.push(item)
         }
       })
       
@@ -221,12 +273,10 @@
     }
     
     ,wrap: function(el) {
-      var tmp
-      this.each(function(node) {
-        node = $(node)
-        tmp = $(el)
-        node.before(tmp)
-        tmp.append(this)
+      el || (el = '<div>')
+      
+      this.each(function() {
+        $(el).first().append(this)
       })
       return this
     }
@@ -234,7 +284,10 @@
     ,unwrap: function() {
       var parent
       this.each(function() {
-        parent = this.parentElement
+        parent = this.parentNode
+        if (!parent || !parent.parentNode) {
+          return
+        }
         $(parent.childNodes).each(function() {
           $(parent).before(this)
         })
@@ -244,15 +297,20 @@
     
     ,destroy: function() {
       this.each(function() {
-        this.parentNode.removeChild(this)
+        for (var i in this) {
+          delete this[i]
+        }
+        
+        if (this.parentNode) {
+          this.parentNode.removeChild(this)
+        }
       })
     }
     
     ,html: function(html) {
       if (undefined === html) {
-        var node = this.nodes[0]
-        if (node) {
-          return node.innerHTML
+        if (this[0]) {
+          return this[0].innerHTML
         }
       } else {
         this.each(function() {
@@ -262,27 +320,13 @@
       return this
     }
     
-    ,text: function(text) {
-      if (undefined === text) {
-        var node = this.nodes[0]
-        if (node) {
-          return node.textContent
-        }
-      } else {
-        this.each(function() {
-          this.textContent = text
-        })
-      }
-      return this
-    }
-    
     ,data: function(name, value) {
-      if (!this.nodes[0]) {
+      if (!this[0]) {
         return
       }
       
       if (undefined === value && $.isString(name)) {
-        return this.nodes[0].dataset[name]
+        return this[0].dataset[name]
       }
       
       if ($.isString(name)) {
@@ -300,11 +344,11 @@
     }
     
     ,attr: function(name, value) {
-      if (!this.nodes[0]) {
+      if (!this[0]) {
         return
       }
       if (undefined === value && $.isString(name)) {
-        return this.nodes[0].getAttribute(name)
+        return this[0].getAttribute(name)
       }
       
       if ($.isString(name)) {
@@ -322,231 +366,56 @@
       return this
     }
     
-    ,removeAttr: function(name) {
-      this.each(function() {
-        this.removeAttribute(name)
-      })
-      return this
-    }
-    
-    ,hasClass: function(classes) {
-      classes = classes.trim().split(/\s+/)
-      for (var i = 0, len = this.nodes.length; i < len; ++i) {
-        for (var j = 0, len = classes.length; j < len; ++j) {
-          if (!this.nodes[i].classList.contains(classes[j])) {
-            return false
-          }
-        }
-      }
-      return true
-    }
-    
-    ,addClass: function(classes) {
-      return this.attr('class', this.attr('class') + ' ' + classes)
-    }
-    
-    ,removeClass: function(classes) {
-      classes = classes.trim().split(/\s+/)
-      var i = 0
-        ,len = classes.length
-        
-      this.each(function() {
-        for ( ; i < len; ++i) {
-          this.classList.remove(classes[i])
-        }
-      })
-      return this
-    }
-    
-    ,toggleClass: function(classes, flag) {
-      classes = classes.trim().split(/\s+/)
-      if (undefined === flag) {
-        this.each(function() {
-          node = $(this)
-          for (var i = 0, len = classes.length; i < len; ++i) {
-            node[node.hasClass(classes[i])? 'removeClass' : 'addClass'](classes[i])
-          }
-        })
-      } else {
-        this.each(function() {
-          node = $(this)
-          var method = flag? 'addClass' : 'removeClass'
-          for (var i = 0, len = classes.length; i < len; ++i) {
-            node[method](classes[i])
-          }
-        })
-      }
-      return this
-    }
-    
-    ,css: function(name, value) {
-      if (undefined == value && $.isString(name)) {
-        var node = this.nodes[0]
-        return node.style[name] || document.defaultView.getComputedStyle(node, '').getPropertyValue(name)
-      }
-      
-      !$.isString(name) || function() {
-        var tmp = {}
-        tmp[name] = value
-        name = tmp
-      }()
-      
-      var css = []
-          ,property
-
-      for (var i in name) {
-        property = $.str(i).underscore().dasherize()
-        
-        if (undefined === document.body.style[$.str(property).camelize()]) {
-          property = '-' + $.vendorPrefix + '-' + property
-        }
-        
-        css.push(property + ':' + name[i])
-      }
-      css = css.join(';')
-      
-      this.each(function() {
-        this.style.cssText += ';' + css
-      })
-      
-      return this
-    }
-    
-    ,width: function(value) {
-      if (undefined === value) {
-        value = parseFloat(this.css('width'))
-        return isNaN(value)? 0 : value
-      }
-      
-      return this.css('width', value + 'px')
-    }
-    
-    ,height: function(value) {
-      if (undefined === value) {
-        value = parseFloat(this.css('height'))
-        return isNaN(value)? 0 : value
-      }
-      
-      return this.css('height', value + 'px')
-    }
-    
-    ,offset: function() {
-      var node = this.nodes[0]
+    ,hasAttr: function(name) {
+      var node = this[0]
       
       if (!node) {
         return
       }
       
-      return {
-        width: node.offsetWidth
-        ,height: node.offsetHeight
-        ,left: node.offsetLeft
-        ,top: node.offsetTop
-      }
-    }
-    
-    ,val: function(value, reset) {
-      if (undefined === value) {
-        var node = this.nodes[0]
-        
-        if (!node) {
-          return
+      var attrs = flattenArgs(arguments)
+          ,i = 0
+          ,len = attrs.length
+      
+      for (; i < len; ++i) {
+        if (!node.hasAttribute(attrs[i])) {
+          return false
         }
-        
-        if (node.multiple) {
-          var options = node.options
-              ,value = []
-          for (var i = 0, len = options.length; i < len; ++i) {
-            if (options[i].selected) {
-              value.push(options[i].value)
-            }
-          }
-          return value.length? value : undefined
-        }
-        
-        if ('FORM' == node.nodeName) {
-          var value = {}
-          $(node.elements).each(function(n) {
-            n = $(n)
-            if (undefined !== value[this.name]) {
-              value[this.name] = [value[this.name], n.val()]
-            } else {
-              value[this.name] = n.val()
-            }
-          })
-          return value
-        }
-        
-        return node.value
-      } else {
-        this.each(function(node) {
-          if (node.multiple) {
-            $.isArray(value) || (value = [value])
-            
-            for (var i = 0, len = value.length; i < len; ++i) {
-              value[i] = value[i] + ''
-            }
-            
-            var options = node.options
-            
-            for (var i = 0, len = options.length; i < len; ++i) {
-              options[i].selected  = -1 != value.indexOf(options[i].value)
-            }
-          } else if ('FORM' == node.nodeName) {
-            $(node.elements).each(function(n) {
-              n = $(n)
-              if (undefined !== value[this.name]) {
-                n.val(value[this.name])
-              } else if (reset) {
-                n.val('')
-              }
-            })
-          } else {  
-            switch (node.type) {
-              case 'checkbox':
-                node.checked = !!value
-                break;
-                
-              case 'radio':
-                node.checked = $(node).val() == value + ''
-                break;
-                
-              default:
-                node.value = value
-            }      
-          }
-        })
       }
       
-      return this
+      return true
     }
     
-    ,submit: function(options) {
-      options || (options = {})
-      
-      if (!$.isFunction(options)) {
-        options = {success: options}
-      }  
+    ,removeAttr: function(name) {
+      var attrs = flattenArgs(arguments)
+          ,i
+          ,len = attrs.length
       
       this.each(function() {
-        if ('FORM' != this.nodeName) {
-          return
+        for (i = 0; i < len; ++i) {          
+          this.removeAttribute(attrs[i])
         }
-        
-        node = $(this)
-        
-        var ajaxOptions = {
-          url: this.action
-          ,method: this.method
-          ,data: node.val()
-        }
-        
-        $.extend(ajaxOptions, options)
-        $.ajax(ajaxOptions)
       })
       return this
     }
-  })
+    
+    ,hasClass: function() {
+      var cls = flattenArgs(arguments, true)
+          ,result = true
+          ,i
+          ,len = cls.length
+          
+      this.each(function() {
+        for (i = 0; i < len; ++i) {          
+          if (!this.classList.contains(cls[i])) {
+            return result = false
+          }
+        }
+      })
+      
+      return result
+    }
+  }
   
   $.NodeList = NodeList
 })(one)
