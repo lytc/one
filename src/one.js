@@ -3,7 +3,7 @@ one = (function() {
     ,tmpNode
   
   var $ = function(what, scope) {
-    if (what instanceof $.node) {
+    if (what instanceof $.nodes) {
       return what
     }
     
@@ -21,7 +21,7 @@ one = (function() {
     }
     
     if ($.isNode(what) || $.isNodeList(what) || $.isHtmlCollection(what) || $.isArray(what)) {
-      return $.node(what)
+      return $.nodes(what)
     }
   }
   
@@ -322,6 +322,7 @@ one = (function() {
   ,isSafari   = !isChrome && test(/sarafi/i)
   ,isOpera    = test(/opera/i)
   ,isIe       = test(/msie/i)
+  ,isIphone   = test(/iphone/i)
   
   $.extend($, {
     isFirefox:  isFirefox
@@ -339,8 +340,6 @@ one = (function() {
     }()
   })
   
-  
   return $
 })()
-
 window.$ || (window.$ = one)

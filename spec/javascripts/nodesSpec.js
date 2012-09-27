@@ -1,6 +1,6 @@
-describe('$.Node', function() {
-  it('$.Node() should return an array object', function() {
-    expect($.isArray($.node())).toBeTruthy()
+describe('$.Nodes', function() {
+  it('$.Nodes() should return an array object', function() {
+    expect($.isArray($.nodes())).toBeTruthy()
     expect($.isArray($('*'))).toBeTruthy()
   })
   
@@ -31,7 +31,7 @@ describe('$.Node', function() {
   // index()
   describe('index()', function() {
     it('should be return -1', function() {
-      expect($.node().index()).toEqual(-1)
+      expect($.nodes().index()).toEqual(-1)
     })
   
     it('shoul be return the index', function() {
@@ -89,7 +89,7 @@ describe('$.Node', function() {
   // first()
   describe('first()', function() {
     it('should be return emtpy node list', function() {
-      expect($.node().first().length).toBe(0)
+      expect($.nodes().first().length).toBe(0)
     })
     
     it('should be return the right item', function() {
@@ -115,7 +115,7 @@ describe('$.Node', function() {
   // last()
   describe('last()', function() {
     it('should be return emtpy node list', function() {
-      expect($.node().last().length).toBe(0)
+      expect($.nodes().last().length).toBe(0)
     })
     
     it('should be return the right item', function() {

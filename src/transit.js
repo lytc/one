@@ -4,9 +4,9 @@
     transitionEndEventName = 'webkitTransitionEnd'
   }
   
-  $.extend($.node.prototype, {
+  $.extend($.nodes.fn, {
     transit: function(properties, duration, easing, callback) {
-      var node = this.nodes[0]
+      var node = this[0]
       if (!node) {
         return this
       }
@@ -71,6 +71,8 @@
           ,value
           ,newValue
           ,originalSize
+          
+          console.log(abc = this, $(this))
         
         for (var i in properties) {
           if (-1 != ['width', 'height', 'left', 'top', 'right', 'bottom'].indexOf(i)) {
@@ -182,87 +184,87 @@
     }
     
     ,slideUp: function(options) {
-      this.each(function(node) {
-        var el = $(node)
-        node.originalHeight = el.css('height')
+      this.each(function() {
+        var el = $(this)
+        this.originalHeight = el.css('height')
         el.transit({height: 0}, options)
       })
       return this
     }
     
     ,slideDown: function(options) {
-      this.each(function(node) {
-        if (!node.originalHeight) {
+      this.each(function() {
+        if (!this.originalHeight) {
           return
         }
         
-        $(node).transit({height: node.originalHeight}, options)
-        node.originalHeight = undefined
+        $(this).transit({height: this.originalHeight}, options)
+        this.originalHeight = undefined
       })
       return this
     }
     
     ,slideLeft: function(options) {
-      this.each(function(node) {
-        var el = $(node)
-        node.originalWidth = el.css('width')
+      this.each(function() {
+        var el = $(this)
+        this.originalWidth = el.css('width')
         el.transit({width: 0}, options)
       })
       return this
     }
     
     ,slideRight: function(options) {
-      this.each(function(node) {
-        if (!node.originalWidth) {
+      this.each(function() {
+        if (!this.originalWidth) {
           return
         }
         
-        $(node).transit({width: node.originalWidth}, options)
-        node.originalWidth = undefined
+        $(this).transit({width: this.originalWidth}, options)
+        this.originalWidth = undefined
       })
       return this
     }
     
-    ,slideVertical: function(options) {
-      this.each(function(node) {
-        $(node)[node.originalHeight? 'slideDown' : 'slideUp'](options)
+    ,slideV: function(options) {
+      this.each(function() {
+        $(this)[this.originalHeight? 'slideDown' : 'slideUp'](options)
       })
       return this
     }
     
-    ,slideHorizontal: function(options) {
-      this.each(function(node) {
-        $(node)[node.originalWidth? 'slideRight' : 'slideLeft'](options)
+    ,slideH: function(options) {
+      this.each(function() {
+        $(this)[this.originalWidth? 'slideRight' : 'slideLeft'](options)
       })
       return this
     }
     
     ,collapse: function(options) {
-      this.each(function(node) {
-        var el = $(node)
-        node.originalHeight = el.css('height')
-        node.originalWidth = el.css('width')
+      this.each(function() {
+        var el = $(this)
+        this.originalHeight = el.css('height')
+        this.originalWidth = el.css('width')
         el.transit({height: 0, width: 0}, options)
       })
       return this
     }
     
     ,expand: function(options) {
-      this.each(function(node) {
-        if (!node.originalHeight && !node.originalWidth) {
+      this.each(function() {
+        if (!this.originalHeight && !this.originalWidth) {
           return
         }
         
-        $(node).transit({height: node.originalHeight, width: node.originalWidth}, options)
-        node.originalHeight = undefined
-        node.originalWidth = undefined
+        $(this).transit({height: this.originalHeight, width: this.originalWidth}, options)
+        this.originalHeight = undefined
+        this.originalWidth = undefined
       })
       return this
     }
     
     ,toggleCollapse: function(options) {
-      this.each(function(node) {
-        $(node)[node.originalHeight && node.originalWidth? 'expand' : 'collapse'](options)
+      this.each(function() {
+        $(this)[this.originalHeight && this.originalWidth? 'expand' : 'collapse'](options)
       })
       return this
     }

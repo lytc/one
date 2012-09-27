@@ -1,31 +1,56 @@
 ---
-title: Welcome to Middleman
+title: Welcome to One.js
 ---
+<div class="wrapper">
+  <header>
+    <h1>One.js</h1>
+    <p id="description">loading ...</p>
 
-<div id="root">
-  <div class="a" style="width: 400px; height: 100px; background: red;">a</div>
-  <div class="b" style="width: 400px; height: 100px; background: blue;">b</div>
-  <div class="c" style="width: 400px; height: 100px; background: green;">c</div>
-  <div class="d">d</div>
-  <div class="e">e</div>
-  <div class="f">f</div>
-  <div class="g">g</div>
+    <p class="view"><a href="https://github.com/lytc/one">View the Project on GitHub <small>lytc/one</small></a></p>
+
+
+    <ul>
+      <li><a href="https://github.com/lytc/one/zipball/master">Download <strong>ZIP File</strong></a></li>
+      <li><a href="https://github.com/lytc/one/tarball/master">Download <strong>TAR Ball</strong></a></li>
+      <li><a href="https://github.com/lytc/one">View On <strong>GitHub</strong></a></li>
+    </ul>
+  </header>
+  <section>
+    <h3>Target platforms</h3>
+    <ul>
+      <li>Chrome 5+</li>
+      <li>Safari 5+</li>
+      <li>Mozilla Firefox 4+</li>
+      <li>Chrome 5+</li>
+      <li>IE 10+</li>
+    </ul>
+    
+    <h3>How to use?</h3>
+    <p>Include One.js with a script tag at the end of body tag</p>
+    <pre><code>&lt;body&gt;
+  ...
+  &lt;script src="one.js"&gt;&lt;/script&gt;
+&lt;/body&gt;</code></pre>
+
+    <h3>Work with event</h3>
+    <pre><code>...
+&lt;a id="click-me" href="#">Click me!&lt;/a&gt;
+...</code></pre>
+    <p><a id="click-me" href="#">Click me!</a></p>
+<pre><code>$.ready(function() {
+  $('#click-me').on('click', function(e) {
+    e.preventDefault()
+    alert('Thanks for visiting!')
+  })
+})</code></pre>
+
+    <h3>Work with selector</h3>
+    <p>One selector wrap "querySelectorAll" to support more features like: Adjacent previous sibling combinator (<code>"-"</code>), General previous sibling combinator (<code>"&lt;~"</code>)</p>
+    <pre><code>$('#container').find('- div') //Adjacent previous sibling combinator
+$('#container').find('<~ div') //General previous sibling combinator</code></pre>
+  </section>
+  <footer>
+    <p>This project is maintained by <a href="https://github.com/lytc">lytc</a></p>
+    <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+  </footer>
 </div>
-
-<form action="/data.json" method="post">
-  <input type="text" name="name1">
-  <input type="checkbox" name="name2" value=1>
-  <div>sdf</div>
-  <select name="select1">
-    <option value=1>1</option>
-    <option value=2>2</option>
-    <option value=3>3</option>
-    <option value=4>4</option>
-  </select>
-  <select name="select2" multiple>
-    <option value=1>1</option>
-    <option value=2>2</option>
-    <option value=3>3</option>
-    <option value=4>4</option>
-  </select>
-</form>

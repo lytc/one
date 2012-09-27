@@ -12,7 +12,7 @@
 #
 src_files:
     - src/one.js
-    - src/node.js
+    - src/nodes.js
     - src/**/*.js
 
 # stylesheets

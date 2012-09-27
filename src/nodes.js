@@ -17,15 +17,15 @@
     return a
   }
   
-  var Node = function(nodes) {
+  var Nodes = function(nodes) {
     nodes || (nodes = [])
     nodes = $.toArray(nodes)
     
-    $.extend(nodes, Node.fn)
+    $.extend(nodes, Nodes.fn)
     return nodes
   }
   
-  Node.fn = {
+  Nodes.fn = {
     index: function() {
       if (!this[0]) {
         return -1
@@ -46,7 +46,7 @@
     }
     
     ,item: function(index, acceptTextNode) {
-      return Node(this.get(index, acceptTextNode))
+      return Nodes(this.get(index, acceptTextNode))
     }
     
     ,first: function(acceptTextNode) {
@@ -73,7 +73,7 @@
         }
       })
       
-      return Node(result)
+      return Nodes(result)
     }
     
     ,matches: function(selector) {
@@ -134,7 +134,7 @@
         }
       })
       
-      return Node(nodes)
+      return Nodes(nodes)
     }
     
     ,parent: function(selector) {
@@ -149,7 +149,7 @@
           nodes.push(n)
         })
       })
-      return Node(nodes)
+      return Nodes(nodes)
     }
     
     ,children: function(selector) {
@@ -626,5 +626,5 @@
     }
   }
   
-  $.node = Node
+  $.nodes = Nodes
 })(one)

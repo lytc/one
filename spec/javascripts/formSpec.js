@@ -1,4 +1,4 @@
-describe('$.Node.form', function() {
+describe('$.Nodes.form', function() {
   var form = $('<form>')
   
   form.append(

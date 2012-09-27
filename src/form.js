@@ -1,5 +1,5 @@
 (function($) {
-  $.extend($.node.fn, {
+  $.extend($.nodes.fn, {
     val: function(value, reset) {
       if (undefined === value) {
         var node = this[0]
