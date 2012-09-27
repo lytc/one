@@ -11,9 +11,9 @@
 #   - dist/**/*.js
 #
 src_files:
-    - docs/source/javascripts/one.js
-    - docs/source/javascripts/node.js
-    - docs/source/javascripts/**/*.js
+    - src/one.js
+    - src/node.js
+    - src/**/*.js
 
 # stylesheets
 #
