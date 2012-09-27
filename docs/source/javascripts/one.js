@@ -3,7 +3,7 @@ one = (function() {
     ,tmpNode
   
   var $ = function(what, scope) {
-    if (what instanceof $.NodeList) {
+    if (what instanceof $.node) {
       return what
     }
     
@@ -13,7 +13,7 @@ one = (function() {
         tmpNode.innerHTML = what
         what = tmpNode.childNodes
       } else {
-        parent = scope || document
+        var parent = scope || document
         what = parent.querySelectorAll(what)
       } 
     } else if ($.isFunction(what)) {
@@ -21,11 +21,31 @@ one = (function() {
     }
     
     if ($.isNode(what) || $.isNodeList(what) || $.isHtmlCollection(what) || $.isArray(what)) {
-      return $.NodeList(what)
+      return $.node(what)
     }
   }
   
-$.extend = function(target/*, sources*//*, recusive*/) {
+  $.isObject = function(o) {
+    return o instanceof Object
+  }
+    
+  $.isPlainObject = function(o) {
+    if ( !o || !$.isObject(o) || o.nodeType || o == o.window ) {
+			return false;
+		}
+      
+    var hasOwn = Object.prototype.hasOwnProperty
+			
+    if ( o.constructor && !hasOwn.call(o, 'constructor') && !hasOwn.call(o.constructor.prototype, 'isPrototypeOf') ) {
+			return false;
+		}
+      		
+		for ( var key in o ) {}
+
+		return key === undefined || hasOwn.call( o, key );
+  }
+  
+  $.extend = function(target/*, sources*//*, recusive*/) {
     var sources = slice.call(arguments, 1)
         ,recusive = sources.pop()
         ,item
@@ -43,7 +63,7 @@ $.extend = function(target/*, sources*//*, recusive*/) {
     sources.forEach(function(source) {
       for (var key in source) {
         item = source[key]
-        if (recusive && item instanceof Object && item.__proto__ == Object.prototype) {
+        if (recusive && $.isPlainObject(item)) {
           target[key] = $.extend({}, item, true)
         } else {          
           if (source.hasOwnProperty(key)) {            
@@ -107,14 +127,6 @@ $.extend = function(target/*, sources*//*, recusive*/) {
             || $.getType(o) == 'Arguments'
     }
     
-    ,isObject: function(o) {
-      return o instanceof Object
-    }
-    
-    ,isPlainObject: function(o) {
-      return $.isObject(o) && o.__proto__ == Object.prototype
-    }
-    
     ,isNode: function(o) {
       return o instanceof Node
     }
@@ -128,7 +140,7 @@ $.extend = function(target/*, sources*//*, recusive*/) {
     }
     
     ,isNodeList: function(o) {
-      return o instanceof NodeList
+      return o instanceof NodeList || /* opera bug? */ $.getType(o) == 'NodeList'
     }
     
     ,isHtmlCollection: function(o) {
@@ -304,23 +316,26 @@ $.extend = function(target/*, sources*//*, recusive*/) {
   ,test = function(regex) {
     return regex.test(ua)
   }
-  ,isWebkit = test(/webkit/i)
-  ,isFirefox = test(/firefox/i)
-  ,isChrome = test(/chrome/i)
-  ,isSafari = !isChrome && test(/sarafi/i)
-  ,isOpera = test(/opera/i)
+  ,isWebkit   = test(/webkit/i)
+  ,isFirefox  = test(/firefox/i)
+  ,isChrome   = test(/chrome/i)
+  ,isSafari   = !isChrome && test(/sarafi/i)
+  ,isOpera    = test(/opera/i)
+  ,isIe       = test(/msie/i)
   
   $.extend($, {
-    isFirefox: isFirefox
-    ,isWebkit: isWebkit
-    ,isChrome: isChrome
-    ,isSafari: isSafari
-    ,isOpera: isOpera
+    isFirefox:  isFirefox
+    ,isWebkit:  isWebkit
+    ,isChrome:  isChrome
+    ,isSafari:  isSafari
+    ,isOpera:   isOpera
+    ,isIe:      isIe
     
     ,vendorPrefix: function() {
       return  isFirefox?  'moz' : 
               isWebkit?   'webkit' :
-              isOpera?    'o' : ''
+              isOpera?    'o' : 
+              isIe?       'ms' : ''
     }()
   })
   

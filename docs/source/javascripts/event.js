@@ -18,7 +18,7 @@
     }
   }
   
-  $.extend($.NodeList.prototype, {
+  $.extend($.node.prototype, {
     on: function(eventName, selector, callback, limit) {
       init.call(this, eventName, selector)
       initDomListener.call(this, eventName)

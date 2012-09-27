@@ -1,3 +1,3 @@
 //= require one
-//= require node-list
+//= require node
 //= require_tree .

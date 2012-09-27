@@ -12,6 +12,7 @@ describe('$', function() {
       var object = {foo: {bar: {baz: 1}}}
       var extendedObject = $.extend({}, object, true)
       expect(extendedObject).toEqual({foo: {bar: {baz: 1}}})
+      expect(extendedObject).toNotBe(object)
       expect(extendedObject.foo).toNotBe(object.foo)
       expect(extendedObject.foo.bar).toNotBe(object.foo.bar)
     })
@@ -468,7 +469,7 @@ describe('$', function() {
   // $.vendorPrefix
   describe('vendorPrefix', function() {
     it('should be in the list', function() {
-      expect(['' ,'moz', 'webkit', 'o']).toContain($.vendorPrefix)
+      expect(['' ,'moz', 'webkit', 'o', 'ms']).toContain($.vendorPrefix)
     })
   })
 })

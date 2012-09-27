@@ -12,7 +12,7 @@
 #
 src_files:
     - docs/source/javascripts/one.js
-    - docs/source/javascripts/node-list.js
+    - docs/source/javascripts/node.js
     - docs/source/javascripts/**/*.js
 
 # stylesheets

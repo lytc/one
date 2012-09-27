@@ -4,7 +4,7 @@
     transitionEndEventName = 'webkitTransitionEnd'
   }
   
-  $.extend($.NodeList.prototype, {
+  $.extend($.node.prototype, {
     transit: function(properties, duration, easing, callback) {
       var node = this.nodes[0]
       if (!node) {

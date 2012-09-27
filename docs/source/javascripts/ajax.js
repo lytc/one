@@ -17,10 +17,8 @@
     
     options = $.extend({}, ajax.defaultOptions, options)
     
-    var url = options.url
-    
     if (false !== options.disableCaching) {
-      url = $.appendQuery(url, function() {
+      options.url = $.appendQuery(options.url, function() {
         var params = {}
         params[options.disableCaching] = new Date().getTime()
         return params
@@ -31,7 +29,7 @@
     options.method = options.method.toUpperCase()
     
     if (options.data && options.method == 'GET') {
-      url = $.appendQuery(url, options.data)
+      options.url = $.appendQuery(options.url, options.data)
       options.data = null
     }
     
@@ -39,14 +37,14 @@
       options.headers['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8'
     }
     
-    var xhr = new XMLHttpRequest()
+    var xhr = ajax.createXhr()
     
     xhr.onreadystatechange = function() {
-      if (xhr.readyState == 4) {
+      if (this.readyState == 4) {
         clearTimeout(timeoutId)
         var result, error = false
-        if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304 || (xhr.status == 0 && protocol == 'file:')) {
-          var responseType = options.responseType || xhr.getResponseHeader('content-type')
+        if ((this.status >= 200 && this.status < 300) || this.status == 304 || (this.status == 0 && this.protocol == 'file:')) {
+          var responseType = this.options.responseType || this.getResponseHeader('content-type')
               ,result
               ,error
 
@@ -54,44 +52,51 @@
             switch (responseType) {
               case 'application/json':
               case 'json':
-                result = JSON.parse(xhr.responseText)
+                result = JSON.parse(this.responseText)
                 break
               
               case 'application/xml':
               case 'text/xml':
               case 'xml':
-                result = xhr.responseXML
+                result = this.responseXML
                 break
                 
               case 'application/javascript':
               case 'text/javascript':
               case 'javascript':
               case 'script':
-                result = eval(xhr.responseText)
+                result = eval(/^\((.*)\)$/.test(this.responseText)? this.responseText : '(' + this.responseText + ')')
                 break
                 
               default:
-                result = xhr.responseText
+                result = this.responseText
             }
           } catch (e) { 
             error = e 
           }
         } else {
-          error = xhr.status + ' ' + xhr.statusText
+          error = this.status + ' ' + this.statusText
         }
         
-        options.complete(xhr, options)
+        this.options.complete(this, options)
         
         if (error) {
-          options.error(xhr, options)
+          this.options.error(this, options)
           $.error(error)
         } else {
-          options.success(result, xhr, options)
+          this.options.success(result, this, options)
         }
       }
     }
     
-    xhr.open(options.method, url, options.async)
+    xhr.onabort = function() {
+      this.options.complete(this, options)
+      this.options.abort(this, options)
+    }
+    
+    xhr.options = options
+    
+    xhr.open(options.method, options.url, options.async)
     
     for (var name in options.headers) {
       xhr.setRequestHeader(name, options.headers[name])
@@ -99,7 +104,7 @@
     
     if (false === options.before(xhr, options)) {
       xhr.abort()
-      return false
+      return xhr
     }
     
     var timeoutId
@@ -150,11 +155,12 @@
     ,get: function(url, success, responseType) {
       var options = {
         url: url
-        ,success: success
+        ,success: success || $.noop
       }
       if (responseType) {
         options.responseType = responseType
       }
+      
       return $.ajax(options)
     }
     
@@ -226,19 +232,24 @@
   })
   
   ajax.defaultOptions = {
-    method: 'GET'
+    url: '.'
+    ,method: 'GET'
     ,timeout: 60000
-    ,async: false
+    ,async: true
     ,baseHeaders: {
       'X-Requested-With': 'XMLHttpRequest'
     }
     ,data: null
-    ,responseType: 'text'
     ,disableCaching: '_dc'
     ,before: $.noop
     ,complete: $.noop
     ,success: $.noop
     ,error: $.noop
+    ,abort: $.noop
+  }
+  
+  ajax.createXhr = function() {
+    return new XMLHttpRequest()
   }
   
   $.ajax = ajax
