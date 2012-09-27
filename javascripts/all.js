@@ -1983,6 +1983,13 @@ return $
 window.$ || (window.$ = one)
 ;
 $.ready(function() {
+  $('#click-me').on('click', function(e) {
+    e.preventDefault()
+    alert('Thanks for visiting!')
+  })
+})
+;
+$.ready(function() {
   $.getJson('https://api.github.com/repos/lytc/one', function(result) {
     $('#description').html(result.description)
   })
