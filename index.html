@@ -57,9 +57,32 @@
 })</code></pre>
 
     <h3>Selectors</h3>
-    <p>One selector wrap "querySelectorAll" to support more features like: Adjacent previous sibling combinator (<code>"-"</code>), General previous sibling combinator (<code>"&lt;~"</code>)</p>
+    <p>One.js selector wrap "querySelectorAll" to support more features like: Adjacent previous sibling combinator (<code>"-"</code>), General previous sibling combinator (<code>"&lt;~"</code>)</p>
     <pre><code>$('#container').find('- div') //Adjacent previous sibling combinator
 $('#container').find('<~ div') //General previous sibling combinator</code></pre>
+    
+    <h3>Ajax</h3>
+    <p>One.js ajax support full XMLHttpRequest Level 2 and modify a bit to make it more convenient.</p>
+    <pre><code>$.ajax('/hello', function(response) {
+  // do something
+})
+
+$.ajax('/hello', {
+  onStart: function(e) {
+    // do something
+  }
+  ,onSuccess: function(response, e) {
+    // do something
+  }
+})
+
+$.getJson('/data.json', function(data) {
+  // do something
+})
+
+$.getJsonp('https://api.github.com/repos/lytc/one', function(data) {
+  // do something
+})</code></pre>
   </section>
   <footer>
     <p>This project is maintained by <a href="https://github.com/lytc">lytc</a></p>
