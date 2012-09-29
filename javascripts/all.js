@@ -1236,123 +1236,129 @@ one = (function() {
       return this.on(eventName, selector, callback, 1)
     }
   })
-  var ajax = function(url, options) {
+  var xhrEvents = {
+    readystatechange: {alias: 'onStateChange'}, 
+    loadstart: {alias: 'onStart', cancelable: true}, 
+    progress: {alias: 'onProgess', cancelable: true}, 
+    abort: {alias: 'onAbort'}, 
+    error: {alias: 'onError'}, 
+    load: {alias: 'onSuccess'},
+    timeout: {alias: 'onTimeout'}, 
+    loadend: {alias: 'onComplete'}
+  }
+  
+  $.ajax = function(url, options) {
     if (!$.isString(url)) {
       options = url
     }
     
     if ($.isFunction(options)) {
-      options = {success: options}
+      options = {onSuccess: options}
     }
     
     options || (options = {})
+    
     if ($.isString(url)) {
       options.url = url
     }
     
-    options.headers = $.extend({}, ajax.defaultOptions.baseHeaders, options.headers || {})
-    
-    options = $.extend({}, ajax.defaultOptions, options)
-    
-    if (false !== options.disableCaching) {
-      options.url = $.appendQuery(options.url, function() {
-        var params = {}
-        params[options.disableCaching] = new Date().getTime()
-        return params
-      }())
+    var responseType = options.responseType || defaultOptions.responseType
+    if ('jsonp' == responseType) {
+      return this.getJsonp(options)
     }
     
-    options.method || (options.method = 'GET')
-    options.method = options.method.toUpperCase()
+    var xhr = $.ajax.createXhr()
+        ,processResponseData = function(response) {
+          return response
+        }
     
-    if (options.data && options.method == 'GET') {
-      options.url = $.appendQuery(options.url, options.data)
+    // event listeneners
+    $.each(xhrEvents, function(eventName, eventOptions) {
+      var alias = eventOptions.alias || eventName
+          ,callback = options[alias]
+      if (!callback) {
+        return
+      }
+      
+      xhr.addEventListener(eventName, function(e) {
+        if (e.type == 'load') {
+          var result = processResponseData(this.response)
+          callback.call(this, result, e)
+        } else if (false === callback.call(this, e) && eventOptions.cancelable) {
+          this.abort()
+        }
+      }, false)
+    })
+    
+    var defaultOptions = $.ajax.defaultOptions
+    
+    // request timeout
+    xhr.timeout = options.timeout || defaultOptions.timeout
+    
+    // request url
+    var url = options.url || defaultOptions.url
+        ,disableCaching = undefined !== options.disableCaching? options.disableCaching : defaultOptions.disableCaching
+
+    if (disableCaching) {
+      url = $.appendQuery(url, function() {
+        var params = {}
+        params[disableCaching] = new Date().getTime()
+        return params
+      }())
+    } 
+    
+    // request method
+    var method = options.method || defaultOptions.method
+    if (method == 'POST') {
+      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8')
+    }
+    
+    // request data
+    var data = options.data
+    if (data && method == 'GET') {
+      url = $.appendQuery(url, data)
       options.data = null
     }
     
-    if (options.method == 'POST') {
-      options.headers['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8'
+    // async
+    var async = undefined !== options.async? options.async : defaultOptions.async
+    
+    // open xhr
+    xhr.open(method, url, async)
+    
+    // responseType
+    if (async) {
+      switch (responseType) {
+        case 'json':
+          processResponseData = function(response) {
+            return JSON.parse(response)
+          }
+          break;
+          
+        case 'arraybuffer':
+        case 'blob':
+        case 'document':
+        case 'text':
+          xhr.responseType = responseType
+      }
+    } else {
+      throw new Error('XMLHttpRequest.responseType cannot be changed for synchronous HTTP(S) requests made from the window context.')
     }
     
-    var xhr = ajax.createXhr()
+    // request headers
+    for (var i in defaultOptions.requestHeaders) {
+      xhr.setRequestHeader(i, defaultOptions.requestHeaders[i])
+    }
     
-    xhr.onreadystatechange = function() {
-      if (this.readyState == 4) {
-        clearTimeout(timeoutId)
-        var result, error = false
-        if ((this.status >= 200 && this.status < 300) || this.status == 304 || (this.status == 0 && this.protocol == 'file:')) {
-          var responseType = this.options.responseType || this.getResponseHeader('content-type')
-              ,result
-              ,error
-
-          try {
-            switch (responseType) {
-              case 'application/json':
-              case 'json':
-                result = JSON.parse(this.responseText)
-                break
-              
-              case 'application/xml':
-              case 'text/xml':
-              case 'xml':
-                result = this.responseXML
-                break
-                
-              case 'application/javascript':
-              case 'text/javascript':
-              case 'javascript':
-              case 'script':
-                result = eval(/^\((.*)\)$/.test(this.responseText)? this.responseText : '(' + this.responseText + ')')
-                break
-                
-              default:
-                result = this.responseText
-            }
-          } catch (e) { 
-            error = e 
-          }
-        } else {
-          error = this.status + ' ' + this.statusText
-        }
-        
-        this.options.complete(this, options)
-        
-        if (error) {
-          this.options.error(this, options)
-          $.error(error)
-        } else {
-          this.options.success(result, this, options)
-        }
+    if (options.headers) {
+      for (var i in options.headers) {
+        xhr.setRequestHeader(i, options.headers[i])
       }
     }
+ 
+    // send
+    xhr.send(options.data)
     
-    xhr.onabort = function() {
-      this.options.complete(this, options)
-      this.options.abort(this, options)
-    }
-    
-    xhr.options = options
-    
-    xhr.open(options.method, options.url, options.async)
-    
-    for (var name in options.headers) {
-      xhr.setRequestHeader(name, options.headers[name])
-    }
-    
-    if (false === options.before(xhr, options)) {
-      xhr.abort()
-      return xhr
-    }
-    
-    var timeoutId
-    if (options.timeout > 0) {
-      timeoutId = setTimeout(function() {
-        xhr.abort()
-        $.error('ajax timeout')
-      }, options.timeout)
-    }
-    
-    xhr.send(options.data? $.param(options.data) : null)
     return xhr
   }
   
@@ -1370,7 +1376,7 @@ one = (function() {
       else params.add(key, value)
     })
   }
-
+  
   $.extend($, {
     param: function(obj, traditional){
       var params = []
@@ -1383,16 +1389,22 @@ one = (function() {
       if (-1 == url.indexOf('?')) {
         url += '?'
       }
+      
+      if (params instanceof HTMLFormElement || params instanceof $.nodes) {
+        params = $(params).val()
+      }
+      
       if ($.isObject(params)) {
         params = $.param(params)
       }
+      
       return url += params
     }
     
-    ,get: function(url, success, responseType) {
+    ,get: function(url, onSuccess, responseType) {
       var options = {
         url: url
-        ,success: success || $.noop
+        ,onSuccess: onSuccess || $.noop
       }
       if (responseType) {
         options.responseType = responseType
@@ -1401,22 +1413,48 @@ one = (function() {
       return $.ajax(options)
     }
     
-    ,getJson: function(url, success) {
-      return $.get(url, success, 'json')
+    ,getJson: function(url, onSuccess) {
+      return $.get(url, onSuccess, 'json')
     }
     
-    ,getXml: function(url, success) {
-      return $.get(url, success, 'xml')
+    ,getJsonp: function(url, onSuccess) {
+      if (!$.isString(url)) {
+        options = url
+      } else {
+        options = {url: url, onSuccess: onSuccess}
+      }
+      
+      var callbackName = $.sequence('_jsonpCallback')
+          ,script = $.createElement('script')
+          
+      window[callbackName] = function(response) {
+        onSuccess(response)
+        window[callbackName] = null
+        $(script).destroy()
+      }
+      
+      var params = {}
+      params[options.callbackParamName || 'callback'] = callbackName
+      options.url = $.appendQuery(options.url, params)              
+      
+      $('head').append(script) 
+      script.src = options.url
+      
+      return script
     }
     
-    ,getScript: function(url, success) {
-      return $.get(url, success, 'script')
+    ,getXml: function(url, onSuccess) {
+      return $.get(url, onSuccess, 'xml')
     }
     
-    ,post: function(url, data, success, responseType) {
+    ,getScript: function(url, onSuccess) {
+      return $.get(url, onSuccess, 'script')
+    }
+    
+    ,post: function(url, data, onSuccess, responseType) {
       if ($.isFunction(data)) {
-        responseType = success
-        success = data
+        responseType = onSuccess
+        onSuccess = data
         data = null
       }
     
@@ -1424,7 +1462,7 @@ one = (function() {
         url: url
         ,method: 'POST'
         ,data: data
-        ,success: success
+        ,onSuccess: onSuccess
       }
     
       if (responseType) {
@@ -1440,7 +1478,7 @@ one = (function() {
       }
     
       if ($.isFunction(options)) {
-        options = {success: options}
+        options = {onSuccess: options}
       }
       
       if ($.isNumber(options)) {
@@ -1454,42 +1492,35 @@ one = (function() {
       
       var newOptions = $.extend({}, options)
       
-      newOptions.success = function() {
+      newOptions.onSuccess = function() {
         $(function(){
           $.ajax(newOptions)
         }).defer(options.delay || 1000)
       }
       
-      if (options.success) {
-        newOptions.success = $(newOptions.success).createInterceptor(options.success)
+      if (options.onSuccess) {
+        newOptions.onSuccess = $(newOptions.onSuccess).createInterceptor(options.onSuccess)
       }
       
       return $.ajax(newOptions)
     }
   })
   
-  ajax.defaultOptions = {
-    url: '.'
-    ,method: 'GET'
+  $.ajax.defaultOptions = {
+    method: 'GET'
+    ,url: '.'
     ,timeout: 60000
     ,async: true
-    ,baseHeaders: {
+    ,responseType: 'text'
+    ,requestHeaders: {
       'X-Requested-With': 'XMLHttpRequest'
     }
-    ,data: null
     ,disableCaching: '_dc'
-    ,before: $.noop
-    ,complete: $.noop
-    ,success: $.noop
-    ,error: $.noop
-    ,abort: $.noop
   }
   
-  ajax.createXhr = function() {
+  $.ajax.createXhr = function() {
     return new XMLHttpRequest()
   }
-  
-  $.ajax = ajax
   $.extend($.nodes.fn, {
     val: function(value, reset) {
       if (undefined === value) {
@@ -1990,8 +2021,11 @@ $.ready(function() {
 })
 ;
 $.ready(function() {
-  $.getJson('https://api.github.com/repos/lytc/one', function(result) {
-    $('#description').html(result.description)
+  // $.getJson('https://api.github.com/repos/lytc/one', function(result) {
+  //     $('#description').html(result.description)
+  //   })
+  $.getJsonp('https://api.github.com/repos/lytc/one', function(result) {
+    $('#description').html(result.data.description)
   })
 })
 ;
