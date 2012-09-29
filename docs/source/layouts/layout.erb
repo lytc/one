@@ -14,7 +14,8 @@
   </head>
   <body>
     <%= yield %>
-    <%= javascript_include_tag  "all" %>
     
+    </script>
+    <script src="javascripts/all.js?<% Time.now.to_s %>"></script>
   </body>
 </html>

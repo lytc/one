@@ -91,7 +91,7 @@
       options || (options = {})
       
       if ($.isFunction(options)) {
-        options = {success: options}
+        options = {onSuccess: options}
       }  
       
       var ajaxOptions = {

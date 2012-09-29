@@ -42,13 +42,26 @@ describe('$.Nodes.form', function() {
   
   describe('submit()', function() {
     it('submit()', function() {
-      var success = jasmine.createSpy()
-      var xhr = form.submit(success)
-      xhr.response({
-        status: 200
+      var server = Mock.server
+      server.start()
+      
+      var onSuccess = jasmine.createSpy()
+      
+      var ajax = form.submit({
+        url: 'url'
+        ,onSuccess: onSuccess
+      })
+      
+      server.response({
+        method: 'GET'
+        ,url: 'url'
+        ,status: 200
         ,responseText: 'ok'
       })
-      expect(success).toHaveBeenCalled()
+      
+      expect(onSuccess).toHaveBeenCalled()
+      
+      server.stop()
     })
   })
 })

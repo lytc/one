@@ -45,7 +45,7 @@ task :build do
   min_file.close()
 end
 
-task :doc do
+task :docs do
   Dir.chdir('docs') do
     system "middleman build"
   end
@@ -60,5 +60,5 @@ end
 task :default do
   Rake::Task['jasmine:ci'].invoke
   Rake::Task['build'].invoke
-  Rake::Task['doc'].invoke
+  Rake::Task['docs'].invoke
 end
