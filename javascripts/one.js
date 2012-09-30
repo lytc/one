@@ -1262,14 +1262,16 @@ one = (function() {
       options.url = url
     }
     
-    var responseType = options.responseType || defaultOptions.responseType
+    var defaultOptions = $.ajax.defaultOptions
+        ,responseType = options.responseType || defaultOptions.responseType
+        
     if ('jsonp' == responseType) {
       return this.getJsonp(options)
     }
     
     var xhr = $.ajax.createXhr()
-        ,processResponseData = function(response) {
-          return response
+        ,processResponseData = function(xhr) {
+          return xhr.response
         }
     
     // event listeneners
@@ -1282,15 +1284,13 @@ one = (function() {
       
       xhr.addEventListener(eventName, function(e) {
         if (e.type == 'load') {
-          var result = processResponseData(this.response)
+          var result = processResponseData(this)
           callback.call(this, result, e)
         } else if (false === callback.call(this, e) && eventOptions.cancelable) {
           this.abort()
         }
       }, false)
     })
-    
-    var defaultOptions = $.ajax.defaultOptions
     
     // request timeout
     xhr.timeout = options.timeout || defaultOptions.timeout
@@ -1327,22 +1327,27 @@ one = (function() {
     xhr.open(method, url, async)
     
     // responseType
-    if (async) {
-      switch (responseType) {
-        case 'json':
-          processResponseData = function(response) {
-            return JSON.parse(response)
-          }
-          break;
+    if (responseType) {
+        switch (responseType) {
+          case 'json':
+            processResponseData = function(xhr) {
+              return JSON.parse(xhr.responseText)
+            }
+            break;
           
-        case 'arraybuffer':
-        case 'blob':
-        case 'document':
-        case 'text':
-          xhr.responseType = responseType
-      }
-    } else {
-      throw new Error('XMLHttpRequest.responseType cannot be changed for synchronous HTTP(S) requests made from the window context.')
+          case 'xml':
+            responseType = 'document'
+          
+          case 'arraybuffer':
+          case 'blob':
+          case 'document':
+          case 'text':
+            xhr.responseType = responseType
+            break;
+          
+          default:
+            throw new Error('XMLHttpRequest doesn\'t support response type "' + responseType + '"')
+        }
     }
     
     // request headers
@@ -1511,7 +1516,7 @@ one = (function() {
     ,url: '.'
     ,timeout: 60000
     ,async: true
-    ,responseType: 'text'
+    ,responseType: ''
     ,requestHeaders: {
       'X-Requested-With': 'XMLHttpRequest'
     }
@@ -1613,7 +1618,7 @@ one = (function() {
       options || (options = {})
       
       if ($.isFunction(options)) {
-        options = {success: options}
+        options = {onSuccess: options}
       }  
       
       var ajaxOptions = {
@@ -1755,7 +1760,7 @@ one = (function() {
       }
       
       options = $.extend({
-        duration: .5
+        duration: 1
         ,easing: 'ease'
         ,delay: 0
       }, options)

@@ -20,7 +20,6 @@
 
     <p class="view"><a href="https://github.com/lytc/one">View the Project on GitHub <small>lytc/one</small></a></p>
 
-
     <ul>
       <li><a href="https://github.com/lytc/one/zipball/master">Download <strong>ZIP File</strong></a></li>
       <li><a href="https://github.com/lytc/one/tarball/master">Download <strong>TAR Ball</strong></a></li>
@@ -36,30 +35,87 @@
       <li>Chrome 5+</li>
       <li>IE 10+</li>
     </ul>
-    
+    <br>
     <h3>How to use?</h3>
     <p>Include One.js with a script tag at the end of body tag</p>
-    <pre><code>&lt;body&gt;
+
+<div class="CodeRay">
+  <div class="code"><pre><span style="color:#070">&lt;body&gt;</span>
   ...
-  &lt;script src="one.js"&gt;&lt;/script&gt;
-&lt;/body&gt;</code></pre>
+  <span style="color:#070">&lt;script</span> <span style="color:#b48">src</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">one</span><span style="color:#710">&quot;</span></span><span style="color:#070">&gt;</span><span style="color:#070">&lt;/script&gt;</span>
+<span style="color:#070">&lt;/body&gt;</span>
+</pre></div>
+</div>
 
-    <h3>Work with event</h3>
-    <pre><code>...
-&lt;a id="click-me" href="#">Click me!&lt;/a&gt;
-...</code></pre>
-    <p><a id="click-me" href="#">Click me!</a></p>
-<pre><code>$.ready(function() {
-  $('#click-me').on('click', function(e) {
+<br>
+
+<h3>Events</h3>
+
+<div class="CodeRay">
+  <div class="code"><pre>...
+<span style="color:#070">&lt;a</span> <span style="color:#b48">id</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">click-me</span><span style="color:#710">&quot;</span></span> <span style="color:#b48">href</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">#</span><span style="color:#710">&quot;</span></span><span style="color:#070">&gt;</span>Click me!<span style="color:#070">&lt;/a&gt;</span>
+...
+</pre></div>
+</div>
+
+<p><a id="click-me" href="#">Click me!</a></p>
+  
+<div class="CodeRay">
+  <div class="code"><pre><span style="color:#369;font-weight:bold">$</span>.ready(<span style="color:#080;font-weight:bold">function</span>() {
+  <span style="color:#369;font-weight:bold">$</span>(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">#click-me</span><span style="color:#710">'</span></span>).on(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">click</span><span style="color:#710">'</span></span>, <span style="color:#080;font-weight:bold">function</span>(e) {
     e.preventDefault()
-    alert('Thanks for visiting!')
+    alert(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">Thanks for visiting!</span><span style="color:#710">'</span></span>)
   })
-})</code></pre>
+})
+</pre></div>
+</div>
 
-    <h3>Work with selector</h3>
-    <p>One selector wrap "querySelectorAll" to support more features like: Adjacent previous sibling combinator (<code>"-"</code>), General previous sibling combinator (<code>"&lt;~"</code>)</p>
-    <pre><code>$('#container').find('- div') //Adjacent previous sibling combinator
-$('#container').find('<~ div') //General previous sibling combinator</code></pre>
+<br>
+
+    <h3>Selectors</h3>
+    <p>One.js selector wrap "querySelectorAll" to support more features like: Adjacent previous sibling combinator (<code>"-"</code>), General previous sibling combinator (<code>"&lt;~"</code>)</p>
+    
+<div class="CodeRay">
+  <div class="code"><pre><span style="color:#369;font-weight:bold">$</span>(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">#container</span><span style="color:#710">'</span></span>).find(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">- div</span><span style="color:#710">'</span></span>) <span style="color:#777">//Adjacent previous sibling combinator</span>
+<span style="color:#369;font-weight:bold">$</span>(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">#container</span><span style="color:#710">'</span></span>).find(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">&lt;~ div</span><span style="color:#710">'</span></span>) <span style="color:#777">//General previous sibling combinator</span>
+</pre></div>
+</div>
+  
+<br>
+  
+    <h3>Ajax</h3>
+    <p>One.js ajax support full XMLHttpRequest Level 2 and modify a bit to make it more convenient.</p>
+    
+<div class="CodeRay">
+  <div class="code"><pre><span style="color:#369;font-weight:bold">$</span>.ajax(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">/hello</span><span style="color:#710">'</span></span>, <span style="color:#080;font-weight:bold">function</span>(response) {
+  <span style="color:#777">// do something</span>
+})
+
+<span style="color:#369;font-weight:bold">$</span>.ajax(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">/hello</span><span style="color:#710">'</span></span>, {
+  <span style="color:#06B;font-weight:bold">onStart</span>: <span style="color:#080;font-weight:bold">function</span>(e) {
+    <span style="color:#777">// do something</span>
+  }
+  ,<span style="color:#06B;font-weight:bold">onSuccess</span>: <span style="color:#080;font-weight:bold">function</span>(response, e) {
+    <span style="color:#777">// do something</span>
+  }
+})
+
+<span style="color:#369;font-weight:bold">$</span>.getJson(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">/data.json</span><span style="color:#710">'</span></span>, <span style="color:#080;font-weight:bold">function</span>(data) {
+  <span style="color:#777">// do something</span>
+})
+
+<span style="color:#369;font-weight:bold">$</span>.getJsonp(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">https://api.github.com/repos/lytc/one</span><span style="color:#710">'</span></span>, <span style="color:#080;font-weight:bold">function</span>(data) {
+  <span style="color:#777">// do something</span>
+})
+</pre></div>
+</div>
+
+<br>
+
+<h3>Transition & Animation</h3>
+<p>One.js use native CSS3 transition & animation</p>
+<div id="hide-me" style="background-color: #39C; color: white; border-radius: 10px; padding: 20px; cursor: pointer;">Hide me please!</div>
+
   </section>
   <footer>
     <p>This project is maintained by <a href="https://github.com/lytc">lytc</a></p>
@@ -67,7 +123,6 @@ $('#container').find('<~ div') //General previous sibling combinator</code></pre
   </footer>
 </div>
     
-    </script>
     <script src="javascripts/all.js?"></script>
   </body>
 </html>
