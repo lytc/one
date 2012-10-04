@@ -124,6 +124,7 @@ one = (function() {
             || $.isNodeList(o) 
             || $.isHtmlCollection(o) 
             || o instanceof DOMTokenList 
+            || o instanceof FileList
             || $.getType(o) == 'Arguments'
     }
     
@@ -287,13 +288,13 @@ one = (function() {
           
         case '-':
           var index = $(root).index()
-            ,parent = root.parentElement
+            ,parent = root.parentNode
             return $.query(selector.substr(1) + ':nth-child(' + index + ')', parent)
           
         case '<':
           if (selector[1] == '~') {
             var index = $(root).index()
-              ,nodes = $.query(selector.substr(2), root.parentElement)
+              ,nodes = $.query(selector.substr(2), root.parentNode)
               ,result = []
             
             for (var i = 0, len = nodes.length; i < len; ++i) {
@@ -340,9 +341,16 @@ one = (function() {
     }()
   })
   
+  return $
+})()
+window.$ || (window.$ = one)
+;
+(function($) {
   $.supports = {
     dataset: !!document.documentElement.dataset
   }
+})(one);
+(function($) {
   var escapeChars = {
     lt: '<',
     gt: '>',
@@ -385,6 +393,8 @@ one = (function() {
   }
   
   $.str = Str
+})(one);
+(function($) {
   var Arr = function(arr) {
     $.extend(arr, Arr.fn)
     return arr
@@ -456,22 +466,25 @@ one = (function() {
     }
   }
   $.arr = Arr
-  var Fn = function(fn) {
-    $.extend(fn, Fn.fn)
+})(one);
+(function($) {
+  $.fn = function(fn) {
+    $.extend(fn, $.fn.fn)
     return fn
   }
   
-  Fn.fn = {
+  $.fn.fn = {
     createBuffered: function(buffer) {
       var timeoutId
           ,fn = this
           
       return function() {
-        var args = arguments
+        var me = this
+            ,args = arguments
         
         !timeoutId || clearTimeout(timeoutId)
         timeoutId = setTimeout(function() {
-          fn.apply(fn, args)
+          fn.apply(me, args)
         }, buffer)
       }
     }
@@ -480,7 +493,8 @@ one = (function() {
       var intervalId
         ,fn = this
         ,result = function() {
-          var args = arguments
+          var me = this
+              ,args = arguments
           
           return intervalId = setInterval(function() {
             fn.apply(fn, args)
@@ -497,10 +511,11 @@ one = (function() {
     ,createInterceptor: function(origFn, delay) {
       var fn = this
       return function() {
-        var args = arguments
-        if (false !== fn.apply(fn, args)) {
+        var me = this
+            ,args = arguments
+        if (false !== fn.apply(me, args)) {
           $(function() {
-            origFn.apply(origFn, args)
+            origFn.apply(me, args)
           }).defer(delay | 0)
         }
       }
@@ -516,8 +531,8 @@ one = (function() {
       }, miliseconds)
     }
   }
-  
-  $.fn = Fn
+})(one);
+(function($) {
   var flattenArgs = function(args, useSpace) {
     var a = []
       ,_a
@@ -549,7 +564,8 @@ one = (function() {
       if (!this[0]) {
         return -1
       }
-      return [].indexOf.call(this[0].parentElement.children, this[0])
+      
+      return [].indexOf.call(this[0].parentNode.children, this[0])
     }
     
     ,get: function(index, acceptTextNode) {
@@ -785,10 +801,10 @@ one = (function() {
       
       $.each(arguments, function(index, item) {
         if ($.isString(item)) {
-          me.concat.apply(me, $.query(item))
+          me.concat.apply(me, $.toArray($.query(item)))
         
         } else if ($.isLikeArray(item)) {
-          me.concat.apply(me, item)
+          me.concat.apply(me, $.toArray(item))
         
         } else if ($.isNode(item)) {
           me.push(item)
@@ -1146,6 +1162,8 @@ one = (function() {
   }
   
   $.nodes = Nodes
+})(one);
+(function($) {
   function init(eventName, selector) {
     this.listeners || (this.listeners = {})
     this.listeners[eventName] || (this.listeners[eventName] = [])
@@ -1236,15 +1254,17 @@ one = (function() {
       return this.on(eventName, selector, callback, 1)
     }
   })
+})(one);
+(function($) {
   var xhrEvents = {
-    readystatechange: {alias: 'onStateChange'}, 
-    loadstart: {alias: 'onStart', cancelable: true}, 
-    progress: {alias: 'onProgess', cancelable: true}, 
-    abort: {alias: 'onAbort'}, 
-    error: {alias: 'onError'}, 
-    load: {alias: 'onSuccess'},
-    timeout: {alias: 'onTimeout'}, 
-    loadend: {alias: 'onComplete'}
+    readystatechange: {alias: 'StateChange'}, 
+    loadstart: {alias: 'Start', cancelable: true}, 
+    progress: {alias: 'Progress', cancelable: true}, 
+    abort: {alias: 'Abort'}, 
+    error: {alias: 'Error'}, 
+    load: {alias: 'Success'},
+    timeout: {alias: 'Timeout'}, 
+    loadend: {alias: 'Complete'}
   }
   
   $.ajax = function(url, options) {
@@ -1277,16 +1297,36 @@ one = (function() {
     // event listeneners
     $.each(xhrEvents, function(eventName, eventOptions) {
       var alias = eventOptions.alias || eventName
-          ,callback = options[alias]
-      if (!callback) {
+          ,callback = options['on' + alias]
+      
+      if (callback) {
+        xhr.addEventListener(eventName, function(e) {
+          if (e.type == 'load') {
+            if ((this.status >= 200 && this.status < 300) || this.status == 304 || (this.status == 0 && this.protocol == 'file:')) {
+            
+            }
+            var result = processResponseData(this)
+            callback.call(this, result, e)
+          } else if (false === callback.call(this, e) && eventOptions.cancelable) {
+            this.abort()
+          }
+        }, false)
+      }
+      
+      var uploadCallback = options['on' + 'Upload' + alias]
+      
+      if (!uploadCallback) {
         return
       }
       
-      xhr.addEventListener(eventName, function(e) {
+      xhr.upload.addEventListener(eventName, function(e) {
         if (e.type == 'load') {
+          if ((this.status >= 200 && this.status < 300) || this.status == 304 || (this.status == 0 && this.protocol == 'file:')) {
+            
+          }
           var result = processResponseData(this)
-          callback.call(this, result, e)
-        } else if (false === callback.call(this, e) && eventOptions.cancelable) {
+          uploadCallback.call(this, result, e)
+        } else if (false === uploadCallback.call(this, e) && eventOptions.cancelable) {
           this.abort()
         }
       }, false)
@@ -1309,19 +1349,29 @@ one = (function() {
     
     // request method
     var method = options.method || defaultOptions.method
-    if (method == 'POST') {
-      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8')
-    }
     
     // request data
     var data = options.data
     if (data && method == 'GET') {
       url = $.appendQuery(url, data)
       options.data = null
+    } else if (method == 'POST' || method == 'PUT') {
+      if ($.isPlainObject(data)) {
+        var formData = new FormData
+        for (var i in data) {
+          formData.append(i, data[i])
+        }
+        options.data = formData
+      } else if (data instanceof HTMLFormElement) {
+        options.data = new FormData(options.data)
+      }
     }
     
     // async
     var async = undefined !== options.async? options.async : defaultOptions.async
+    
+    // cross-origin request
+    xhr.withCredentials = undefined !== options.withCredentials || defaultOptions.withCredentials
     
     // open xhr
     xhr.open(method, url, async)
@@ -1351,6 +1401,10 @@ one = (function() {
     }
     
     // request headers
+    if (method == 'POST') {
+      //xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8')
+    }
+    
     for (var i in defaultOptions.requestHeaders) {
       xhr.setRequestHeader(i, defaultOptions.requestHeaders[i])
     }
@@ -1452,23 +1506,23 @@ one = (function() {
       return $.get(url, onSuccess, 'xml')
     }
     
-    ,getScript: function(url, onSuccess) {
-      return $.get(url, onSuccess, 'script')
-    }
-    
     ,post: function(url, data, onSuccess, responseType) {
       if ($.isFunction(data)) {
         responseType = onSuccess
         onSuccess = data
         data = null
       }
-    
-      var options = {
-        url: url
-        ,method: 'POST'
-        ,data: data
-        ,onSuccess: onSuccess
+      
+      if ($.isObject(onSuccess)) {
+        options = onSuccess
+        onSuccess = null
       }
+      
+      options || (options = {})
+      options.url = url
+      options.method = 'POST'
+      options.data = data
+      options.onSuccess = onSuccess
     
       if (responseType) {
         options.responseType = responseType
@@ -1509,6 +1563,79 @@ one = (function() {
       
       return $.ajax(newOptions)
     }
+    
+    // @todo
+    ,upload2: function(url, options) {
+      if (!$.isString(url)) {
+        options = url
+      }
+      
+      if ($.isFunction(options)) {
+        options = {onSuccess: options}
+      }
+      
+      options || (options = {})
+      if ($.isString(url)) {
+        options.url = url
+      }
+      
+      options.bytesPerChunk || (options.bytesPerChunk = $.ajax.defaultOptions.bytesPerChunk)
+      
+      options.method = 'POST'
+      options.headers || (options.headers = {})
+      var file = options.file
+      
+      if ($.isString(file)) {
+        file = $.query(file)[0]
+      }
+      
+      var start
+          ,end
+          ,fieldName = file.name
+          ,chunk
+          ,formData
+          ,requests = []
+          
+      $.each(file.files, function(index, file) {
+        start = 0
+        end = options.bytesPerChunk
+        fileName = file.name
+        
+        while(start < file.size) {
+          chunk = file.slice(start, end)
+          formData = new FormData
+          formData.append(fieldName, chunk, fileName)
+          
+          requests.push($.extend({}, options, {data: formData, headers: {'X-File-Name': fileName}}))
+          
+          start = end
+          end = start + options.bytesPerChunk
+        }  
+      })
+      
+      var xhrs = []
+      function send() {
+        var options = requests.shift()
+        if (!options) {
+          return
+        }
+        
+        var onSuccess = options.onSuccess || $.noop
+        onSuccess = $.fn(onSuccess).createInterceptor(function() {
+          send()
+        })
+        options.onSuccess = onSuccess
+        
+        xhrs.push($.ajax(options))
+      }
+      
+      var chunksPerTime = options.chunksPerTime || $.ajax.defaultOptions.chunksPerTime
+      for (var i = 0; i < chunksPerTime; ++i) {
+        send()
+      }
+      
+      return xhrs
+    }
   })
   
   $.ajax.defaultOptions = {
@@ -1516,16 +1643,21 @@ one = (function() {
     ,url: '.'
     ,timeout: 60000
     ,async: true
+    ,withCredentials: true
     ,responseType: ''
     ,requestHeaders: {
       'X-Requested-With': 'XMLHttpRequest'
     }
     ,disableCaching: '_dc'
+    ,bytesPerChunk: 524288 // bytes per chunk 1024 * 512 : 0.5MB chunk sizes
+    ,chunksPerTime: 5
   }
   
   $.ajax.createXhr = function() {
     return new XMLHttpRequest()
   }
+})(one);
+(function($) {
   $.extend($.nodes.fn, {
     val: function(value, reset) {
       if (undefined === value) {
@@ -1631,6 +1763,129 @@ one = (function() {
       return $.ajax(ajaxOptions)
     }
   })
+})(one);
+(function($) {
+  var Upload = function(url, files, options) {
+    if ($.isFunction(options)) {
+      options = {onSuccess: options}
+    }
+    
+    options || (options = {})
+    options.url = url
+    
+    if ($.isString(files)) {
+      files = $.query(files)[0]
+    }
+    
+    var id = options.id || Upload.defaultOptions.id
+        ,fileId
+        ,name
+        ,fileName
+        ,fileType
+        ,formData
+        ,chunksNumber
+        ,chunkIndex
+        ,start
+        ,end
+        ,chunk
+        ,bytesPerChunk
+        ,concurrentChunks
+        ,onSuccess
+        ,requestOptions
+        ,requestsOptions = []
+        ,requests = []
+        ,onSuccessAll = options.onSuccess
+    
+    delete options.onSuccess 
+    delete options.id
+    
+    if (options.onProgress) {
+      options.onUploadProgress || (options.onUploadProgress = function() {})
+      options.onUploadProgress = $.fn(options.onUploadProgress).createInterceptor(options.onProgress)
+    }
+       
+    requests.abort = function() {
+      this.forEach(function(request) {
+        request.abort()
+      })
+    }
+      
+    if (files instanceof HTMLInputElement) {
+      name = options.name || files.name
+      files = files.files
+      delete options.name
+    }
+    
+    files = $.toArray(files)
+    
+    bytesPerChunk = options.bytesPerChunk || Upload.defaultOptions.bytesPerChunk 
+    delete options.bytesPerChunk
+    
+    $.each(files, function(index, file) {
+      fileId = $.sequence('file-')
+      start         = 0
+      chunksNumber  = Math.ceil(file.size / bytesPerChunk)
+      chunkIndex    = 0
+      end           = bytesPerChunk
+      fileName      = file.name
+      fileType      = file.type
+        
+      while (start < file.size) {
+        chunk = file.slice(start, end, fileType)
+        formData = new FormData
+        !id || formData.append('id', id)
+        formData.append('fileName', fileName)
+        formData.append('chunksNumber', chunksNumber)
+        formData.append(name, chunk, fileName)
+        formData.append('chunkIndex', ++chunkIndex)
+        
+        requestsOptions.push($.extend({}, options, {
+          method: 'POST'
+          ,data: formData
+        }))
+        
+        start = end
+        end = start + bytesPerChunk
+      }
+    })
+    
+    var len = requestsOptions.length
+    
+    function send() {
+      requestOptions = requestsOptions.shift()
+      if (!requestOptions) {
+        if (onSuccessAll) {
+          console.log(1111111)
+          onSuccessAll(requests)
+        }
+        return
+      }
+      
+      requestOptions.onUploadSuccess || (requestOptions.onUploadSuccess = function(){})
+      requestOptions.onUploadSuccess = $.fn(requestOptions.onUploadSuccess).createInterceptor(send)
+      requests.push($.ajax(requestOptions))
+    }
+    
+    concurrentChunks = options.concurrentChunks || Upload.defaultOptions.concurrentChunks
+    if (concurrentChunks > len) {
+      concurrentChunks = len
+    }
+    
+    for (var i = 0; i < concurrentChunks; ++i) {
+      send()
+    }
+    
+    return requests
+  }
+  
+  Upload.defaultOptions = {
+    bytesPerChunk: 1024 * 128
+    ,concurrentChunks: 5
+  }
+  
+  $.upload = Upload
+})(one);
+(function($) {
   var cache = {};
 	var Template = function() {
     if (arguments.length) {      
@@ -1725,6 +1980,8 @@ one = (function() {
     
     return tpl;
   }
+})(one);
+(function($) {
   var transitionEndEventName = 'transitionend'
   if ($.isWebkit) {
     transitionEndEventName = 'webkitTransitionEnd'
@@ -1760,7 +2017,7 @@ one = (function() {
       }
       
       options = $.extend({
-        duration: .5
+        duration: 1
         ,easing: 'ease'
         ,delay: 0
       }, options)
@@ -1797,8 +2054,6 @@ one = (function() {
           ,value
           ,newValue
           ,originalSize
-          
-          console.log(abc = this, $(this))
         
         for (var i in properties) {
           if (-1 != ['width', 'height', 'left', 'top', 'right', 'bottom'].indexOf(i)) {
@@ -2014,6 +2269,4 @@ one = (function() {
       }, options)
     }
   })
-return $
-})()
-window.$ || (window.$ = one)
+})(one);

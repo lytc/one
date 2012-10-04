@@ -1,64 +1,73 @@
-(function($) {
-  var Fn = function(fn) {
-    $.extend(fn, Fn.fn)
-    return fn
-  }
-  
-  Fn.fn = {
-    createBuffered: function(buffer) {
-      var timeoutId
-          ,fn = this
-          
-      return function() {
-        var args = arguments
-        
-        !timeoutId || clearTimeout(timeoutId)
-        timeoutId = setTimeout(function() {
-          fn.apply(fn, args)
-        }, buffer)
-      }
+(function ($) {
+    "use strict"
+
+    $.fn = function (fn) {
+        $.extend(fn, $.fn.fn)
+        return fn
     }
-    
-    ,createRepeated: function(interval) {
-      var intervalId
-        ,fn = this
-        ,result = function() {
-          var args = arguments
-          
-          return intervalId = setInterval(function() {
-            fn.apply(fn, args)
-          }, interval)
+
+    $.extend($.fn, {
+        createAlias: function (obj, fnName) {
+            return function () {
+                return obj[fnName].apply(obj, arguments)
+            }
         }
-        
-        result.stop = function() {
-          clearInterval(intervalId)
+    })
+
+    $.fn.fn = {
+        createBuffered: function (buffer) {
+            var timeoutId
+                ,fn = this
+
+            return function () {
+                var me = this
+                    ,args = arguments
+
+                !timeoutId || clearTimeout(timeoutId)
+                timeoutId = setTimeout(function () {
+                    fn.apply(me, args)
+                }, buffer)
+            }
         }
-        
-        return result
-    }
-    
-    ,createInterceptor: function(origFn, delay) {
-      var fn = this
-      return function() {
-        var args = arguments
-        if (false !== fn.apply(fn, args)) {
-          $(function() {
-            origFn.apply(origFn, args)
-          }).defer(delay | 0)
+
+        ,createRepeated:function (interval) {
+            var intervalId
+                ,fn = this
+                ,result = function () {
+                    var me = this
+                        ,args = arguments
+
+                    return intervalId = setInterval(function () {
+                        fn.apply(me, args)
+                    }, interval)
+                }
+
+            result.stop = function () {
+                clearInterval(intervalId)
+            }
+
+            return result
         }
-      }
+
+        ,createInterceptor: function (passedFn) {
+            var fn = this
+            return function () {
+                var me = this
+                    ,args = arguments
+
+                if (false !== passedFn.apply(me, args)) {
+                    return fn.apply(me, args)
+                }
+                return false
+            }
+        }
+
+        ,defer: function (miliseconds) {
+            var fn = this
+
+            return setTimeout(function () {
+                fn.call(this)
+            }, miliseconds || 0)
+        }
     }
-    
-    ,defer: function() {
-      var fn = this
-      ,args = arguments
-      ,miliseconds = [].shift.call(args)
-      
-      return setTimeout(function() {
-        fn.apply(fn, args)
-      }, miliseconds)
-    }
-  }
-  
-  $.fn = Fn
 })(one)

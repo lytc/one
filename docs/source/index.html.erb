@@ -8,7 +8,6 @@ title: Welcome to One.js
 
     <p class="view"><a href="https://github.com/lytc/one">View the Project on GitHub <small>lytc/one</small></a></p>
 
-
     <ul>
       <li><a href="https://github.com/lytc/one/zipball/master">Download <strong>ZIP File</strong></a></li>
       <li><a href="https://github.com/lytc/one/tarball/master">Download <strong>TAR Ball</strong></a></li>
@@ -24,30 +23,87 @@ title: Welcome to One.js
       <li>Chrome 5+</li>
       <li>IE 10+</li>
     </ul>
-    
+    <br>
     <h3>How to use?</h3>
     <p>Include One.js with a script tag at the end of body tag</p>
-    <pre><code>&lt;body&gt;
-  ...
-  &lt;script src="one.js"&gt;&lt;/script&gt;
-&lt;/body&gt;</code></pre>
 
-    <h3>Work with event</h3>
-    <pre><code>...
-&lt;a id="click-me" href="#">Click me!&lt;/a&gt;
-...</code></pre>
-    <p><a id="click-me" href="#">Click me!</a></p>
-<pre><code>$.ready(function() {
+<% content_for :example1 do %>
+<body>
+  ...
+  <script src="one"></script>
+</body>
+<% end %>
+<%= CodeRay.scan((yield_content :example1), :html).div %>
+
+<br>
+
+<h3>Events</h3>
+
+<% content_for :example2 do %>
+...
+<a id="click-me" href="#">Click me!</a>
+...
+<% end %>
+<%= CodeRay.scan((yield_content :example2), :html).div %>
+
+<p><a id="click-me" href="#">Click me!</a></p>
+  
+<% content_for :example3 do %>
+$.ready(function() {
   $('#click-me').on('click', function(e) {
     e.preventDefault()
     alert('Thanks for visiting!')
   })
-})</code></pre>
+})
+<% end %>
+<%= CodeRay.scan((yield_content :example3), :javascript).div %>
 
-    <h3>Work with selector</h3>
-    <p>One selector wrap "querySelectorAll" to support more features like: Adjacent previous sibling combinator (<code>"-"</code>), General previous sibling combinator (<code>"&lt;~"</code>)</p>
-    <pre><code>$('#container').find('- div') //Adjacent previous sibling combinator
-$('#container').find('<~ div') //General previous sibling combinator</code></pre>
+<br>
+
+    <h3>Selectors</h3>
+    <p>One.js selector wrap "querySelectorAll" to support more features like: Adjacent previous sibling combinator (<code>"-"</code>), General previous sibling combinator (<code>"&lt;~"</code>)</p>
+    
+<% content_for :example4 do %>
+$('#container').find('- div') //Adjacent previous sibling combinator
+$('#container').find('<~ div') //General previous sibling combinator
+<% end %>
+<%= CodeRay.scan((yield_content :example4), :javascript).div %>
+  
+<br>
+  
+    <h3>Ajax</h3>
+    <p>One.js ajax support full XMLHttpRequest Level 2 and modify a bit to make it more convenient.</p>
+    
+<% content_for :example5 do %>
+$.ajax('/hello', function(response) {
+  // do something
+})
+
+$.ajax('/hello', {
+  onStart: function(e) {
+    // do something
+  }
+  ,onSuccess: function(response, e) {
+    // do something
+  }
+})
+
+$.getJson('/data.json', function(data) {
+  // do something
+})
+
+$.getJsonp('https://api.github.com/repos/lytc/one', function(data) {
+  // do something
+})
+<% end %>
+<%= CodeRay.scan((yield_content :example5), :javascript).div %>
+
+<br>
+
+<h3>Transition & Animation</h3>
+<p>One.js use native CSS3 transition & animation</p>
+<div id="hide-me" style="background-color: #39C; color: white; border-radius: 10px; padding: 20px; cursor: pointer;">Hide me please!</div>
+
   </section>
   <footer>
     <p>This project is maintained by <a href="https://github.com/lytc">lytc</a></p>

@@ -1,5 +1,7 @@
 (function($) {
-  $.supports = {
-    dataset: !!document.documentElement.dataset
-  }
+    "use strict"
+
+    $.supports = {
+        dataset: !!document.documentElement.dataset
+    }
 })(one)

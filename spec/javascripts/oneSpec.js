@@ -139,7 +139,7 @@ describe('$', function() {
   // $.isNode()
   describe('isNode()', function() {
     it('should be truthy', function() {
-      expect($.isNode(document)).toBeTruthy()
+      expect($.isNode(document.documentElement)).toBeTruthy()
     })
     it('should be falsy', function() {
       expect($.isNode(window)).toBeFalsy()

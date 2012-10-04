@@ -1,0 +1,16 @@
+load:
+  - jasmine.js
+  - JasmineAdapter-1.1.2.js
+  - spec/javascripts/helpers/mock-ajax.js
+  - src/one.js
+  - src/nodes.js
+  - src/*.js
+  - spec/javascripts/*.js
+#  - spec/javascripts/oneSpec.js
+#  - spec/javascripts/ajaxSpec.js
+#  - spec/javascripts/arrSpec.js
+#  - spec/javascripts/fnSpec.js
+#  - spec/javascripts/formSpec.js
+#  - spec/javascripts/nodesSpec.js
+#  - spec/javascripts/strSpec.js
+#  - spec/javascripts/templateSpec.js

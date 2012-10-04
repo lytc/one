@@ -5,18 +5,13 @@ describe('$.Nodes.form', function() {
     '<input type="hidden" name="hidden1" />',
     '<input type="text" name="text1" />',
     '<input type="password" name="password1" />',
+
     '<input type="radio" name="radio1" value="radio1" />',
     '<input type="radio" name="radio1" value="radio2" />',
     '<input type="checkbox" name="checkbox1" value="checkbox1" />',
     '<input type="checkbox" name="checkbox1" value="checkbox2" />',
-    '<select name="select1">\
-      <option value="option1">option1</option>\
-      <option value="option2">option1</option>\
-    </select>',
-    '<select name="select2" multiple>\
-      <option value="option1">option1</option>\
-      <option value="option2">option1</option>\
-    </select>',
+    '<select name="select1"><option value="option1">option1</option><option value="option2">option1</option></select>',
+    '<select name="select2" multiple><option value="option1">option1</option><option value="option2">option1</option></select>',
     '<textarea name="textarea1">abc</textarea>',
     '<input type="button" name="button1" />'
   )

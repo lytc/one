@@ -12,25 +12,28 @@ task :build do
   
   all = ''
   files = {
-    :one      => [1, 3], 
+    :one      => [1, 3],
     :supports => [1, 1],
     :str      => [1, 1],
     :arr      => [1, 1],
-    :fn       => [1, 1], 
+    :fn       => [1, 1],
     :nodes    => [1, 1],
     :event    => [1, 1],
-    :ajax     => [1, 1],   
-    :form     => [1, 1],    
-    :template => [1, 1], 
+    :ajax     => [1, 1],
+    :form     => [1, 1],
+    :upload   => [1, 1],
+    :template => [1, 1],
     :transit  => [1, 1]
   }
   
   files.each do |file, lineRemove|
-    all += File.read('src/' + file.to_s + '.js').lines.to_a[lineRemove[0]..-(lineRemove[1]+1)].join
+    #all += File.read('src/' + file.to_s + '.js').lines.to_a[lineRemove[0]..-(lineRemove[1]+1)].join
+    all += File.read('src/' + file.to_s + '.js')
+    all += ";\n"
   end
   
-  all = "one = (function() {\n" + all
-  all += "return $\n})()\nwindow.$ || (window.$ = one)";
+  #all = "one = (function() {\n" + all
+  #all += "return $\n})()\nwindow.$ || (window.$ = one)";
   
   file = File.new('build/one.js', 'w')
   file.write(all)

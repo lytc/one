@@ -3,4 +3,8 @@ $.ready(function() {
     e.preventDefault()
     alert('Thanks for visiting!')
   })
+  
+  $('#hide-me').on('click', function(e) {
+    $(this).hide(true)
+  })
 })

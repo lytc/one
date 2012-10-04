@@ -14,7 +14,7 @@ src_files:
     - src/one.js
     - src/nodes.js
     - src/**/*.js
-    - spec/javascripts/support/mock-ajax.js
+#    - spec/javascripts/support/mock-ajax.js
 
 # stylesheets
 #
