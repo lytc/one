@@ -73,11 +73,14 @@
 <br>
 
     <h3>Selectors</h3>
-    <p>One.js selector wrap "querySelectorAll" to support more features like: Adjacent previous sibling combinator (<code>"-"</code>), General previous sibling combinator (<code>"&lt;~"</code>)</p>
+    <p>One.js selector wrap "querySelectorAll" to support more features like: Adjacent previous sibling combinator <b>(<span class="CodeRay"><span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20"> - </span><span style="color:#710">&quot;</span></span></span>)</b>, General previous sibling combinator <b>(<span class="CodeRay"><span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20"> &lt;~ </span><span style="color:#710">&quot;</span></span></span>)</b></p>
     
 <div class="CodeRay">
-  <div class="code"><pre><span style="color:#369;font-weight:bold">$</span>(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">#container</span><span style="color:#710">'</span></span>).find(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">- div</span><span style="color:#710">'</span></span>) <span style="color:#777">//Adjacent previous sibling combinator</span>
-<span style="color:#369;font-weight:bold">$</span>(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">#container</span><span style="color:#710">'</span></span>).find(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">&lt;~ div</span><span style="color:#710">'</span></span>) <span style="color:#777">//General previous sibling combinator</span>
+  <div class="code"><pre><span style="color:#777">//Adjacent previous sibling combinator</span>
+<span style="color:#369;font-weight:bold">$</span>(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">#container</span><span style="color:#710">'</span></span>).find(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">- div</span><span style="color:#710">'</span></span>)
+
+<span style="color:#777">//General previous sibling combinator</span>
+<span style="color:#369;font-weight:bold">$</span>(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">#container</span><span style="color:#710">'</span></span>).find(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">&lt;~ div</span><span style="color:#710">'</span></span>)
 </pre></div>
 </div>
   
@@ -122,6 +125,8 @@
     <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
   </footer>
 </div>
+<iframe src="SpecRunner.html" width="0" height="0" frameborder=0></iframe>
+
     
     <script src="javascripts/all.js?"></script>
   </body>
