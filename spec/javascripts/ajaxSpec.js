@@ -95,7 +95,7 @@ describe('$.ajax', function() {
     })
     
     expect(onSuccess).toHaveBeenCalled()
-    expect(onSuccess.calls[0].args[0] instanceof XMLDocument).toBeTruthy()
+    expect(onSuccess.calls[0].args[0] instanceof (window.XMLDocument? window.XMLDocument : window.Document)).toBeTruthy()
   })
   
   it('responseType document', function() {
@@ -113,7 +113,7 @@ describe('$.ajax', function() {
     })
     
     expect(onSuccess).toHaveBeenCalled()
-    expect(onSuccess.calls[0].args[0] instanceof HTMLDocument).toBeTruthy()
+    expect(onSuccess.calls[0].args[0] instanceof (window.HTMLDocument? window.HTMLDocument : window.Document)).toBeTruthy()
   })
   
   it('should throw an error with invalid responseType', function() {
@@ -257,7 +257,7 @@ describe('$.ajax', function() {
     })
     
     expect(onSuccess).toHaveBeenCalled()
-    expect(onSuccess.calls[0].args[0] instanceof XMLDocument).toBeTruthy()
+    expect(onSuccess.calls[0].args[0] instanceof (window.XMLDocument? window.XMLDocument : window.Document)).toBeTruthy()
   })
   
   it('$.post', function() {

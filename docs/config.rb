@@ -78,3 +78,15 @@ configure :build do
   # Or use a different image path
   #set :http_path, "/Content/images/"
 end
+
+helpers do
+  def highlight_syntax(*args, &block)
+    options = args.last.kind_of?(Hash) ? args.pop : {}
+    tag = options.delete(:tag) || 'div'
+    lang = args.pop
+
+    content = block_given? ? capture(&block) : (args.last || '')
+    result = CodeRay.scan(content, lang).send(tag, options)
+    block_given? ? concat_content(result) : result
+  end
+end

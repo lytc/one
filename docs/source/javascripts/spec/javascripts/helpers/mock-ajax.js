@@ -263,7 +263,7 @@
           
       for (var i = 0; i < arguments.length; ++i) {
         items = arguments[i]
-        if (typeof item != 'array') {
+        if (typeof items != 'array') {
           items = [items]
         }
         for (var j = 0; j < items.length; ++j) {          

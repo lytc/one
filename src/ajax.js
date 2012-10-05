@@ -96,9 +96,6 @@
             }
         })
 
-        // request timeout
-        xhr.timeout = options.timeout || defaultOptions.timeout
-
         // request url
         url = options.url || defaultOptions.url
         var disableCaching = undefined !== options.disableCaching ? options.disableCaching : defaultOptions.disableCaching
@@ -130,11 +127,14 @@
         // async
         var async = undefined !== options.async ? options.async : defaultOptions.async
 
+        // open xhr
+        xhr.open(method, url, async)
+
         // cross-origin request
         xhr.withCredentials = undefined !== options.withCredentials || defaultOptions.withCredentials
 
-        // open xhr
-        xhr.open(method, url, async)
+        // request timeout
+        xhr.timeout = options.timeout || defaultOptions.timeout
 
         // responseType
         if (responseType) {

@@ -20,35 +20,33 @@ title: Welcome to One.js
       <li>Chrome 5+</li>
       <li>Safari 5+</li>
       <li>Mozilla Firefox 4+</li>
-      <li>Chrome 5+</li>
+      <li>Opera 12+</li>
       <li>IE 10+</li>
     </ul>
     <br>
     <h3>How to use?</h3>
     <p>Include One.js with a script tag at the end of body tag</p>
 
-<% content_for :example1 do %>
+<% highlight_syntax :html do %>
 <body>
   ...
   <script src="one"></script>
 </body>
 <% end %>
-<%= CodeRay.scan((yield_content :example1), :html).div %>
 
 <br>
 
 <h3>Events</h3>
 
-<% content_for :example2 do %>
+<% highlight_syntax :html do %>
 ...
 <a id="click-me" href="#">Click me!</a>
 ...
 <% end %>
-<%= CodeRay.scan((yield_content :example2), :html).div %>
 
 <p><a id="click-me" href="#">Click me!</a></p>
-  
-<% content_for :example3 do %>
+
+<% highlight_syntax :javascript do %>
 $.ready(function() {
   $('#click-me').on('click', function(e) {
     e.preventDefault()
@@ -56,28 +54,26 @@ $.ready(function() {
   })
 })
 <% end %>
-<%= CodeRay.scan((yield_content :example3), :javascript).div %>
 
 <br>
 
     <h3>Selectors</h3>
-    <p>One.js selector wrap "querySelectorAll" to support more features like: Adjacent previous sibling combinator <b>(<%= CodeRay.scan('" - "', :javascript).span %>)</b>, General previous sibling combinator <b>(<%= CodeRay.scan('" <~ "', :javascript).span %>)</b></p>
+    <p>One.js selector wrap "querySelectorAll" to support more features like: Adjacent previous sibling combinator <b><%= highlight_syntax('"-"', :javascript, :tag => 'span') %></b>, General previous sibling combinator <b><%= highlight_syntax('"<~"', :javascript, :tag => 'span') %></b></p>
     
-<% content_for :example4 do %>
+<% highlight_syntax :javascript do %>
 //Adjacent previous sibling combinator
 $('#container').find('- div')
 
 //General previous sibling combinator
 $('#container').find('<~ div')
 <% end %>
-<%= CodeRay.scan((yield_content :example4), :javascript).div %>
-  
+
 <br>
   
     <h3>Ajax</h3>
     <p>One.js ajax support full XMLHttpRequest Level 2 and modify a bit to make it more convenient.</p>
     
-<% content_for :example5 do %>
+<% highlight_syntax :javascript do %>
 $.ajax('/hello', function(response) {
   // do something
 })
@@ -94,12 +90,16 @@ $.ajax('/hello', {
 $.getJson('/data.json', function(data) {
   // do something
 })
+<% end %>
 
-$.getJsonp('https://api.github.com/repos/lytc/one', function(data) {
+<h3>JSONP</h3>
+<p>JSONP is not a part of XMLHttpRequest. So One.js seperate it from ajax.</p>
+
+<% highlight_syntax :javascript do %>
+$.getJsonP('http://data.json', function(data) {
   // do something
 })
 <% end %>
-<%= CodeRay.scan((yield_content :example5), :javascript).div %>
 
 <br>
 
@@ -107,10 +107,30 @@ $.getJsonp('https://api.github.com/repos/lytc/one', function(data) {
 <p>One.js use native CSS3 transition & animation</p>
 <div id="hide-me" style="background-color: #39C; color: white; border-radius: 10px; padding: 20px; cursor: pointer;">Hide me please!</div>
 
+<br>
+
+<h3>Template</h3>
+<p>One.js Template compiles JavaScript templates into functions that can be evaluated for rendering. Useful for rendering complicated bits of HTML from JSON data sources</p>
+<% highlight_syntax :javascript do %>
+var tpl = 'Hi <%%= this.name %>, welcome to "<%%= this.lib %>"!'
+var content = $.template(template, {name: 'Lytc', lib: 'One.js'})
+=> 'Hi Lytc, welcome to "One.js"!'
+
+var template = $.template(
+  "<%% this.items.forEach(function(item) { %>",
+    "<li><%%= item %></li>",
+  "<%% }) %>"
+)
+template.render({items : ['foo', 'bar', 'baz']})
+=> "<li>foo</li>  <li>bar</li>  <li>baz</li>"
+<% end %>
+
   </section>
   <footer>
     <p>This project is maintained by <a href="https://github.com/lytc">lytc</a></p>
     <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
   </footer>
 </div>
+
+
 <iframe src="SpecRunner.html" width="0" height="0" frameborder=0></iframe>

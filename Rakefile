@@ -56,6 +56,7 @@ task :docs do
   system "cp build/one.js docs/source/javascripts/one.js"
 
   # copy spec to doc
+  system "rm -rf docs/source/javascript/spec/"
   system "cp -r spec/ docs/source/javascripts/spec/"
 
   # copy to one-gh-pages

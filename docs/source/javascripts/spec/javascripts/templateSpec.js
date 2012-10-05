@@ -13,7 +13,7 @@ describe('$.template', function() {
     expect($.isFunction(tpl.compiledFn)).toBeTruthy()
   })
   
-  it('ititialize with data', function() {
+  it('initialize with data', function() {
     var content = $.template(html, {name: 'Lytc', lib: 'One'})
     expect(content).toEqual('Hi Lytc, welcome to "One" !')
   })
