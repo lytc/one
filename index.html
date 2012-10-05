@@ -59,7 +59,7 @@
 </div>
 
 <p><a id="click-me" href="#">Click me!</a></p>
-  
+
 <div class="CodeRay">
   <div class="code"><pre><span style="color:#369;font-weight:bold">$</span>.ready(<span style="color:#080;font-weight:bold">function</span>() {
   <span style="color:#369;font-weight:bold">$</span>(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">#click-me</span><span style="color:#710">'</span></span>).on(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">click</span><span style="color:#710">'</span></span>, <span style="color:#080;font-weight:bold">function</span>(e) {
@@ -73,7 +73,7 @@
 <br>
 
     <h3>Selectors</h3>
-    <p>One.js selector wrap "querySelectorAll" to support more features like: Adjacent previous sibling combinator <b>(<span class="CodeRay"><span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20"> - </span><span style="color:#710">&quot;</span></span></span>)</b>, General previous sibling combinator <b>(<span class="CodeRay"><span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20"> &lt;~ </span><span style="color:#710">&quot;</span></span></span>)</b></p>
+    <p>One.js selector wrap "querySelectorAll" to support more features like: Adjacent previous sibling combinator <b><span class="CodeRay"><span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">-</span><span style="color:#710">&quot;</span></span></span></b>, General previous sibling combinator <b><span class="CodeRay"><span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">&lt;~</span><span style="color:#710">&quot;</span></span></span></b></p>
     
 <div class="CodeRay">
   <div class="code"><pre><span style="color:#777">//Adjacent previous sibling combinator</span>
@@ -83,7 +83,7 @@
 <span style="color:#369;font-weight:bold">$</span>(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">#container</span><span style="color:#710">'</span></span>).find(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">&lt;~ div</span><span style="color:#710">'</span></span>)
 </pre></div>
 </div>
-  
+
 <br>
   
     <h3>Ajax</h3>
@@ -106,8 +106,14 @@
 <span style="color:#369;font-weight:bold">$</span>.getJson(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">/data.json</span><span style="color:#710">'</span></span>, <span style="color:#080;font-weight:bold">function</span>(data) {
   <span style="color:#777">// do something</span>
 })
+</pre></div>
+</div>
 
-<span style="color:#369;font-weight:bold">$</span>.getJsonp(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">https://api.github.com/repos/lytc/one</span><span style="color:#710">'</span></span>, <span style="color:#080;font-weight:bold">function</span>(data) {
+<h3>JSONP</h3>
+<p>JSONP is not a part of XMLHttpRequest. So One.js seperate it from ajax.</p>
+
+<div class="CodeRay">
+  <div class="code"><pre><span style="color:#369;font-weight:bold">$</span>.getJsonP(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">http://data.json</span><span style="color:#710">'</span></span>, <span style="color:#080;font-weight:bold">function</span>(data) {
   <span style="color:#777">// do something</span>
 })
 </pre></div>
@@ -119,12 +125,33 @@
 <p>One.js use native CSS3 transition & animation</p>
 <div id="hide-me" style="background-color: #39C; color: white; border-radius: 10px; padding: 20px; cursor: pointer;">Hide me please!</div>
 
+<br>
+
+<h3>Template</h3>
+<p>One.js Template compiles JavaScript templates into functions that can be evaluated for rendering. Useful for rendering complicated bits of HTML from JSON data sources</p>
+<div class="CodeRay">
+  <div class="code"><pre><span style="color:#080;font-weight:bold">var</span> tpl = <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">Hi &lt;%= this.name %&gt;, welcome to &quot;&lt;%= this.lib %&gt;&quot;!</span><span style="color:#710">'</span></span>
+<span style="color:#080;font-weight:bold">var</span> content = <span style="color:#369;font-weight:bold">$</span>.template(template, {<span style="color:#606">name</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">Lytc</span><span style="color:#710">'</span></span>, <span style="color:#606">lib</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">One.js</span><span style="color:#710">'</span></span>})
+=&gt; <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">Hi Lytc, welcome to &quot;One.js&quot;!</span><span style="color:#710">'</span></span>
+
+<span style="color:#080;font-weight:bold">var</span> template = <span style="color:#369;font-weight:bold">$</span>.template(
+  <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">&lt;% this.items.forEach(function(item) { %&gt;</span><span style="color:#710">&quot;</span></span>,
+    <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">&lt;li&gt;&lt;%= item %&gt;&lt;/li&gt;</span><span style="color:#710">&quot;</span></span>,
+  <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">&lt;% }) %&gt;</span><span style="color:#710">&quot;</span></span>
+)
+template.render({<span style="color:#606">items</span> : [<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">foo</span><span style="color:#710">'</span></span>, <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">bar</span><span style="color:#710">'</span></span>, <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">baz</span><span style="color:#710">'</span></span>]})
+=&gt; <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">&lt;li&gt;foo&lt;/li&gt;  &lt;li&gt;bar&lt;/li&gt;  &lt;li&gt;baz&lt;/li&gt;</span><span style="color:#710">&quot;</span></span>
+</pre></div>
+</div>
+
   </section>
   <footer>
     <p>This project is maintained by <a href="https://github.com/lytc">lytc</a></p>
     <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
   </footer>
 </div>
+
+
 <iframe src="SpecRunner.html" width="0" height="0" frameborder=0></iframe>
 
     

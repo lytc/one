@@ -257,7 +257,7 @@ describe('$.ajax', function() {
     })
     
     expect(onSuccess).toHaveBeenCalled()
-    expect(onSuccess.calls[0].args[0] instanceof XMLDocument).toBeTruthy()
+    expect(onSuccess.calls[0].args[0] instanceof (window.XMLDocument? window.XMLDocument : window.Document)).toBeTruthy()
   })
   
   it('$.post', function() {
