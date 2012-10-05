@@ -21,7 +21,6 @@ task :build do
     :event    => [1, 1],
     :ajax     => [1, 1],
     :form     => [1, 1],
-    :upload   => [1, 1],
     :template => [1, 1],
     :transit  => [1, 1]
   }
@@ -55,8 +54,11 @@ task :docs do
   
   # copy js to doc
   system "cp build/one.js docs/source/javascripts/one.js"
-  
-  # copy to quark-gh-pages
+
+  # copy spec to doc
+  system "cp -r spec/ docs/source/javascripts/spec/"
+
+  # copy to one-gh-pages
   system "cp -r docs/build/ ../one-gh-pages/"
 end
 

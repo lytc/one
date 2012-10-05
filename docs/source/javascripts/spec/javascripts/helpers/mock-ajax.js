@@ -1,22 +1,24 @@
-(function(win) {
-  var _staticProperties = ['UNSENT', 'OPENED', 'HEADERS_RECEIVED', 'LOADING', 'DONE']
-  var _methods = ['OPTIONS', 'GET', 'HEAD', 'POST', 'PUT', 'DELETE', 'TRACE', 'CONNECT']
-  var _requests = []
-  
-  var MockXMLHttpRequestEvent = function() {
+(function() {
+  var UNSENT            = 0
+      ,OPENED           = 1
+      ,HEADERS_RECEIVED = 2
+      ,LOADING          = 3
+      ,DONE             = 4
+      ,_methods = ['OPTIONS', 'GET', 'HEAD', 'POST', 'PUT', 'DELETE', 'TRACE', 'CONNECT']
+      ,_requests = []
+      ,MockXMLHttpRequestEvent = function() {
     
-  }
-  
-  var MockXMLHttpRequest = function() {
-    this.readyState = this.UNSENT
-    this.sent = false
-    this.error = false
-    this.uploadComplete = false
-    this.async = true
+      }
+      ,MockXMLHttpRequest = function() {
+        this.readyState = UNSENT
+        this.sent = false
+        this.error = false
+        this.uploadComplete = false
+        this.async = true
     
-    this.requestHeaders = {}
-    this.responseHeaders = {}
-  }
+        this.requestHeaders = {}
+        this.responseHeaders = {}
+      }
   
   MockXMLHttpRequest.prototype = {
     status: 0
@@ -26,7 +28,7 @@
     ,responseXML: null
     ,responseType: ''
     //,responseBlob: ??
-    ,upload: XMLHttpRequestUpload
+    //,upload: XMLHttpRequestUpload
     ,withCredentials: false
     ,onloadstart: null
     ,onreadystatechange: null
@@ -44,7 +46,7 @@
     }
     
     ,setRequestHeader: function(name, value) {
-      if (this.readyState != this.OPENED && this.sent) {
+      if (this.readyState != OPENED && this.sent) {
         throw new Error('DOMException.INVALID_STATE_ERR')
       }
       
@@ -54,7 +56,7 @@
     }
     
     ,getAllResponseHeaders: function() {
-      if (this.readyState == this.UNSENT || this.readyState == this.OPENED|| this.error) {
+      if (this.readyState == UNSENT || this.readyState == OPENED|| this.error) {
         return ''
       }
       
@@ -69,7 +71,7 @@
     }
     
     ,getResponseHeader: function(name) {
-      if (this.readyState == this.UNSENT || this.readyState == this.OPENED|| this.error) {
+      if (this.readyState == UNSENT || this.readyState == OPENED|| this.error) {
         return null
       }
       
@@ -81,11 +83,12 @@
       if (undefined === result) {
         result = null
       }
+      
       return result
     }
     
     ,overrideMimeType: function(mime) {
-      if (this.readyState == this.LOADING || this.readyState == this.DONE) {
+      if (this.readyState == LOADING || this.readyState == DONE) {
         throw Error('DOMException.INVALID_STATE_ERR')
       }
       
@@ -140,11 +143,11 @@
       
       this.abort()
       this.sent = false
-      this.changeReadyState(this.OPENED)
+      this.changeReadyState(OPENED)
     }
     
     ,send: function(data) {
-      if (this.readyState != this.OPENED || this.sent) {
+      if (this.readyState != OPENED || this.sent) {
         throw Error('DOMException.INVALID_STATE_ERR')
       }
       
@@ -191,10 +194,10 @@
       
       this.error = true
       
-      if ((!this.sent && (this.readyState == this.UNSENT || this.readyState == this.OPENED)) || this.readyState == this.DONE) {
+      if ((!this.sent && (this.readyState == UNSENT || this.readyState == OPENED)) || this.readyState == DONE) {
         
       } else {
-        this.changeReadyState(this.DONE)
+        this.changeReadyState(DONE)
         this.sent = false
         
         this.dispatchEvent('abort')
@@ -203,16 +206,9 @@
         this.uploadComplete = true
       }
       
-      this.changeReadyState(this.UNSENT, false)
+      this.changeReadyState(UNSENT, false)
     }
   }
-  
-  var property
-  for (var i = 0; i < _staticProperties.length; ++i) {
-    property = _staticProperties[i]
-    MockXMLHttpRequest.prototype[property] = MockXMLHttpRequest[property] = XMLHttpRequest[property]
-  }
-  
   
   // Mock server
   var originXMLHttpRequest
@@ -250,12 +246,15 @@
         request[i] = response[i]
       }
       
+      request.status || (request.status = 200)
+      request.statusText || (request.statusText = 'ok')
+      
       request.dispatchEvent('load')
       request.dispatchEvent('loadend')
     }
   }
   
-  win.Mock = {
+  window.Mock = {
     XMLHttpRequest: MockXMLHttpRequest
     ,server: MockServer
     ,createXML: function() {
@@ -282,49 +281,4 @@
       return domParser.parseFromString(xml, 'application/xml')
     }
   }
-})(window)
-
-// async = false
-/**
-onreadystatechange 1
-XHR finished loading: "http://localhost:4567/".
-onreadystatechange 4
-onload
-onloadend
-**/
-
-/**
-onreadystatechange 1
-GET http://localhost:4567/sdfdf 404 (Not Found) :4567/sdfdf:1
-XHR finished loading: "http://localhost:4567/sdfdf".
-onreadystatechange 4
-onload
-onloadend
-**/
-
-// async = true
-/**
-onreadystatechange 1
-start
-undefined
-GET http://localhost:8888/sdfdf 404 (Not Found) :8888/sdfdf:1
-onreadystatechange 2
-onprogress
-onreadystatechange 3
-XHR finished loading: "http://localhost:8888/sdfdf".
-onreadystatechange 4
-onload
-onloadend
-**/
-
-/**
-onreadystatechange 1
-start
-undefined
-"NetworkError: 500 Internal Server Error - http://campus.digication.dev/test-500.php"
-test-500.php
-onreadystatechange 2
-onreadystatechange 4
-onload
-onloadend
-**/
+})()

@@ -111,11 +111,13 @@
                 if ($.isFirefox && (el.css('left') == 'auto' || el.css('top') == 'auto')) {
                     fixFirefox = true
                     el.css({
-                        left:0 + 'px', top:0 + 'px'
+                        left: 0 + 'px'
+                        ,top: 0 + 'px'
                     })
                 }
 
-                if ((hasLeft || hasTop || hasRight || hasBottom) && (-1 == ['relative', 'absolute', 'fixed'].indexOf(el.css('position')))) {
+                if ((hasLeft || hasTop || hasRight || hasBottom)
+                    && (-1 == ['relative', 'absolute', 'fixed'].indexOf(el.css('position')))) {
                     el.css('position', 'relative')
                 }
 
@@ -124,10 +126,15 @@
                 }
 
                 el.css({
-                    transitionProperty:transitionProperty, transitionDuration:transitionDuration, transitionTimingFunction:transitionTimingFunction, transitionDelay:transitionDelay
+                    transitionProperty:         transitionProperty
+                    ,transitionDuration:        transitionDuration
+                    ,transitionTimingFunction:  transitionTimingFunction
+                    ,transitionDelay:           transitionDelay
                 })
 
-                $(el.css.bind(el)).defer(fixFirefox ? 10 : 0, properties)
+                $(function() {
+                    el.css(properties)
+                }).defer(fixFirefox ? 10 : 0)
             })
 
             return this
@@ -155,9 +162,9 @@
 
         ,hide: function (options) {
             if ($.isFunction(options)) {
-                options = {callback:options}
+                options = {callback: options}
             } else if ($.isNumber(options)) {
-                options = {duration:options}
+                options = {duration: options}
             } else if (true === options) {
                 options = {}
             }
@@ -165,7 +172,7 @@
             if (undefined === options) {
                 this.css('display', 'none')
             } else {
-                this.transit({opacity:0}, options)
+                this.transit({opacity: 0}, options)
             }
 
             return this

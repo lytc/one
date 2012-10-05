@@ -1,2 +1,4 @@
 //= require one
-//= require_tree .
+//= require git.one.description
+//= require example
+//= require scale.fix

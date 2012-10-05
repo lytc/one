@@ -121,11 +121,7 @@
             options.data = null
         } else if (method == 'POST' || method == 'PUT') {
             if ($.isPlainObject(data)) {
-                var formData = new FormData
-                for (var i in data) {
-                    formData.append(i, data[i])
-                }
-                options.data = formData
+                options.data = JSON.stringify(data)
             } else if (data instanceof HTMLFormElement) {
                 options.data = new FormData(options.data)
             }
@@ -165,6 +161,10 @@
         }
 
         // request headers
+        if (options.data && $.isPlainObject(options.data)) {
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+        }
+
         for (var i in defaultOptions.requestHeaders) {
             xhr.setRequestHeader(i, defaultOptions.requestHeaders[i])
         }
@@ -176,7 +176,7 @@
         }
 
         // send
-        xhr.send(options.data)
+        xhr.send(options.data || null)
 
         return xhr
     }
@@ -251,9 +251,9 @@
                 data = null
             }
 
-            var options
+            var options = {}
 
-            if ($.isObject(onSuccess)) {
+            if ($.isPlainObject(onSuccess)) {
                 options = onSuccess
                 onSuccess = null
             }
@@ -261,7 +261,9 @@
             options.url = url
             options.method = 'POST'
             options.data = data
-            options.onSuccess = onSuccess
+            if (onSuccess) {
+                options.onSuccess = onSuccess
+            }
 
             if (responseType) {
                 options.responseType = responseType
@@ -309,7 +311,7 @@
         ,url:                   '.'
         ,timeout:               60000
         ,async:                 true
-        ,withCredentials:       true
+        ,withCredentials:       false
         ,responseType:          ''
         ,disableCaching:        '_dc'
         ,requestHeaders: {

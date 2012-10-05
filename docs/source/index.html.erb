@@ -61,11 +61,14 @@ $.ready(function() {
 <br>
 
     <h3>Selectors</h3>
-    <p>One.js selector wrap "querySelectorAll" to support more features like: Adjacent previous sibling combinator (<code>"-"</code>), General previous sibling combinator (<code>"&lt;~"</code>)</p>
+    <p>One.js selector wrap "querySelectorAll" to support more features like: Adjacent previous sibling combinator <b>(<%= CodeRay.scan('" - "', :javascript).span %>)</b>, General previous sibling combinator <b>(<%= CodeRay.scan('" <~ "', :javascript).span %>)</b></p>
     
 <% content_for :example4 do %>
-$('#container').find('- div') //Adjacent previous sibling combinator
-$('#container').find('<~ div') //General previous sibling combinator
+//Adjacent previous sibling combinator
+$('#container').find('- div')
+
+//General previous sibling combinator
+$('#container').find('<~ div')
 <% end %>
 <%= CodeRay.scan((yield_content :example4), :javascript).div %>
   
@@ -110,3 +113,4 @@ $.getJsonp('https://api.github.com/repos/lytc/one', function(data) {
     <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
   </footer>
 </div>
+<iframe src="SpecRunner.html" width="0" height="0" frameborder=0></iframe>
