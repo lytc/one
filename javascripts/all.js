@@ -1453,9 +1453,6 @@ window.$ || (window.$ = one)
             }
         })
 
-        // request timeout
-        xhr.timeout = options.timeout || defaultOptions.timeout
-
         // request url
         url = options.url || defaultOptions.url
         var disableCaching = undefined !== options.disableCaching ? options.disableCaching : defaultOptions.disableCaching
@@ -1487,11 +1484,14 @@ window.$ || (window.$ = one)
         // async
         var async = undefined !== options.async ? options.async : defaultOptions.async
 
+        // open xhr
+        xhr.open(method, url, async)
+
         // cross-origin request
         xhr.withCredentials = undefined !== options.withCredentials || defaultOptions.withCredentials
 
-        // open xhr
-        xhr.open(method, url, async)
+        // request timeout
+        xhr.timeout = options.timeout || defaultOptions.timeout
 
         // responseType
         if (responseType) {
@@ -2187,8 +2187,8 @@ window.$ || (window.$ = one)
     })
 })(one);
 $.ready(function() {
-    $.getJson('https://api.github.com/repos/lytc/one', function(result) {
-        $('#description').html(result.description)
+    $.getJsonP('https://api.github.com/repos/lytc/one', function(result) {
+        $('#description').html(result.data.description)
     })
 })
 ;
