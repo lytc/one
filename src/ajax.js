@@ -1,3 +1,6 @@
+/**
+ * @class ajax
+ */
 (function ($) {
     "use strict"
 
@@ -12,6 +15,12 @@
         loadend:            {alias:'Complete'}
     }
 
+    /**
+     * @method ajax
+     * @param {String} url
+     * @param {Object} options
+     * @return {XMLHttpRequest}
+     */
     $.ajax = function (url, options) {
         if (!$.isString(url)) {
             options = url
@@ -197,6 +206,12 @@
     }
 
     $.extend($, {
+        /**
+         * @method param
+         * @param {Object} obj
+         * @param {Boolean} [traditional=false]
+         * @return {String}
+         */
         param: function (obj, traditional) {
             var params = []
             params.add = function (k, v) {
@@ -206,6 +221,12 @@
             return params.join('&').replace('%20', '+')
         }
 
+        /**
+         * @method appendQuery
+         * @param {String} url
+         * @param {String|Object|HTMLFormElement} params
+         * @return {String}
+         */
         ,appendQuery: function (url, params) {
             if (-1 == url.indexOf('?')) {
                 url += '?'
@@ -224,6 +245,13 @@
             return url
         }
 
+        /**
+         * @method get
+         * @param {String} url
+         * @param {Function|Object} onSuccess
+         * @param {String} [responseType]
+         * @return {XMLHttpRequest}
+         */
         ,get: function (url, onSuccess, responseType) {
             var options = {
                 url: url
@@ -236,14 +264,33 @@
             return $.ajax(options)
         }
 
+        /**
+         * @method getJson
+         * @param {String} url
+         * @param {Function|Object} onSuccess
+         * @return {XMLHttpRequest}
+         */
         ,getJson: function (url, onSuccess) {
             return $.get(url, onSuccess, 'json')
         }
 
+        /**
+         * @method getXml
+         * @param {String} url
+         * @param {Function|Object} onSuccess
+         * @return {XMLHttpRequest}
+         */
         ,getXml: function (url, onSuccess) {
             return $.get(url, onSuccess, 'xml')
         }
 
+        /**
+         * @method post
+         * @param {String} url
+         * @param {Function|Object} onSuccess
+         * @param {String} [responseType]
+         * @return {XMLHttpRequest}
+         */
         ,post: function (url, data, onSuccess, responseType) {
             if ($.isFunction(data)) {
                 responseType = onSuccess
@@ -272,6 +319,12 @@
             return $.ajax(options)
         }
 
+        /**
+         * @method pool
+         * @param {String} url
+         * @param {Object|Function} [options]
+         * @return {XMLHttpRequest}
+         */
         ,pool: function (url, options) {
             if (!$.isString(url)) {
                 options = url
@@ -306,6 +359,22 @@
         }
     })
 
+    /**
+     * @attribute defaultOptions
+     * @type {Object}
+     * @default {
+            method:                 'GET'
+            ,url:                   '.'
+            ,timeout:               60000
+            ,async:                 true
+            ,withCredentials:       false
+            ,responseType:          ''
+            ,disableCaching:        '_dc'
+            ,requestHeaders: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        }
+     */
     $.ajax.defaultOptions = {
         method:                 'GET'
         ,url:                   '.'

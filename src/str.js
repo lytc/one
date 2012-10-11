@@ -1,3 +1,6 @@
+/**
+ * @class str
+ */
 (function ($) {
     "use strict"
 
@@ -11,41 +14,55 @@
 
     for (var key in escapeChars) escapeChars[escapeChars[key]] = key;
 
-    var Str = function (str) {
-        str = new String(str)
-        $.extend(str, Str.fn)
-        return str
-    }
-
-    Str.fn = {
+    $.extend(String.prototype, {
+        /**
+         * @method camelize
+         * @return {String}
+         */
         camelize: function () {
-            return Str(this.replace(/[-_\s]+(.)?/g, function (match, c) {
+            return this.replace(/[-_\s]+(.)?/g, function (match, c) {
                 return c.toUpperCase()
-            }))
+            })
         }
 
+        /**
+         * @method underscore
+         * @return {String}
+         */
         ,underscore:function () {
-            return Str(this.replace(/([a-z\d])([A-Z]+)/g, '$1_$2').replace(/[-\s]+/g, '_').toLowerCase())
+            return this.replace(/([a-z\d])([A-Z]+)/g, '$1_$2').replace(/[-\s]+/g, '_').toLowerCase()
         }
 
+        /**
+         * @method dasherize
+         * @return {String}
+         */
         ,dasherize:function () {
-            return Str(this.replace(/([A-Z])/g, '-$1').replace(/[-_\s]+/g, '-').toLowerCase())
+            return this.replace(/([A-Z])/g, '-$1').replace(/[-_\s]+/g, '-').toLowerCase()
         }
 
+        /**
+         * @method format
+         * @param {Array|Object} values
+         * @param {RegExp} [pattern=/\{([\w_\-]+)\}/g]
+         * @return {String}
+         */
         ,format:function (values, pattern) {
             pattern || (pattern = /\{([\w_\-]+)\}/g)
 
-            return Str(this.replace(pattern, function (str, match) {
+            return this.replace(pattern, function (str, match) {
                 return undefined == values[match] ? '' : values[match]
-            }))
+            })
         }
 
+        /**
+         * @method escape
+         * @return {String}
+         */
         ,escape:function () {
-            return Str(this.replace(/[&<>"']/g, function (m) {
+            return this.replace(/[&<>"']/g, function (m) {
                 return '&' + escapeChars[m] + ';';
-            }))
+            })
         }
-    }
-
-    $.str = Str
+    })
 })(one)

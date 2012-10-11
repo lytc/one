@@ -1,20 +1,15 @@
+/**
+ * @class fn
+ */
 (function ($) {
     "use strict"
 
-    $.fn = function (fn) {
-        $.extend(fn, $.fn.fn)
-        return fn
-    }
-
-    $.extend($.fn, {
-        createAlias: function (obj, fnName) {
-            return function () {
-                return obj[fnName].apply(obj, arguments)
-            }
-        }
-    })
-
-    $.fn.fn = {
+    $.extend(Function.prototype,  {
+        /**
+         * @method createBuffered
+         * @param {Int} buffer
+         * @return {Function}
+         */
         createBuffered: function (buffer) {
             var timeoutId
                 ,fn = this
@@ -30,7 +25,12 @@
             }
         }
 
-        ,createRepeated:function (interval) {
+        /**
+         * @method createRepeated
+         * @param {Int} interval
+         * @return {Function}
+         */
+        ,createRepeated: function (interval) {
             var intervalId
                 ,fn = this
                 ,result = function () {
@@ -49,6 +49,11 @@
             return result
         }
 
+        /**
+         * @method createInterceptor
+         * @param {Function} passedFn
+         * @return {Function}
+         */
         ,createInterceptor: function (passedFn) {
             var fn = this
             return function () {
@@ -62,12 +67,17 @@
             }
         }
 
+        /**
+         * @method defer
+         * @param {Int} miliseconds
+         * @return {Int}
+         */
         ,defer: function (miliseconds) {
             var fn = this
 
             return setTimeout(function () {
                 fn.call(this)
-            }, miliseconds || 0)
+            }, miliseconds)
         }
-    }
+    })
 })(one)

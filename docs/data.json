@@ -1,0 +1,1250 @@
+{
+    "project": {
+        "name": "One.js API",
+        "description": "The Oone.js API: a library for doing X, Y, and Z",
+        "version": "1.0",
+        "url": "http://lytc.github.com/one"
+    },
+    "files": {
+        "src/ajax.js": {
+            "name": "src/ajax.js",
+            "modules": {},
+            "classes": {
+                "ajax": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/arr.js": {
+            "name": "src/arr.js",
+            "modules": {},
+            "classes": {
+                "arr": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/fn.js": {
+            "name": "src/fn.js",
+            "modules": {},
+            "classes": {
+                "fn": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/one.js": {
+            "name": "src/one.js",
+            "modules": {},
+            "classes": {
+                "$": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/str.js": {
+            "name": "src/str.js",
+            "modules": {},
+            "classes": {
+                "str": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {},
+    "classes": {
+        "ajax": {
+            "name": "ajax",
+            "shortname": "ajax",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src/ajax.js",
+            "line": 1
+        },
+        "arr": {
+            "name": "arr",
+            "shortname": "arr",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src/arr.js",
+            "line": 1
+        },
+        "fn": {
+            "name": "fn",
+            "shortname": "fn",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src/fn.js",
+            "line": 1
+        },
+        "$": {
+            "name": "$",
+            "shortname": "$",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src/one.js",
+            "line": 1
+        },
+        "str": {
+            "name": "str",
+            "shortname": "str",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src/str.js",
+            "line": 1
+        }
+    },
+    "classitems": [
+        {
+            "file": "src/ajax.js",
+            "line": 18,
+            "itemtype": "method",
+            "name": "ajax",
+            "params": [
+                {
+                    "name": "url",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "options",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "XMLHttpRequest"
+            },
+            "class": "ajax"
+        },
+        {
+            "file": "src/ajax.js",
+            "line": 209,
+            "itemtype": "method",
+            "name": "param",
+            "params": [
+                {
+                    "name": "obj",
+                    "description": "",
+                    "type": "Object"
+                },
+                {
+                    "name": "traditional",
+                    "description": "",
+                    "type": "Boolean",
+                    "optional": true,
+                    "optdefault": "false"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "String"
+            },
+            "class": "ajax"
+        },
+        {
+            "file": "src/ajax.js",
+            "line": 224,
+            "itemtype": "method",
+            "name": "appendQuery",
+            "params": [
+                {
+                    "name": "url",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "params",
+                    "description": "",
+                    "type": "String|Object|HTMLFormElement"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "String"
+            },
+            "class": "ajax"
+        },
+        {
+            "file": "src/ajax.js",
+            "line": 248,
+            "itemtype": "method",
+            "name": "get",
+            "params": [
+                {
+                    "name": "url",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "onSuccess",
+                    "description": "",
+                    "type": "Function|Object"
+                },
+                {
+                    "name": "responseType",
+                    "description": "",
+                    "type": "String",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "XMLHttpRequest"
+            },
+            "class": "ajax"
+        },
+        {
+            "file": "src/ajax.js",
+            "line": 267,
+            "itemtype": "method",
+            "name": "getJson",
+            "params": [
+                {
+                    "name": "url",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "onSuccess",
+                    "description": "",
+                    "type": "Function|Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "XMLHttpRequest"
+            },
+            "class": "ajax"
+        },
+        {
+            "file": "src/ajax.js",
+            "line": 277,
+            "itemtype": "method",
+            "name": "getXml",
+            "params": [
+                {
+                    "name": "url",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "onSuccess",
+                    "description": "",
+                    "type": "Function|Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "XMLHttpRequest"
+            },
+            "class": "ajax"
+        },
+        {
+            "file": "src/ajax.js",
+            "line": 287,
+            "itemtype": "method",
+            "name": "post",
+            "params": [
+                {
+                    "name": "url",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "onSuccess",
+                    "description": "",
+                    "type": "Function|Object"
+                },
+                {
+                    "name": "responseType",
+                    "description": "",
+                    "type": "String",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "XMLHttpRequest"
+            },
+            "class": "ajax"
+        },
+        {
+            "file": "src/ajax.js",
+            "line": 322,
+            "itemtype": "method",
+            "name": "pool",
+            "params": [
+                {
+                    "name": "url",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "options",
+                    "description": "",
+                    "type": "Object|Function",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "XMLHttpRequest"
+            },
+            "class": "ajax"
+        },
+        {
+            "file": "src/ajax.js",
+            "line": 362,
+            "itemtype": "attribute",
+            "name": "defaultOptions",
+            "type": "{Object}",
+            "default": "{\n           method:                 'GET'\n           ,url:                   '.'\n           ,timeout:               60000\n           ,async:                 true\n           ,withCredentials:       false\n           ,responseType:          ''\n           ,disableCaching:        '_dc'\n           ,requestHeaders: {\n               'X-Requested-With': 'XMLHttpRequest'\n           }\n       }",
+            "class": "ajax"
+        },
+        {
+            "file": "src/arr.js",
+            "line": 7,
+            "itemtype": "method",
+            "name": "arr",
+            "params": [
+                {
+                    "name": "arr",
+                    "description": "",
+                    "type": "Array"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Array"
+            },
+            "class": "arr"
+        },
+        {
+            "file": "src/arr.js",
+            "line": 18,
+            "itemtype": "method",
+            "name": "pad",
+            "params": [
+                {
+                    "name": "size",
+                    "description": "",
+                    "type": "Int"
+                },
+                {
+                    "name": "value",
+                    "description": "",
+                    "type": "Mixed"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Array"
+            },
+            "class": "arr"
+        },
+        {
+            "file": "src/arr.js",
+            "line": 38,
+            "itemtype": "method",
+            "name": "padLEft",
+            "params": [
+                {
+                    "name": "size",
+                    "description": "",
+                    "type": "Int"
+                },
+                {
+                    "name": "value",
+                    "description": "",
+                    "type": "Mixed"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Array"
+            },
+            "class": "arr"
+        },
+        {
+            "file": "src/arr.js",
+            "line": 48,
+            "itemtype": "method",
+            "name": "uniq",
+            "return": {
+                "description": "",
+                "type": "Array"
+            },
+            "class": "arr"
+        },
+        {
+            "file": "src/arr.js",
+            "line": 63,
+            "itemtype": "method",
+            "name": "truthy",
+            "return": {
+                "description": "",
+                "type": "Array"
+            },
+            "class": "arr"
+        },
+        {
+            "file": "src/arr.js",
+            "line": 74,
+            "itemtype": "method",
+            "name": "falsy",
+            "return": {
+                "description": "",
+                "type": "Array"
+            },
+            "class": "arr"
+        },
+        {
+            "file": "src/arr.js",
+            "line": 85,
+            "itemtype": "method",
+            "name": "exclude",
+            "params": [
+                {
+                    "name": "items",
+                    "description": "",
+                    "type": "Mixed|Array",
+                    "multiple": true
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Array"
+            },
+            "class": "arr"
+        },
+        {
+            "file": "src/arr.js",
+            "line": 103,
+            "itemtype": "method",
+            "name": "toArray",
+            "return": {
+                "description": "",
+                "type": "Array"
+            },
+            "class": "arr"
+        },
+        {
+            "file": "src/fn.js",
+            "line": 7,
+            "itemtype": "method",
+            "name": "fn",
+            "params": [
+                {
+                    "name": "fn",
+                    "description": "",
+                    "type": "Function"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Function"
+            },
+            "class": "fn"
+        },
+        {
+            "file": "src/fn.js",
+            "line": 18,
+            "itemtype": "method",
+            "name": "createAlias",
+            "static": 1,
+            "params": [
+                {
+                    "name": "obj",
+                    "description": "",
+                    "type": "Object"
+                },
+                {
+                    "name": "fnName",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Function"
+            },
+            "class": "fn"
+        },
+        {
+            "file": "src/fn.js",
+            "line": 33,
+            "itemtype": "method",
+            "name": "createBuffered",
+            "params": [
+                {
+                    "name": "buffer",
+                    "description": "",
+                    "type": "Int"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Function"
+            },
+            "class": "fn"
+        },
+        {
+            "file": "src/fn.js",
+            "line": 53,
+            "itemtype": "method",
+            "name": "createRepeated",
+            "params": [
+                {
+                    "name": "interval",
+                    "description": "",
+                    "type": "Int"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Function"
+            },
+            "class": "fn"
+        },
+        {
+            "file": "src/fn.js",
+            "line": 77,
+            "itemtype": "method",
+            "name": "createInterceptor",
+            "params": [
+                {
+                    "name": "passedFn",
+                    "description": "",
+                    "type": "Function"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Function"
+            },
+            "class": "fn"
+        },
+        {
+            "file": "src/fn.js",
+            "line": 95,
+            "itemtype": "method",
+            "name": "defer",
+            "params": [
+                {
+                    "name": "miliseconds",
+                    "description": "",
+                    "type": "Int"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Int"
+            },
+            "class": "fn"
+        },
+        {
+            "file": "src/one.js",
+            "line": 10,
+            "itemtype": "method",
+            "name": "$",
+            "params": [
+                {
+                    "name": "what",
+                    "description": "",
+                    "type": "String|Node|NodeList|HTMLCollection|Function"
+                },
+                {
+                    "name": "scope",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Nodes"
+            },
+            "class": "$"
+        },
+        {
+            "file": "src/one.js",
+            "line": 39,
+            "itemtype": "method",
+            "name": "isObject",
+            "params": [
+                {
+                    "name": "o",
+                    "description": "",
+                    "type": "Mixed"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "$"
+        },
+        {
+            "file": "src/one.js",
+            "line": 48,
+            "itemtype": "method",
+            "name": "isPlainObject",
+            "params": [
+                {
+                    "name": "o",
+                    "description": "",
+                    "type": "Mixed"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "$"
+        },
+        {
+            "file": "src/one.js",
+            "line": 70,
+            "itemtype": "method",
+            "name": "extend",
+            "params": [
+                {
+                    "name": "target",
+                    "description": "",
+                    "type": "Object"
+                },
+                {
+                    "name": "sources",
+                    "description": "",
+                    "type": "Object",
+                    "multiple": true
+                },
+                {
+                    "name": "recursive",
+                    "description": "",
+                    "type": "Boolean",
+                    "optional": true,
+                    "optdefault": "false"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Object"
+            },
+            "class": "$"
+        },
+        {
+            "file": "src/one.js",
+            "line": 108,
+            "itemtype": "attribute",
+            "name": "noop",
+            "readonly": "",
+            "type": "Function",
+            "class": "$"
+        },
+        {
+            "file": "src/one.js",
+            "line": 116,
+            "itemtype": "method",
+            "name": "sequence",
+            "params": [
+                {
+                    "name": "prefix",
+                    "description": "",
+                    "type": "String",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "String"
+            },
+            "class": "$"
+        },
+        {
+            "file": "src/one.js",
+            "line": 135,
+            "itemtype": "method",
+            "name": "error",
+            "params": [
+                {
+                    "name": "message",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Error"
+            },
+            "class": "$"
+        },
+        {
+            "file": "src/one.js",
+            "line": 144,
+            "itemtype": "method",
+            "name": "getType",
+            "params": [
+                {
+                    "name": "obj",
+                    "description": "",
+                    "type": "Mixed"
+                }
+            ],
+            "return": {
+                "description": "String"
+            },
+            "class": "$"
+        },
+        {
+            "file": "src/one.js",
+            "line": 153,
+            "itemtype": "method",
+            "name": "isString",
+            "params": [
+                {
+                    "name": "obj",
+                    "description": "",
+                    "type": "Mixed"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "$"
+        },
+        {
+            "file": "src/one.js",
+            "line": 162,
+            "itemtype": "method",
+            "name": "isNumber",
+            "params": [
+                {
+                    "name": "obj",
+                    "description": "",
+                    "type": "Mixed"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "$"
+        },
+        {
+            "file": "src/one.js",
+            "line": 171,
+            "itemtype": "method",
+            "name": "isFunction",
+            "params": [
+                {
+                    "name": "obj",
+                    "description": "",
+                    "type": "Mixed"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "$"
+        },
+        {
+            "file": "src/one.js",
+            "line": 180,
+            "itemtype": "method",
+            "name": "isArray",
+            "params": [
+                {
+                    "name": "obj",
+                    "description": "",
+                    "type": "Mixed"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "$"
+        },
+        {
+            "file": "src/one.js",
+            "line": 190,
+            "itemtype": "method",
+            "name": "isLikeArray",
+            "params": [
+                {
+                    "name": "obj",
+                    "description": "",
+                    "type": "Mixed"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "$"
+        },
+        {
+            "file": "src/one.js",
+            "line": 208,
+            "itemtype": "method",
+            "name": "isNode",
+            "params": [
+                {
+                    "name": "obj",
+                    "description": "",
+                    "type": "Mixed"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "$"
+        },
+        {
+            "file": "src/one.js",
+            "line": 217,
+            "itemtype": "method",
+            "name": "isElement",
+            "params": [
+                {
+                    "name": "obj",
+                    "description": "",
+                    "type": "Mixed"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "$"
+        },
+        {
+            "file": "src/one.js",
+            "line": 226,
+            "itemtype": "method",
+            "name": "isTextNode",
+            "params": [
+                {
+                    "name": "obj",
+                    "description": "",
+                    "type": "Mixed"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "$"
+        },
+        {
+            "file": "src/one.js",
+            "line": 235,
+            "itemtype": "method",
+            "name": "isNodeList",
+            "params": [
+                {
+                    "name": "obj",
+                    "description": "",
+                    "type": "Mixed"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "$"
+        },
+        {
+            "file": "src/one.js",
+            "line": 244,
+            "itemtype": "method",
+            "name": "isHtmlCollection",
+            "params": [
+                {
+                    "name": "obj",
+                    "description": "",
+                    "type": "Mixed"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "$"
+        },
+        {
+            "file": "src/one.js",
+            "line": 253,
+            "itemtype": "method",
+            "name": "isDefined",
+            "params": [
+                {
+                    "name": "what",
+                    "description": "",
+                    "type": "Mixed"
+                },
+                {
+                    "name": "context",
+                    "description": "",
+                    "type": "Object",
+                    "optional": true,
+                    "optdefault": "window"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "$"
+        },
+        {
+            "file": "src/one.js",
+            "line": 277,
+            "itemtype": "method",
+            "name": "each",
+            "params": [
+                {
+                    "name": "obj",
+                    "description": "",
+                    "type": "Object|Array|LikeArray"
+                },
+                {
+                    "name": "callback",
+                    "description": "",
+                    "type": "Function"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Mixed"
+            },
+            "class": "$"
+        },
+        {
+            "file": "src/one.js",
+            "line": 305,
+            "itemtype": "method",
+            "name": "map",
+            "params": [
+                {
+                    "name": "obj",
+                    "description": "",
+                    "type": "Object|Array|LikeArray"
+                },
+                {
+                    "name": "callback",
+                    "description": "",
+                    "type": "Function"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Mixed"
+            },
+            "class": "$"
+        },
+        {
+            "file": "src/one.js",
+            "line": 328,
+            "itemtype": "method",
+            "name": "createObject",
+            "params": [
+                {
+                    "name": "names",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "scope",
+                    "description": "",
+                    "type": "Object",
+                    "optional": true,
+                    "optdefault": "window"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Object"
+            },
+            "class": "$"
+        },
+        {
+            "file": "src/one.js",
+            "line": 350,
+            "itemtype": "method",
+            "name": "createElement",
+            "params": [
+                {
+                    "name": "name",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "property",
+                    "description": "",
+                    "type": "Object",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "HTMLElement"
+            },
+            "class": "$"
+        },
+        {
+            "file": "src/one.js",
+            "line": 379,
+            "itemtype": "method",
+            "name": "toArray",
+            "params": [
+                {
+                    "name": "obj",
+                    "description": "",
+                    "type": "Mixed"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Array"
+            },
+            "class": "$"
+        },
+        {
+            "file": "src/one.js",
+            "line": 392,
+            "itemtype": "method",
+            "name": "ready",
+            "params": [
+                {
+                    "name": "callback",
+                    "description": "",
+                    "type": "Function"
+                }
+            ],
+            "class": "$"
+        },
+        {
+            "file": "src/one.js",
+            "line": 416,
+            "itemtype": "method",
+            "name": "query",
+            "params": [
+                {
+                    "name": "selector",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "root",
+                    "description": "",
+                    "type": "HTMLElement",
+                    "optional": true,
+                    "optdefault": "document"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "NodeList"
+            },
+            "class": "$"
+        },
+        {
+            "file": "src/one.js",
+            "line": 466,
+            "itemtype": "method",
+            "name": "getJsonP",
+            "params": [
+                {
+                    "name": "url",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "onSuccess",
+                    "description": "",
+                    "type": "Function"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "HTMLScriptEleemnt"
+            },
+            "class": "$"
+        },
+        {
+            "file": "src/one.js",
+            "line": 514,
+            "itemtype": "attribute",
+            "name": "isFirefox",
+            "readonly": "",
+            "type": "{Boolean}",
+            "class": "$"
+        },
+        {
+            "file": "src/one.js",
+            "line": 521,
+            "itemtype": "attribute",
+            "name": "isWebkit",
+            "readonly": "",
+            "type": "{Boolean}",
+            "class": "$"
+        },
+        {
+            "file": "src/one.js",
+            "line": 528,
+            "itemtype": "attribute",
+            "name": "isChrome",
+            "readonly": "",
+            "type": "{Boolean}",
+            "class": "$"
+        },
+        {
+            "file": "src/one.js",
+            "line": 535,
+            "itemtype": "attribute",
+            "name": "isSafari",
+            "readonly": "",
+            "type": "{Boolean}",
+            "class": "$"
+        },
+        {
+            "file": "src/one.js",
+            "line": 542,
+            "itemtype": "attribute",
+            "name": "isOpera",
+            "readonly": "",
+            "type": "{Boolean}",
+            "class": "$"
+        },
+        {
+            "file": "src/one.js",
+            "line": 549,
+            "itemtype": "attribute",
+            "name": "isIe",
+            "readonly": "",
+            "type": "{Boolean}",
+            "class": "$"
+        },
+        {
+            "file": "src/one.js",
+            "line": 556,
+            "itemtype": "method",
+            "name": "vendorPrefix",
+            "return": {
+                "description": "",
+                "type": "String"
+            },
+            "class": "$"
+        },
+        {
+            "file": "src/str.js",
+            "line": 17,
+            "itemtype": "method",
+            "name": "str",
+            "params": [
+                {
+                    "name": "str",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "String"
+            },
+            "is_constructor": 1,
+            "class": "str"
+        },
+        {
+            "file": "src/str.js",
+            "line": 30,
+            "itemtype": "method",
+            "name": "camelize",
+            "return": {
+                "description": "",
+                "type": "String"
+            },
+            "class": "str"
+        },
+        {
+            "file": "src/str.js",
+            "line": 40,
+            "itemtype": "method",
+            "name": "underscore",
+            "return": {
+                "description": "",
+                "type": "String"
+            },
+            "class": "str"
+        },
+        {
+            "file": "src/str.js",
+            "line": 48,
+            "itemtype": "method",
+            "name": "dasherize",
+            "return": {
+                "description": "",
+                "type": "String"
+            },
+            "class": "str"
+        },
+        {
+            "file": "src/str.js",
+            "line": 56,
+            "itemtype": "method",
+            "name": "format",
+            "params": [
+                {
+                    "name": "values",
+                    "description": "",
+                    "type": "Array|Object"
+                },
+                {
+                    "name": "pattern",
+                    "description": "",
+                    "type": "RegExp",
+                    "optional": true,
+                    "optdefault": "/\\{([\\w_\\-"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "String"
+            },
+            "class": "str"
+        },
+        {
+            "file": "src/str.js",
+            "line": 70,
+            "itemtype": "method",
+            "name": "escape",
+            "return": {
+                "description": "",
+                "type": "String"
+            },
+            "class": "str"
+        }
+    ]
+}

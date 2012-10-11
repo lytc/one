@@ -1,9 +1,18 @@
+/**
+ * @class $
+ */
 one = (function () {
     "use strict"
 
     var slice = [].slice
         ,tmpNode
 
+    /**
+     * @method $
+     * @param {String|Node|NodeList|HTMLCollection|Function} what
+     * @param {Object} scope
+     * @return {Nodes}
+     */
     var $ = function (what, scope) {
         if (what instanceof $.nodes) {
             return what
@@ -18,8 +27,6 @@ one = (function () {
                 var parent = scope || document
                 what = parent.querySelectorAll(what)
             }
-        } else if ($.isFunction(what)) {
-            return $.fn(what)
         }
 
         if ($.isNode(what) || $.isNodeList(what) || $.isHtmlCollection(what) || $.isArray(what)) {
@@ -27,10 +34,20 @@ one = (function () {
         }
     }
 
+    /**
+     * @method isObject
+     * @param {Mixed} o
+     * @return {Boolean}
+     */
     $.isObject = function (o) {
         return o instanceof Object
     }
 
+    /**
+     * @method isPlainObject
+     * @param {Mixed} o
+     * @return {Boolean}
+     */
     $.isPlainObject = function (o) {
         if (!o || !$.isObject(o) || o.nodeType || o == o.window) {
             return false;
@@ -48,6 +65,13 @@ one = (function () {
         return key === undefined || hasOwn.call(o, key);
     }
 
+    /**
+     * @method extend
+     * @param {Object} target
+     * @param {Object} sources*
+     * @param {Boolean} [recursive=false]
+     * @return {Object}
+     */
     $.extend = function (target/*, sources*//*, recursive*/) {
         var sources = slice.call(arguments, 1)
             ,recursive = sources.pop()
@@ -79,10 +103,20 @@ one = (function () {
     }
 
     $.extend($, {
-        noop:function () {
+        /**
+         * @attribute noop
+         * @readOnly
+         * @type Function
+         */
+        noop: function () {
         }
 
-        ,sequence:function () {
+        /**
+         * @method sequence
+         * @param {String} [prefix]
+         * @return {String}
+         */
+        ,sequence: function () {
             var counter = 0
             var counterPrefixes = {}
 
@@ -96,31 +130,67 @@ one = (function () {
             }
         }()
 
-        ,error:function (message) {
+        /**
+         * @method error
+         * @param {String} message
+         * @return {Error}
+         */
+        ,error: function (message) {
             return new Error(message)
         }
 
-        ,getType:function (o) {
+        /**
+         * @method getType
+         * @param {Mixed} obj
+         * @return String
+         */
+        ,getType: function (o) {
             return Object.prototype.toString.call(o).match(/\[object (\w+)\]/)[1]
         }
 
-        ,isString:function (o) {
+        /**
+         * @method isString
+         * @param {Mixed} obj
+         * @return {Boolean}
+         */
+        ,isString: function (o) {
             return typeof o == 'string'
         }
 
-        ,isNumber:function (o) {
+        /**
+         * @method isNumber
+         * @param {Mixed} obj
+         * @return {Boolean}
+         */
+        ,isNumber: function (o) {
             return typeof o == 'number'
         }
 
-        ,isFunction:function (o) {
+        /**
+         * @method isFunction
+         * @param {Mixed} obj
+         * @return {Boolean}
+         */
+        ,isFunction: function (o) {
             return typeof o == 'function'
         }
 
-        ,isArray:function (o) {
+        /**
+         * @method isArray
+         * @param {Mixed} obj
+         * @return {Boolean}
+         */
+        ,isArray: function (o) {
             return o instanceof Array
         }
 
-        ,isLikeArray:function (o) {
+
+        /**
+         * @method isLikeArray
+         * @param {Mixed} obj
+         * @return {Boolean}
+         */
+        ,isLikeArray: function (o) {
             if (!o) {
                 return false
             }
@@ -133,27 +203,58 @@ one = (function () {
                 || $.getType(o) == 'Arguments'
         }
 
-        ,isNode:function (o) {
+        /**
+         * @method isNode
+         * @param {Mixed} obj
+         * @return {Boolean}
+         */
+        ,isNode: function (o) {
             return o instanceof Node
         }
 
-        ,isElement:function (o) {
+        /**
+         * @method isElement
+         * @param {Mixed} obj
+         * @return {Boolean}
+         */
+        ,isElement: function (o) {
             return o instanceof Element
         }
 
-        ,isTextNode:function (o) {
+        /**
+         * @method isTextNode
+         * @param {Mixed} obj
+         * @return {Boolean}
+         */
+        ,isTextNode: function (o) {
             return o instanceof Text
         }
 
-        ,isNodeList:function (o) {
+        /**
+         * @method isNodeList
+         * @param {Mixed} obj
+         * @return {Boolean}
+         */
+        ,isNodeList: function (o) {
             return o instanceof NodeList || /* opera bug? */ $.getType(o) == 'NodeList'
         }
 
-        ,isHtmlCollection:function (o) {
+        /**
+         * @method isHtmlCollection
+         * @param {Mixed} obj
+         * @return {Boolean}
+         */
+        ,isHtmlCollection: function (o) {
             return o instanceof HTMLCollection
         }
 
-        ,isDefined:function (what, context) {
+        /**
+         * @method isDefined
+         * @param {Mixed} what
+         * @param {Object} [context=window]
+         * @return {Boolean}
+         */
+        ,isDefined: function (what, context) {
             context || (context = window)
             if ($.isString(what) && /\./.test(what)) {
                 var parts = what.split('.')
@@ -171,7 +272,13 @@ one = (function () {
             return true
         }
 
-        ,each:function (o, callback) {
+        /**
+         * @method each
+         * @param {Object|Array|LikeArray} obj
+         * @param {Function} callback
+         * @return {Mixed}
+         */
+        ,each: function (o, callback) {
             var result
 
             if ($.isLikeArray(o)) {
@@ -193,7 +300,13 @@ one = (function () {
             return result
         }
 
-        ,map:function (o, callback) {
+        /**
+         * @method map
+         * @param {Object|Array|LikeArray} obj
+         * @param {Function} callback
+         * @return {Mixed}
+         */
+        ,map: function (o, callback) {
             var result
 
             if ($.isLikeArray(o)) {
@@ -210,7 +323,13 @@ one = (function () {
             return result
         }
 
-        ,createObject:function (names, scope) {
+        /**
+         * @method namespace
+         * @param {String} names
+         * @param {Object} [scope=window]
+         * @return {Object}
+         */
+        ,namespace: function (names, scope) {
             var parts = names.split('.')
                 ,i = 0
                 ,len = parts.length
@@ -226,7 +345,32 @@ one = (function () {
             return tmp
         }
 
-        ,createElement:function (name, properties) {
+        /**
+         * @method createAlias
+         * @static
+         * @param {Object} obj
+         * @param {String} fnName
+         * @return {Function}
+         */
+        ,createAlias: function (obj, fnName) {
+            return function () {
+                return obj[fnName].apply(obj, arguments)
+            }
+        }
+
+        /**
+         * @method createElement
+         * @param {String} name
+         * @param {Object} [property]
+         * @return {HTMLElement}
+         */
+        ,createElement: function (name, properties) {
+            if ($.isPlainObject(name)) {
+                properties = name
+                name = undefined
+            }
+
+            name || (name = 'div')
             var dom = document.createElement(name)
 
             properties || (properties = {})
@@ -249,7 +393,12 @@ one = (function () {
             return dom
         }
 
-        ,toArray:function (o) {
+        /**
+         * @method toArray
+         * @param {Mixed} obj
+         * @return {Array}
+         */
+        ,toArray: function (o) {
             if (!$.isLikeArray(o)) {
                 return [].slice.call(arguments)
             }
@@ -257,7 +406,11 @@ one = (function () {
             return [].slice.call(o)
         }
 
-        ,ready:function () {
+        /**
+         * @method ready
+         * @param {Function} callback
+         */
+        ,ready: function () {
             var isReady = document.readyState == 'complete'
                 , callbacks = []
 
@@ -274,10 +427,17 @@ one = (function () {
                 }
 
                 callbacks.push(callback)
+                return $
             }
         }()
 
-        ,query:function (selector, root) {
+        /**
+         * @method query
+         * @param {String} selector
+         * @param {HTMLElement} [root=document]
+         * @return {NodeList}
+         */
+        ,query: function (selector, root) {
             root || (root = document)
 
             switch (selector[0]) {
@@ -321,7 +481,13 @@ one = (function () {
             }
         }
 
-        ,getJsonP:function (url, onSuccess) {
+        /**
+         * @method getJsonP
+         * @param {String} url
+         * @param {Function} onSuccess
+         * @return {HTMLScriptEleemnt}
+         */
+        ,getJsonP: function (url, onSuccess) {
             var options
 
             if (!$.isString(url)) {
@@ -363,12 +529,52 @@ one = (function () {
         ,isIphone   = test(/iphone/i)
 
     $.extend($, {
+        /**
+         * @attribute isFirefox
+         * @readOnly
+         * @type {Boolean}
+         */
         isFirefox:isFirefox
+
+        /**
+         * @attribute isWebkit
+         * @readOnly
+         * @type {Boolean}
+         */
         ,isWebkit:isWebkit
+
+        /**
+         * @attribute isChrome
+         * @readOnly
+         * @type {Boolean}
+         */
         ,isChrome:isChrome
+
+        /**
+         * @attribute isSafari
+         * @readOnly
+         * @type {Boolean}
+         */
         ,isSafari:isSafari
+
+        /**
+         * @attribute isOpera
+         * @readOnly
+         * @type {Boolean}
+         */
         ,isOpera:isOpera
+
+        /**
+         * @attribute isIe
+         * @readOnly
+         * @type {Boolean}
+         */
         ,isIe:isIe
+
+        /**
+         * @method vendorPrefix
+         * @return {String}
+         */
         ,vendorPrefix:function () {
             return  isFirefox ? 'moz' :
                     isWebkit ? 'webkit' :

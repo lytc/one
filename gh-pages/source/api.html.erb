@@ -1,0 +1,64 @@
+---
+title: API Documentation
+---
+
+<% content_for :stylesheet do %>
+    <%= stylesheet_link_tag 'api' %>
+<% end %>
+
+<%
+apis = {
+    'Core' => ['$()', '$.extend()', '$.noop', '$.sequence()', '$.error()', '$.getType()', '$.isString()', '$.isNumber()',
+        '$.isFunction()', '$.isArray()', '$.isLikeArray()', '$.isNode()', '$.isElement()', '$.isTextNode()',
+        '$.isHtmlCollection()', '$.isDefined()', '$.each()', '$.map()', '$.namespace()', '$.createElement()',
+        '$.toArray()', '$.ready()', '$.query()', '$.getJsonP()', '$.isFirefox', '$.isWebkit', '$.isChrome', '$.isSafari',
+        '$.isOpera', '$.isIe', '$.vendorPrefix', '$.createAlias()'],
+    'Nodes' => ['index()', 'get()', 'item()', 'first()', 'last()', 'each()', 'filter()', 'matches()', 'is()', 'ancestors()',
+        'parent()', 'find()', 'children()', 'next()', 'prev()', 'nextSiblings()', 'prevSiblings()', 'append()',
+        'prepend()', 'before()', 'after()', 'clone()', 'concat()', 'wrap()', 'unwrap()', 'destroy()', 'html()',
+        'data()', 'attr()', 'hasAttr()', 'removeAttr()', 'hasClass()', 'addClass()', 'removeClass()', 'toggleClass()',
+        'css()', 'width()', 'height()', 'top()', 'left()', 'offset()'],
+    'Form'  => ['val()', 'submit()'],
+    'Event' => ['on()', 'un()', 'trigger()'],
+    'String' => ['camelize()', 'underscore()', 'dasherize()', 'format()', 'escape()'],
+    'Array' => ['pad()', 'padLeft()', 'uniq()', 'truthy()', 'falsy()', 'exclude()'],
+    'Function' => ['createBuffered()', 'createRepeated()', 'createInterceptor()', 'defer()'],
+    'Transition' => ['transit()', 'show()', 'hide()', 'toggle()', 'slideUp()', 'slideDown()', 'slideLeft()', 'slideRight()',
+        'slideV()', 'slideH()', 'collapse()', 'expand()', 'toggleCollapse()', 'moveX()', 'moveY()', 'move()'],
+    'Template'  => ['$.template()', 'setTemplate()', 'render()']
+}
+%>
+<% content_for :aside do %>
+<button class="toggle-nav">
+  <span></span>
+  <span></span>
+  <span></span>
+</button>
+<section>
+  <h3>One.js API Documentation</h3>
+  <ul>
+    <% apis.each do |section, items| %>
+    <li>
+      <a href="#<%= section %>"><%= section %></a>
+      <ul>
+        <% items.sort.each do |item| %>
+        <li><a href="#<%= section %>|<%= item %>"><%= item %></a></li>
+        <% end %>
+      </ul>
+    </li>
+    <% end %>
+  </ul>
+</section>
+<% end %>
+
+<section>
+    <% apis.each do |section, items| %>
+      <h2 id="<%= section %>"><%= section %></h2>
+      <% items.sort.each do |item| %>
+        <article id="<%= section %>|<%= item %>">
+          <h3><%= item %></h3>
+          <%= partial "api/#{section}/#{item}" %>
+        </article>
+      <%end %>
+    <% end %>
+</section>

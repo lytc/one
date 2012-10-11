@@ -280,15 +280,7 @@
             var me = this
 
             $.each(arguments, function (index, item) {
-                if ($.isString(item)) {
-                    me.concat.apply(me, $.toArray($.query(item)))
-
-                } else if ($.isLikeArray(item)) {
-                    me.concat.apply(me, $.toArray(item))
-
-                } else if ($.isNode(item)) {
-                    me.push(item)
-                }
+                me.push.apply(me, $.toArray($(item)))
             })
 
             return this
@@ -317,6 +309,8 @@
                 })
                 $(parent).destroy()
             })
+
+            return this
         }
 
         ,destroy: function () {
@@ -498,10 +492,10 @@
         ,css: function (name, value) {
             if (undefined == value && $.isString(name)) {
                 var node = this[0]
-                if (undefined === document.body.style[$.str(name).camelize()]) {
+                if (undefined === document.body.style[name.camelize()]) {
                     name = '-' + $.vendorPrefix + '-' + name
                 }
-                name = $.str(name).camelize()
+                name = name.camelize()
                 return node.style[name] || document.defaultView.getComputedStyle(node, '').getPropertyValue(name)
             }
 
@@ -515,9 +509,9 @@
                 ,property
 
             for (var i in name) {
-                property = $.str(i).underscore().dasherize()
+                property = i.underscore().dasherize()
 
-                if (undefined === document.body.style[$.str(property).camelize()]) {
+                if (undefined === document.body.style[property.camelize()]) {
                     property = '-' + $.vendorPrefix + '-' + property
                 }
 

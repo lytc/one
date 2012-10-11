@@ -47,24 +47,24 @@ task :build do
   min_file.close()
 end
 
-task :docs do
-  Dir.chdir('docs') do
+task :ghpages do
+  Dir.chdir('gh-pages') do
     system "middleman build"
   end
   
-  # copy js to doc
-  system "cp build/one.js docs/source/javascripts/one.js"
+  # copy js to gh-pages
+  system "cp build/one.js gh-pages/source/javascripts/one.js"
 
-  # copy spec to doc
-  system "rm -rf docs/source/javascript/spec/"
-  system "cp -r spec/ docs/source/javascripts/spec/"
+  # copy spec to gh-pages
+  system "rm -rf gh-pages/source/javascript/spec/"
+  system "cp -r spec/ gh-pages/source/javascripts/spec/"
 
   # copy to one-gh-pages
-  system "cp -r docs/build/ ../one-gh-pages/"
+  system "cp -r gh-pages/build/ ../one-gh-pages/"
 end
 
 task :default do
   Rake::Task['jasmine:ci'].invoke
   Rake::Task['build'].invoke
-  Rake::Task['docs'].invoke
+  Rake::Task['ghpages'].invoke
 end

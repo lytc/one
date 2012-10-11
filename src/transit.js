@@ -1,11 +1,7 @@
 (function ($) {
     "use strict"
 
-    var transitionEndEventName = 'transitionend'
-
-    if ($.isWebkit) {
-        transitionEndEventName = 'webkitTransitionEnd'
-    }
+    var transitionEndEventName = $.isFirefox? 'transitionend' : $.vendorPrefix + 'TransitionEnd'
 
     $.extend($.nodes.fn, {
         transit: function (properties, duration, easing, callback) {
@@ -42,7 +38,7 @@
 
             var me = this
             this.one(transitionEndEventName, function (e) {
-                !callback || options.callback.call(e.target, e, me)
+                !options.callback || options.callback.call(e.target, e, me)
 
                 node.isFxPlaying = false
                 var args = node.fxQueue.shift()
@@ -55,9 +51,9 @@
                 ,len = keys.length
 
             var transitionProperty = keys.join()
-                ,transitionDuration = $.arr([]).pad(len, options.duration + 's')
-                ,transitionTimingFunction = $.arr([]).pad(len, options.easing)
-                ,transitionDelay = $.arr([]).pad(len, options.delay + 's')
+                ,transitionDuration = [].pad(len, options.duration + 's')
+                ,transitionTimingFunction = [].pad(len, options.easing)
+                ,transitionDelay = [].pad(len, options.delay + 's')
                 ,fixFirefox = false
                 ,has = properties.hasOwnProperty.bind(properties)
                 ,hasLeft = has('left')
@@ -132,9 +128,13 @@
                     ,transitionDelay:           transitionDelay
                 })
 
-                $(function() {
+                if (fixFirefox) {
+                    (function() {
+                        el.css(properties)
+                    }).defer(10)
+                } else {
                     el.css(properties)
-                }).defer(fixFirefox ? 10 : 0)
+                }
             })
 
             return this
@@ -172,6 +172,12 @@
             if (undefined === options) {
                 this.css('display', 'none')
             } else {
+                options || (options = {})
+
+                options.callback || (options.callback = $.noop)
+                options.callback = options.callback.createInterceptor(function() {
+                    $(this).css('display', 'none')
+                })
                 this.transit({opacity: 0}, options)
             }
 
@@ -274,7 +280,7 @@
 
         ,moveX: function (x, options) {
             return this.transit({
-                left:x
+                left: x
             }, options)
         }
 
@@ -286,7 +292,8 @@
 
         ,move: function (x, y, options) {
             return this.transit({
-                left:x, top:y
+                left: x
+                ,top: y
             }, options)
         }
     })

@@ -12,7 +12,7 @@
         if (!this.domListeners[eventName]) {
             var me = this
                 ,callback = function (e) {
-                    me.trigger(eventName, e)
+                    me.trigger(eventName, e, this)
                 }
 
             this.each(function () {
@@ -77,11 +77,19 @@
                 return this
             }
 
+            if (!node) {
+                e instanceof Event || (e = new CustomEvent(eventName, e))
+                this.each(function() {
+                    this.dispatchEvent(e)
+                })
+                return this
+            }
+
             var me = this
-                ,target = $(e.target)
+                ,target = e.target
 
             $.each(this.listeners[eventName], function (index, event) {
-                if (event.selector && !target.is(event.selector)) {
+                if (event.selector && !$(target).is(event.selector)) {
                     return
                 }
                 event.callback.call(target, e, node)
