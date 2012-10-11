@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>The Middleman</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+
+    
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div id="container">
+        <aside>
+          <nav>
+            <ul>
+              <li><a href=".">Introduction</a></li>
+              <li><a href="api.html">API Documentation</a></li>
+            </ul>
+          </nav>
+          
+        </aside>
+        <pre><code>prepend(String|Array|Node|NodeList|HTMLCollection els) =&gt; self
+</code></pre>
+
+<div><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span><span style="color:#070">&lt;div</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">foo</span><span style="color:#710">&quot;</span></span><span style="color:#070">&gt;</span>
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span>    <span style="color:#070">&lt;div</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">bar</span><span style="color:#710">&quot;</span></span><span style="color:#070">&gt;</span><span style="color:#070">&lt;/div&gt;</span>
+<span class="line-numbers"><a href="#n3" name="n3">3</a></span><span style="color:#070">&lt;/div&gt;</span>
+</pre></div>
+</div>
+</div>
+
+<div><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span><span style="color:#369;font-weight:bold">$</span>(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">.foo</span><span style="color:#710">'</span></span>).prepend(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">&lt;div class=&quot;baz&quot;&gt;&lt;/div&gt;</span><span style="color:#710">'</span></span>)
+</pre></div>
+</div>
+</div>
+
+<div><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span><span style="color:#070">&lt;div</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">foo</span><span style="color:#710">&quot;</span></span><span style="color:#070">&gt;</span>
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span>    <span style="color:#070">&lt;div</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">bar</span><span style="color:#710">&quot;</span></span><span style="color:#070">&gt;</span><span style="color:#070">&lt;/div&gt;</span>
+<span class="line-numbers"><a href="#n3" name="n3">3</a></span>    <span style="color:#070">&lt;div</span> <span style="color:#b48">class</span>=<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">&quot;</span><span style="color:#D20">baz</span><span style="color:#710">&quot;</span></span><span style="color:#070">&gt;</span><span style="color:#070">&lt;/div&gt;</span>
+<span class="line-numbers"><a href="#n4" name="n4">4</a></span><span style="color:#070">&lt;/div&gt;</span>
+</pre></div>
+</div>
+</div>
+
+        <div class="clearfix"></div>
+    </div>
+    <script src="javascripts/all.js?"></script>
+  </body>
+</html>

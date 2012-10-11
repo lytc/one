@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>The Middleman</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+
+    
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div id="container">
+        <aside>
+          <nav>
+            <ul>
+              <li><a href=".">Introduction</a></li>
+              <li><a href="api.html">API Documentation</a></li>
+            </ul>
+          </nav>
+          
+        </aside>
+        <pre><code>Function.prototype.createInterceptor(Function passedFn) =&gt; Function
+</code></pre>
+
+<div><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"> <a href="#n1" name="n1">1</a></span><span style="color:#080;font-weight:bold">var</span> <span style="color:#06B;font-weight:bold">callback</span> = <span style="color:#080;font-weight:bold">function</span>(name) {
+<span class="line-numbers"> <a href="#n2" name="n2">2</a></span>    console.log(name)
+<span class="line-numbers"> <a href="#n3" name="n3">3</a></span>}
+<span class="line-numbers"> <a href="#n4" name="n4">4</a></span>
+<span class="line-numbers"> <a href="#n5" name="n5">5</a></span><span style="color:#080;font-weight:bold">var</span> interceptor = callback.createInterceptor(<span style="color:#080;font-weight:bold">function</span>() {
+<span class="line-numbers"> <a href="#n6" name="n6">6</a></span>    console.log(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">Hello </span><span style="color:#710">'</span></span>)
+<span class="line-numbers"> <a href="#n7" name="n7">7</a></span>})
+<span class="line-numbers"> <a href="#n8" name="n8">8</a></span>
+<span class="line-numbers"> <a href="#n9" name="n9">9</a></span>interceptor(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">One.js</span><span style="color:#710">'</span></span>)
+<span class="line-numbers"><strong><a href="#n10" name="n10">10</a></strong></span>
+<span class="line-numbers"><a href="#n11" name="n11">11</a></span><span style="color:#777">// =&gt; Hello</span>
+<span class="line-numbers"><a href="#n12" name="n12">12</a></span><span style="color:#777">// =&gt; One.js</span>
+</pre></div>
+</div>
+</div>
+
+        <div class="clearfix"></div>
+    </div>
+    <script src="javascripts/all.js?"></script>
+  </body>
+</html>

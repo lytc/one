@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>The Middleman</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+
+    
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div id="container">
+        <aside>
+          <nav>
+            <ul>
+              <li><a href=".">Introduction</a></li>
+              <li><a href="api.html">API Documentation</a></li>
+            </ul>
+          </nav>
+          
+        </aside>
+        <pre><code>$.vendorPrefix =&gt; String
+</code></pre>
+
+<p>Return prefix of current browser.</p>
+
+<pre><code>Firefox:    =&gt; moz
+Webkit:     =&gt; webkit
+Opera:      =&gt; o
+Ie:         =&gt; ms
+</code></pre>
+
+        <div class="clearfix"></div>
+    </div>
+    <script src="javascripts/all.js?"></script>
+  </body>
+</html>

@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>The Middleman</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+
+    
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div id="container">
+        <aside>
+          <nav>
+            <ul>
+              <li><a href=".">Introduction</a></li>
+              <li><a href="api.html">API Documentation</a></li>
+            </ul>
+          </nav>
+          
+        </aside>
+        <pre><code>$.Template.setTemplate(String tpl) =&gt; $.Template
+</code></pre>
+
+<div><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span><span style="color:#080;font-weight:bold">var</span> template = <span style="color:#369;font-weight:bold">$</span>.template()
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span>template.setTemplate(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">Hi &lt;%= this.name %&gt;, welcome to &quot;&lt;%= this.lib %&gt;&quot;!</span><span style="color:#710">'</span></span>)
+<span class="line-numbers"><a href="#n3" name="n3">3</a></span>
+<span class="line-numbers"><a href="#n4" name="n4">4</a></span>template.render({<span style="color:#606">name</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">Lytc</span><span style="color:#710">'</span></span>, <span style="color:#606">lib</span>: <span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">One.js</span><span style="color:#710">'</span></span>})
+<span class="line-numbers"><a href="#n5" name="n5">5</a></span><span style="color:#777">// =&gt; 'Hi Lytc, welcome to &quot;One.js&quot;!'</span>
+</pre></div>
+</div>
+</div>
+
+        <div class="clearfix"></div>
+    </div>
+    <script src="javascripts/all.js?"></script>
+  </body>
+</html>

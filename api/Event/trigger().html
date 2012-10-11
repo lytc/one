@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>The Middleman</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+
+    
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div id="container">
+        <aside>
+          <nav>
+            <ul>
+              <li><a href=".">Introduction</a></li>
+              <li><a href="api.html">API Documentation</a></li>
+            </ul>
+          </nav>
+          
+        </aside>
+        <pre><code>trigger(String eventName, [Object|CustomEvent e]) =&gt; self
+</code></pre>
+
+<div><div class="CodeRay">
+  <div class="code"><pre><span class="line-numbers"><a href="#n1" name="n1">1</a></span><span style="color:#080;font-weight:bold">var</span> nodes = <span style="color:#369;font-weight:bold">$</span>(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">&lt;div&gt;</span><span style="color:#710">'</span></span>)
+<span class="line-numbers"><a href="#n2" name="n2">2</a></span>nodes.on(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">custom-event</span><span style="color:#710">'</span></span>, <span style="color:#080;font-weight:bold">function</span>(e) {
+<span class="line-numbers"><a href="#n3" name="n3">3</a></span>    <span style="color:#777">// do somethings</span>
+<span class="line-numbers"><a href="#n4" name="n4">4</a></span>})
+<span class="line-numbers"><a href="#n5" name="n5">5</a></span>nodes.trigger(<span style="background-color:hsla(0,100%,50%,0.05)"><span style="color:#710">'</span><span style="color:#D20">custom-event</span><span style="color:#710">'</span></span>, {<span style="color:#606">bubbles</span>: <span style="color:#069">true</span>, <span style="color:#606">detail</span>: {<span style="color:#606">foo</span>: <span style="color:#00D">1</span>, <span style="color:#606">bar</span>: <span style="color:#00D">2</span>}})
+</pre></div>
+</div>
+</div>
+
+        <div class="clearfix"></div>
+    </div>
+    <script src="javascripts/all.js?"></script>
+  </body>
+</html>
