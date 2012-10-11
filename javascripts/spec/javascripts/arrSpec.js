@@ -1,35 +1,35 @@
-describe('$.arr', function() {
+describe('Array.prototype', function() {
   it('pad', function() {
-    expect($.arr([]).pad(3, 1).toArray()).toEqual([1, 1, 1])
-    expect($.arr([2, 3]).pad(4, 1).toArray()).toEqual([2, 3, 1, 1])
+    expect([].pad(3, 1)).toEqual([1, 1, 1])
+    expect([2, 3].pad(4, 1)).toEqual([2, 3, 1, 1])
   })
   
   it('padLeft', function() {
-    expect($.arr([2, 3]).padLeft(4, 1).toArray()).toEqual([1, 1, 2, 3])
+    expect([2, 3].padLeft(4, 1)).toEqual([1, 1, 2, 3])
   })
   
   it('uniq', function() {
-    expect($.arr([]).uniq().toArray()).toEqual([])
-    expect($.arr([1, 2, 3]).uniq().toArray()).toEqual([1, 2, 3])
-    expect($.arr([1, 2, 3, 1, 1, 2]).uniq().toArray()).toEqual([1, 2, 3])
+    expect([].uniq()).toEqual([])
+    expect([1, 2, 3].uniq()).toEqual([1, 2, 3])
+    expect([1, 2, 3, 1, 1, 2].uniq()).toEqual([1, 2, 3])
   })
   
   it('truthy', function() {
-    expect($.arr([]).truthy().toArray()).toEqual([])
-    expect($.arr([1, false, true, null, '', undefined, 0, NaN]).truthy().toArray()).toEqual([1, true])
+    expect([].truthy()).toEqual([])
+    expect([1, false, true, null, '', undefined, 0, NaN].truthy()).toEqual([1, true])
   })
   
   it('falsy', function() {
-    expect($.arr([]).truthy().toArray()).toEqual([])
-    expect($.arr([1, false, true, null, '', undefined, 0]).falsy().toArray()).toEqual([false, null, '', undefined, 0])
-    expect(isNaN($.arr([1, NaN]).falsy().toArray()[0])).toBeTruthy()
+    expect([].truthy()).toEqual([])
+    expect([1, false, true, null, '', undefined, 0].falsy()).toEqual([false, null, '', undefined, 0])
+    expect(isNaN([1, NaN].falsy()[0])).toBeTruthy()
   })
   
   it('exclude', function() {
-    expect($.arr([]).exclude().toArray()).toEqual([])
-    expect($.arr([1, 2, 3, 4]).exclude(1, 3).toArray()).toEqual([2, 4])
-    expect($.arr([1, 2, 3, 4]).exclude([1, 3]).toArray()).toEqual([2, 4])
-    expect($.arr([1, 2, 3, 4]).exclude(1, [3]).toArray()).toEqual([2, 4])
+    expect([].exclude()).toEqual([])
+    expect([1, 2, 3, 4].exclude(1, 3)).toEqual([2, 4])
+    expect([1, 2, 3, 4].exclude([1, 3])).toEqual([2, 4])
+    expect([1, 2, 3, 4].exclude(1, [3])).toEqual([2, 4])
   })
 })
 ;

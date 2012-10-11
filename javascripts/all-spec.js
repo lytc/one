@@ -585,38 +585,38 @@ describe('$.ajax', function() {
   })
 })
 ;
-describe('$.arr', function() {
+describe('Array.prototype', function() {
   it('pad', function() {
-    expect($.arr([]).pad(3, 1).toArray()).toEqual([1, 1, 1])
-    expect($.arr([2, 3]).pad(4, 1).toArray()).toEqual([2, 3, 1, 1])
+    expect([].pad(3, 1)).toEqual([1, 1, 1])
+    expect([2, 3].pad(4, 1)).toEqual([2, 3, 1, 1])
   })
   
   it('padLeft', function() {
-    expect($.arr([2, 3]).padLeft(4, 1).toArray()).toEqual([1, 1, 2, 3])
+    expect([2, 3].padLeft(4, 1)).toEqual([1, 1, 2, 3])
   })
   
   it('uniq', function() {
-    expect($.arr([]).uniq().toArray()).toEqual([])
-    expect($.arr([1, 2, 3]).uniq().toArray()).toEqual([1, 2, 3])
-    expect($.arr([1, 2, 3, 1, 1, 2]).uniq().toArray()).toEqual([1, 2, 3])
+    expect([].uniq()).toEqual([])
+    expect([1, 2, 3].uniq()).toEqual([1, 2, 3])
+    expect([1, 2, 3, 1, 1, 2].uniq()).toEqual([1, 2, 3])
   })
   
   it('truthy', function() {
-    expect($.arr([]).truthy().toArray()).toEqual([])
-    expect($.arr([1, false, true, null, '', undefined, 0, NaN]).truthy().toArray()).toEqual([1, true])
+    expect([].truthy()).toEqual([])
+    expect([1, false, true, null, '', undefined, 0, NaN].truthy()).toEqual([1, true])
   })
   
   it('falsy', function() {
-    expect($.arr([]).truthy().toArray()).toEqual([])
-    expect($.arr([1, false, true, null, '', undefined, 0]).falsy().toArray()).toEqual([false, null, '', undefined, 0])
-    expect(isNaN($.arr([1, NaN]).falsy().toArray()[0])).toBeTruthy()
+    expect([].truthy()).toEqual([])
+    expect([1, false, true, null, '', undefined, 0].falsy()).toEqual([false, null, '', undefined, 0])
+    expect(isNaN([1, NaN].falsy()[0])).toBeTruthy()
   })
   
   it('exclude', function() {
-    expect($.arr([]).exclude().toArray()).toEqual([])
-    expect($.arr([1, 2, 3, 4]).exclude(1, 3).toArray()).toEqual([2, 4])
-    expect($.arr([1, 2, 3, 4]).exclude([1, 3]).toArray()).toEqual([2, 4])
-    expect($.arr([1, 2, 3, 4]).exclude(1, [3]).toArray()).toEqual([2, 4])
+    expect([].exclude()).toEqual([])
+    expect([1, 2, 3, 4].exclude(1, 3)).toEqual([2, 4])
+    expect([1, 2, 3, 4].exclude([1, 3])).toEqual([2, 4])
+    expect([1, 2, 3, 4].exclude(1, [3])).toEqual([2, 4])
   })
 })
 ;
@@ -706,21 +706,53 @@ describe('$.nodes event', function() {
         var node = document.createElement('div')
             ,child = document.createElement('div')
             ,nodes = $(node)
-            ,e = {target: child}
+            ,e = new CustomEvent('click', {bubbles: true})
             ,callback = jasmine.createSpy()
 
         child.className = 'foo'
         node.appendChild(child)
 
-        nodes.on('click', '.foo', callback)
-        nodes.trigger('click', e, node)
+        var flag = false
+        waitsFor(function() {
+            return flag
+        })
 
-        expect(callback).toHaveBeenCalled()
-        expect(callback.calls.length).toEqual(1)
+        $.ready(function() {
+            document.body.appendChild(node)
+            flag = true
+        })
+
+        runs(function() {
+            nodes.on('click', '.foo', callback)
+            child.dispatchEvent(e)
+
+            expect(callback).toHaveBeenCalled()
+            expect(callback.calls.length).toEqual(1)
+        })
+    })
+
+    it('should work with custom event', function() {
+        var node = document.createElement('div')
+            ,nodes = $(node)
+
+        var expectedEvent
+            ,expectedContext
+            ,eventOption = {detail: {foo: 1, bar: 2}}
+
+        nodes.on('custom-event', function(e) {
+            expectedEvent = e
+            expectedContext = this
+        })
+
+        nodes.trigger('custom-event', eventOption)
+
+        expect(expectedEvent instanceof CustomEvent).toBeTruthy()
+        expect(expectedEvent.detail).toEqual(eventOption.detail)
+        expect(expectedContext).toBe(node)
     })
 })
 ;
-describe('$.fn', function() {
+describe('Function.prototype', function() {
   it('should work with createAlias', function() {
     var scope
     var obj = {
@@ -729,7 +761,7 @@ describe('$.fn', function() {
       }
     }
     
-    var alias = $.fn.createAlias(obj, 'callback')
+    var alias = $.createAlias(obj, 'callback')
     alias()
     expect(scope).toBe(obj)
   })
@@ -737,14 +769,14 @@ describe('$.fn', function() {
   describe('createBuffered', function() {
     it('should not called', function() {
       var callback = jasmine.createSpy()
-      var buffered = $.fn(callback).createBuffered(1)
+      var buffered = callback.createBuffered(1)
       buffered()
       expect(callback).not.toHaveBeenCalled()
     })
   
     it('should called', function() {
       var callback = jasmine.createSpy()
-      var buffered = $.fn(callback).createBuffered(1)
+      var buffered = callback.createBuffered(1)
       buffered()
       var flag = false
       waitsFor(function() {
@@ -762,7 +794,7 @@ describe('$.fn', function() {
   
     it('should called with right arguments', function() {
       var callback = jasmine.createSpy()
-      var buffered = $.fn(callback).createBuffered(1)
+      var buffered = callback.createBuffered(1)
       
       buffered(1, 2, 3)
       var flag = false
@@ -787,7 +819,7 @@ describe('$.fn', function() {
         expectedScope = this
       }).bind(scope)
       
-      var buffered = $.fn(callback).createBuffered(1)
+      var buffered = callback.createBuffered(1)
       
       buffered()
       var flag = false
@@ -806,7 +838,7 @@ describe('$.fn', function() {
     
     it('should called one within the period', function() {
       var callback = jasmine.createSpy()
-        ,buffered = $.fn(callback).createBuffered(1)
+        ,buffered = callback.createBuffered(1)
         buffered()
         buffered()
         
@@ -828,14 +860,14 @@ describe('$.fn', function() {
   describe('createRepeated', function() {
     it('should not called', function() {
       var callback = jasmine.createSpy()
-      var repeated = $.fn(callback).createRepeated(1)
+      var repeated = callback.createRepeated(1)
       repeated()
       expect(callback).not.toHaveBeenCalled()
     })
     
     it('should called', function() {
       var callback = jasmine.createSpy()
-      var repeated = $.fn(callback).createRepeated(1)
+      var repeated = callback.createRepeated(1)
       repeated()
       
       var flag = false
@@ -854,7 +886,7 @@ describe('$.fn', function() {
     
     it('should repeated', function() {
       var callback = jasmine.createSpy()
-      var repeated = $.fn(callback).createRepeated(1)
+      var repeated = callback.createRepeated(1)
       repeated()
       
       var flag = false
@@ -873,7 +905,7 @@ describe('$.fn', function() {
     
     it('should called with right arguments', function() {
       var callback = jasmine.createSpy()
-      var repeated = $.fn(callback).createRepeated(1)
+      var repeated = callback.createRepeated(1)
       
       repeated(1, 2, 3)
       var flag = false
@@ -898,7 +930,7 @@ describe('$.fn', function() {
         expectedScope = this
       }).bind(scope)
       
-      var repeated = $.fn(callback).createRepeated(1)
+      var repeated = callback.createRepeated(1)
       
       repeated()
       var flag = false
@@ -917,7 +949,7 @@ describe('$.fn', function() {
     
     it('should stop when called stop', function() {
       var callback = jasmine.createSpy()
-      var repeated = $.fn(callback).createRepeated(1)
+      var repeated = callback.createRepeated(1)
       repeated()
       repeated.stop()
       
@@ -940,7 +972,7 @@ describe('$.fn', function() {
     it('should work', function() {
       var passedFn = jasmine.createSpy()
       var fn = jasmine.createSpy()
-      var intercepter = $.fn(fn).createInterceptor(passedFn)
+      var intercepter = fn.createInterceptor(passedFn)
       intercepter()
       
       expect(passedFn).toHaveBeenCalled()
@@ -951,7 +983,7 @@ describe('$.fn', function() {
       var lastCalledFrom
           ,passedFn = function() { lastCalledFrom = 'passed fn' }
           ,fn = function() { lastCalledFrom = 'orig fn' }
-          ,intercepter = $.fn(fn).createInterceptor(passedFn)
+          ,intercepter = fn.createInterceptor(passedFn)
           
       intercepter()
       
@@ -961,7 +993,7 @@ describe('$.fn', function() {
     it('should not call the original function if the passed function return false', function() {
       var passedFn = function() { return false }
           ,fn = jasmine.createSpy()
-          ,intercepter = $.fn(fn).createInterceptor(passedFn)
+          ,intercepter = fn.createInterceptor(passedFn)
           
       intercepter()
       
@@ -972,9 +1004,7 @@ describe('$.fn', function() {
   describe('defer', function() {
     it('should called', function() {
       var callback = jasmine.createSpy()
-      $.fn(callback).defer()
-      
-      $.fn(callback).defer()
+      callback.defer()
       expect(callback).not.toHaveBeenCalled()
       
       var flag = false
@@ -2559,19 +2589,19 @@ describe('$', function() {
     })
   })
   
-  // $.createObject()
-  describe('createObject()', function() {
+  // $.namespace()
+  describe('namespace()', function() {
     it('should created a new object', function() {
-      expect($.createObject('foo.bar.baz')).toEqual({})
+      expect($.namespace('foo.bar.baz')).toEqual({})
     })
     it('should not override existing object', function() {
       window.foo = {bar: {one: 1}}
-      $.createObject('foo.bar.baz')
+      $.namespace('foo.bar.baz')
       expect(window.foo).toEqual({bar: {one: 1, baz: {}}})
     })
     it('with custom scope', function() {
       var object = {foo: {}}
-      $.createObject('foo.bar.baz', object)
+      $.namespace('foo.bar.baz', object)
       expect(object).toEqual({foo: {bar: {baz: {}}}})
     })
   })
@@ -2720,48 +2750,41 @@ describe('$', function() {
   })
 })
 ;
-describe('$.str', function() {
-  it('should be object type', function() {
-    var str = 'this is it'
-    str = $.str(str)
-    expect($.isObject(str)).toBeTruthy()
-    expect(str).toEqual('this is it')
-  })
-  
+describe('String.prototype', function() {
   it('camelize', function() {
-    expect($.str('ca me li ze').camelize()).toEqual('caMeLiZe')
-    expect($.str('ca-me-li-ze').camelize()).toEqual('caMeLiZe')
-    expect($.str('ca_me_li_ze').camelize()).toEqual('caMeLiZe')
-    expect($.str('ca me-li_ze').camelize()).toEqual('caMeLiZe')
+    expect('ca me li ze'.camelize()).toEqual('caMeLiZe')
+    expect('ca-me-li-ze'.camelize()).toEqual('caMeLiZe')
+    expect('ca_me_li_ze'.camelize()).toEqual('caMeLiZe')
+    expect('ca me-li_ze'.camelize()).toEqual('caMeLiZe')
   })
   
   it('underscore', function() {
-    expect($.str('un der sco re').underscore()).toEqual('un_der_sco_re')
-    expect($.str('un-der-sco-re').underscore()).toEqual('un_der_sco_re')
-    expect($.str('unDerScoRe').underscore()).toEqual('un_der_sco_re')
-    expect($.str('un der-sco-Re').underscore()).toEqual('un_der_sco_re')
+    expect('un der sco re'.underscore()).toEqual('un_der_sco_re')
+    expect('un-der-sco-re'.underscore()).toEqual('un_der_sco_re')
+    expect('unDerScoRe'.underscore()).toEqual('un_der_sco_re')
+    expect('un der-sco-Re'.underscore()).toEqual('un_der_sco_re')
   })
   
   it('dasherize', function() {
-    expect($.str('da she ri ze').dasherize()).toEqual('da-she-ri-ze')
-    expect($.str('da_she_ri_ze').dasherize()).toEqual('da-she-ri-ze')
-    expect($.str('daSheRiZe').dasherize()).toEqual('da-she-ri-ze')
-    expect($.str('da she_riZe').dasherize()).toEqual('da-she-ri-ze')
+    expect('da she ri ze'.dasherize()).toEqual('da-she-ri-ze')
+    expect('da_she_ri_ze'.dasherize()).toEqual('da-she-ri-ze')
+    expect('daSheRiZe'.dasherize()).toEqual('da-she-ri-ze')
+    expect('da she_riZe'.dasherize()).toEqual('da-she-ri-ze')
   })
   
   it('format', function() {
-    expect($.str('Hi {0}, welcome to {1} !').format(['Lytc', '"One"']))
+    expect('Hi {0}, welcome to {1} !'.format(['Lytc', '"One"']))
           .toEqual('Hi Lytc, welcome to "One" !')
           
-    expect($.str('Hi {name}, welcome to {lib} !').format({name: 'Lytc', lib: '"One"'}))
+    expect('Hi {name}, welcome to {lib} !'.format({name: 'Lytc', lib: '"One"'}))
           .toEqual('Hi Lytc, welcome to "One" !')
           
-    expect($.str('Hi [0], welcome to [1] !').format(['Lytc', '"One"'], /\[([\w_\-]+)\]/g))
+    expect('Hi [0], welcome to [1] !'.format(['Lytc', '"One"'], /\[([\w_\-]+)\]/g))
           .toEqual('Hi Lytc, welcome to "One" !')
   })
   
   it('escape', function() {
-    expect($.str('<div>" content \' &</div>').escape()).toEqual('&lt;div&gt;&quot; content \&apos; &amp;&lt;/div&gt;')
+    expect('<div>" content \' &</div>'.escape()).toEqual('&lt;div&gt;&quot; content \&apos; &amp;&lt;/div&gt;')
   })
 })
 ;
@@ -2775,12 +2798,7 @@ describe('$.template', function() {
     expect(tpl.compiledFn).toBe(null)
   })
   
-  it('compile', function() {
-    tpl.compile()
-    expect($.isFunction(tpl.compiledFn)).toBeTruthy()
-  })
-  
-  it('ititialize with data', function() {
+  it('initialize with data', function() {
     var content = $.template(html, {name: 'Lytc', lib: 'One'})
     expect(content).toEqual('Hi Lytc, welcome to "One" !')
   })

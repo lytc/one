@@ -1,4 +1,4 @@
-describe('$.fn', function() {
+describe('Function.prototype', function() {
   it('should work with createAlias', function() {
     var scope
     var obj = {
@@ -7,7 +7,7 @@ describe('$.fn', function() {
       }
     }
     
-    var alias = $.fn.createAlias(obj, 'callback')
+    var alias = $.createAlias(obj, 'callback')
     alias()
     expect(scope).toBe(obj)
   })
@@ -15,14 +15,14 @@ describe('$.fn', function() {
   describe('createBuffered', function() {
     it('should not called', function() {
       var callback = jasmine.createSpy()
-      var buffered = $.fn(callback).createBuffered(1)
+      var buffered = callback.createBuffered(1)
       buffered()
       expect(callback).not.toHaveBeenCalled()
     })
   
     it('should called', function() {
       var callback = jasmine.createSpy()
-      var buffered = $.fn(callback).createBuffered(1)
+      var buffered = callback.createBuffered(1)
       buffered()
       var flag = false
       waitsFor(function() {
@@ -40,7 +40,7 @@ describe('$.fn', function() {
   
     it('should called with right arguments', function() {
       var callback = jasmine.createSpy()
-      var buffered = $.fn(callback).createBuffered(1)
+      var buffered = callback.createBuffered(1)
       
       buffered(1, 2, 3)
       var flag = false
@@ -65,7 +65,7 @@ describe('$.fn', function() {
         expectedScope = this
       }).bind(scope)
       
-      var buffered = $.fn(callback).createBuffered(1)
+      var buffered = callback.createBuffered(1)
       
       buffered()
       var flag = false
@@ -84,7 +84,7 @@ describe('$.fn', function() {
     
     it('should called one within the period', function() {
       var callback = jasmine.createSpy()
-        ,buffered = $.fn(callback).createBuffered(1)
+        ,buffered = callback.createBuffered(1)
         buffered()
         buffered()
         
@@ -106,14 +106,14 @@ describe('$.fn', function() {
   describe('createRepeated', function() {
     it('should not called', function() {
       var callback = jasmine.createSpy()
-      var repeated = $.fn(callback).createRepeated(1)
+      var repeated = callback.createRepeated(1)
       repeated()
       expect(callback).not.toHaveBeenCalled()
     })
     
     it('should called', function() {
       var callback = jasmine.createSpy()
-      var repeated = $.fn(callback).createRepeated(1)
+      var repeated = callback.createRepeated(1)
       repeated()
       
       var flag = false
@@ -132,7 +132,7 @@ describe('$.fn', function() {
     
     it('should repeated', function() {
       var callback = jasmine.createSpy()
-      var repeated = $.fn(callback).createRepeated(1)
+      var repeated = callback.createRepeated(1)
       repeated()
       
       var flag = false
@@ -151,7 +151,7 @@ describe('$.fn', function() {
     
     it('should called with right arguments', function() {
       var callback = jasmine.createSpy()
-      var repeated = $.fn(callback).createRepeated(1)
+      var repeated = callback.createRepeated(1)
       
       repeated(1, 2, 3)
       var flag = false
@@ -176,7 +176,7 @@ describe('$.fn', function() {
         expectedScope = this
       }).bind(scope)
       
-      var repeated = $.fn(callback).createRepeated(1)
+      var repeated = callback.createRepeated(1)
       
       repeated()
       var flag = false
@@ -195,7 +195,7 @@ describe('$.fn', function() {
     
     it('should stop when called stop', function() {
       var callback = jasmine.createSpy()
-      var repeated = $.fn(callback).createRepeated(1)
+      var repeated = callback.createRepeated(1)
       repeated()
       repeated.stop()
       
@@ -218,7 +218,7 @@ describe('$.fn', function() {
     it('should work', function() {
       var passedFn = jasmine.createSpy()
       var fn = jasmine.createSpy()
-      var intercepter = $.fn(fn).createInterceptor(passedFn)
+      var intercepter = fn.createInterceptor(passedFn)
       intercepter()
       
       expect(passedFn).toHaveBeenCalled()
@@ -229,7 +229,7 @@ describe('$.fn', function() {
       var lastCalledFrom
           ,passedFn = function() { lastCalledFrom = 'passed fn' }
           ,fn = function() { lastCalledFrom = 'orig fn' }
-          ,intercepter = $.fn(fn).createInterceptor(passedFn)
+          ,intercepter = fn.createInterceptor(passedFn)
           
       intercepter()
       
@@ -239,7 +239,7 @@ describe('$.fn', function() {
     it('should not call the original function if the passed function return false', function() {
       var passedFn = function() { return false }
           ,fn = jasmine.createSpy()
-          ,intercepter = $.fn(fn).createInterceptor(passedFn)
+          ,intercepter = fn.createInterceptor(passedFn)
           
       intercepter()
       
@@ -250,9 +250,7 @@ describe('$.fn', function() {
   describe('defer', function() {
     it('should called', function() {
       var callback = jasmine.createSpy()
-      $.fn(callback).defer()
-      
-      $.fn(callback).defer()
+      callback.defer()
       expect(callback).not.toHaveBeenCalled()
       
       var flag = false

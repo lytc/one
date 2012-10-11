@@ -313,19 +313,19 @@ describe('$', function() {
     })
   })
   
-  // $.createObject()
-  describe('createObject()', function() {
+  // $.namespace()
+  describe('namespace()', function() {
     it('should created a new object', function() {
-      expect($.createObject('foo.bar.baz')).toEqual({})
+      expect($.namespace('foo.bar.baz')).toEqual({})
     })
     it('should not override existing object', function() {
       window.foo = {bar: {one: 1}}
-      $.createObject('foo.bar.baz')
+      $.namespace('foo.bar.baz')
       expect(window.foo).toEqual({bar: {one: 1, baz: {}}})
     })
     it('with custom scope', function() {
       var object = {foo: {}}
-      $.createObject('foo.bar.baz', object)
+      $.namespace('foo.bar.baz', object)
       expect(object).toEqual({foo: {bar: {baz: {}}}})
     })
   })

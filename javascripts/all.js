@@ -1,9 +1,19 @@
+/**
+ * @class $
+ */
+
 one = (function () {
     "use strict"
 
     var slice = [].slice
         ,tmpNode
 
+    /**
+     * @method $
+     * @param {String|Node|NodeList|HTMLCollection|Function} what
+     * @param {Object} scope
+     * @return {Nodes}
+     */
     var $ = function (what, scope) {
         if (what instanceof $.nodes) {
             return what
@@ -18,8 +28,6 @@ one = (function () {
                 var parent = scope || document
                 what = parent.querySelectorAll(what)
             }
-        } else if ($.isFunction(what)) {
-            return $.fn(what)
         }
 
         if ($.isNode(what) || $.isNodeList(what) || $.isHtmlCollection(what) || $.isArray(what)) {
@@ -27,10 +35,20 @@ one = (function () {
         }
     }
 
+    /**
+     * @method isObject
+     * @param {Mixed} o
+     * @return {Boolean}
+     */
     $.isObject = function (o) {
         return o instanceof Object
     }
 
+    /**
+     * @method isPlainObject
+     * @param {Mixed} o
+     * @return {Boolean}
+     */
     $.isPlainObject = function (o) {
         if (!o || !$.isObject(o) || o.nodeType || o == o.window) {
             return false;
@@ -48,6 +66,13 @@ one = (function () {
         return key === undefined || hasOwn.call(o, key);
     }
 
+    /**
+     * @method extend
+     * @param {Object} target
+     * @param {Object} sources*
+     * @param {Boolean} [recursive=false]
+     * @return {Object}
+     */
     $.extend = function (target/*, sources*//*, recursive*/) {
         var sources = slice.call(arguments, 1)
             ,recursive = sources.pop()
@@ -79,10 +104,20 @@ one = (function () {
     }
 
     $.extend($, {
-        noop:function () {
+        /**
+         * @attribute noop
+         * @readOnly
+         * @type Function
+         */
+        noop: function () {
         }
 
-        ,sequence:function () {
+        /**
+         * @method sequence
+         * @param {String} [prefix]
+         * @return {String}
+         */
+        ,sequence: function () {
             var counter = 0
             var counterPrefixes = {}
 
@@ -96,31 +131,67 @@ one = (function () {
             }
         }()
 
-        ,error:function (message) {
+        /**
+         * @method error
+         * @param {String} message
+         * @return {Error}
+         */
+        ,error: function (message) {
             return new Error(message)
         }
 
-        ,getType:function (o) {
+        /**
+         * @method getType
+         * @param {Mixed} obj
+         * @return String
+         */
+        ,getType: function (o) {
             return Object.prototype.toString.call(o).match(/\[object (\w+)\]/)[1]
         }
 
-        ,isString:function (o) {
+        /**
+         * @method isString
+         * @param {Mixed} obj
+         * @return {Boolean}
+         */
+        ,isString: function (o) {
             return typeof o == 'string'
         }
 
-        ,isNumber:function (o) {
+        /**
+         * @method isNumber
+         * @param {Mixed} obj
+         * @return {Boolean}
+         */
+        ,isNumber: function (o) {
             return typeof o == 'number'
         }
 
-        ,isFunction:function (o) {
+        /**
+         * @method isFunction
+         * @param {Mixed} obj
+         * @return {Boolean}
+         */
+        ,isFunction: function (o) {
             return typeof o == 'function'
         }
 
-        ,isArray:function (o) {
+        /**
+         * @method isArray
+         * @param {Mixed} obj
+         * @return {Boolean}
+         */
+        ,isArray: function (o) {
             return o instanceof Array
         }
 
-        ,isLikeArray:function (o) {
+
+        /**
+         * @method isLikeArray
+         * @param {Mixed} obj
+         * @return {Boolean}
+         */
+        ,isLikeArray: function (o) {
             if (!o) {
                 return false
             }
@@ -133,27 +204,58 @@ one = (function () {
                 || $.getType(o) == 'Arguments'
         }
 
-        ,isNode:function (o) {
+        /**
+         * @method isNode
+         * @param {Mixed} obj
+         * @return {Boolean}
+         */
+        ,isNode: function (o) {
             return o instanceof Node
         }
 
-        ,isElement:function (o) {
+        /**
+         * @method isElement
+         * @param {Mixed} obj
+         * @return {Boolean}
+         */
+        ,isElement: function (o) {
             return o instanceof Element
         }
 
-        ,isTextNode:function (o) {
+        /**
+         * @method isTextNode
+         * @param {Mixed} obj
+         * @return {Boolean}
+         */
+        ,isTextNode: function (o) {
             return o instanceof Text
         }
 
-        ,isNodeList:function (o) {
+        /**
+         * @method isNodeList
+         * @param {Mixed} obj
+         * @return {Boolean}
+         */
+        ,isNodeList: function (o) {
             return o instanceof NodeList || /* opera bug? */ $.getType(o) == 'NodeList'
         }
 
-        ,isHtmlCollection:function (o) {
+        /**
+         * @method isHtmlCollection
+         * @param {Mixed} obj
+         * @return {Boolean}
+         */
+        ,isHtmlCollection: function (o) {
             return o instanceof HTMLCollection
         }
 
-        ,isDefined:function (what, context) {
+        /**
+         * @method isDefined
+         * @param {Mixed} what
+         * @param {Object} [context=window]
+         * @return {Boolean}
+         */
+        ,isDefined: function (what, context) {
             context || (context = window)
             if ($.isString(what) && /\./.test(what)) {
                 var parts = what.split('.')
@@ -171,7 +273,13 @@ one = (function () {
             return true
         }
 
-        ,each:function (o, callback) {
+        /**
+         * @method each
+         * @param {Object|Array|LikeArray} obj
+         * @param {Function} callback
+         * @return {Mixed}
+         */
+        ,each: function (o, callback) {
             var result
 
             if ($.isLikeArray(o)) {
@@ -193,7 +301,13 @@ one = (function () {
             return result
         }
 
-        ,map:function (o, callback) {
+        /**
+         * @method map
+         * @param {Object|Array|LikeArray} obj
+         * @param {Function} callback
+         * @return {Mixed}
+         */
+        ,map: function (o, callback) {
             var result
 
             if ($.isLikeArray(o)) {
@@ -210,7 +324,13 @@ one = (function () {
             return result
         }
 
-        ,createObject:function (names, scope) {
+        /**
+         * @method namespace
+         * @param {String} names
+         * @param {Object} [scope=window]
+         * @return {Object}
+         */
+        ,namespace: function (names, scope) {
             var parts = names.split('.')
                 ,i = 0
                 ,len = parts.length
@@ -226,7 +346,32 @@ one = (function () {
             return tmp
         }
 
-        ,createElement:function (name, properties) {
+        /**
+         * @method createAlias
+         * @static
+         * @param {Object} obj
+         * @param {String} fnName
+         * @return {Function}
+         */
+        ,createAlias: function (obj, fnName) {
+            return function () {
+                return obj[fnName].apply(obj, arguments)
+            }
+        }
+
+        /**
+         * @method createElement
+         * @param {String} name
+         * @param {Object} [property]
+         * @return {HTMLElement}
+         */
+        ,createElement: function (name, properties) {
+            if ($.isPlainObject(name)) {
+                properties = name
+                name = undefined
+            }
+
+            name || (name = 'div')
             var dom = document.createElement(name)
 
             properties || (properties = {})
@@ -249,7 +394,12 @@ one = (function () {
             return dom
         }
 
-        ,toArray:function (o) {
+        /**
+         * @method toArray
+         * @param {Mixed} obj
+         * @return {Array}
+         */
+        ,toArray: function (o) {
             if (!$.isLikeArray(o)) {
                 return [].slice.call(arguments)
             }
@@ -257,7 +407,11 @@ one = (function () {
             return [].slice.call(o)
         }
 
-        ,ready:function () {
+        /**
+         * @method ready
+         * @param {Function} callback
+         */
+        ,ready: function () {
             var isReady = document.readyState == 'complete'
                 , callbacks = []
 
@@ -274,10 +428,17 @@ one = (function () {
                 }
 
                 callbacks.push(callback)
+                return $
             }
         }()
 
-        ,query:function (selector, root) {
+        /**
+         * @method query
+         * @param {String} selector
+         * @param {HTMLElement} [root=document]
+         * @return {NodeList}
+         */
+        ,query: function (selector, root) {
             root || (root = document)
 
             switch (selector[0]) {
@@ -321,7 +482,13 @@ one = (function () {
             }
         }
 
-        ,getJsonP:function (url, onSuccess) {
+        /**
+         * @method getJsonP
+         * @param {String} url
+         * @param {Function} onSuccess
+         * @return {HTMLScriptEleemnt}
+         */
+        ,getJsonP: function (url, onSuccess) {
             var options
 
             if (!$.isString(url)) {
@@ -363,12 +530,52 @@ one = (function () {
         ,isIphone   = test(/iphone/i)
 
     $.extend($, {
+        /**
+         * @attribute isFirefox
+         * @readOnly
+         * @type {Boolean}
+         */
         isFirefox:isFirefox
+
+        /**
+         * @attribute isWebkit
+         * @readOnly
+         * @type {Boolean}
+         */
         ,isWebkit:isWebkit
+
+        /**
+         * @attribute isChrome
+         * @readOnly
+         * @type {Boolean}
+         */
         ,isChrome:isChrome
+
+        /**
+         * @attribute isSafari
+         * @readOnly
+         * @type {Boolean}
+         */
         ,isSafari:isSafari
+
+        /**
+         * @attribute isOpera
+         * @readOnly
+         * @type {Boolean}
+         */
         ,isOpera:isOpera
+
+        /**
+         * @attribute isIe
+         * @readOnly
+         * @type {Boolean}
+         */
         ,isIe:isIe
+
+        /**
+         * @method vendorPrefix
+         * @return {String}
+         */
         ,vendorPrefix:function () {
             return  isFirefox ? 'moz' :
                     isWebkit ? 'webkit' :
@@ -388,6 +595,9 @@ window.$ || (window.$ = one)
         dataset: !!document.documentElement.dataset
     }
 })(one);
+/**
+ * @class str
+ */
 (function ($) {
     "use strict"
 
@@ -401,135 +611,160 @@ window.$ || (window.$ = one)
 
     for (var key in escapeChars) escapeChars[escapeChars[key]] = key;
 
-    var Str = function (str) {
-        str = new String(str)
-        $.extend(str, Str.fn)
-        return str
-    }
-
-    Str.fn = {
+    $.extend(String.prototype, {
+        /**
+         * @method camelize
+         * @return {String}
+         */
         camelize: function () {
-            return Str(this.replace(/[-_\s]+(.)?/g, function (match, c) {
+            return this.replace(/[-_\s]+(.)?/g, function (match, c) {
                 return c.toUpperCase()
-            }))
+            })
         }
 
+        /**
+         * @method underscore
+         * @return {String}
+         */
         ,underscore:function () {
-            return Str(this.replace(/([a-z\d])([A-Z]+)/g, '$1_$2').replace(/[-\s]+/g, '_').toLowerCase())
+            return this.replace(/([a-z\d])([A-Z]+)/g, '$1_$2').replace(/[-\s]+/g, '_').toLowerCase()
         }
 
+        /**
+         * @method dasherize
+         * @return {String}
+         */
         ,dasherize:function () {
-            return Str(this.replace(/([A-Z])/g, '-$1').replace(/[-_\s]+/g, '-').toLowerCase())
+            return this.replace(/([A-Z])/g, '-$1').replace(/[-_\s]+/g, '-').toLowerCase()
         }
 
+        /**
+         * @method format
+         * @param {Array|Object} values
+         * @param {RegExp} [pattern=/\{([\w_\-]+)\}/g]
+         * @return {String}
+         */
         ,format:function (values, pattern) {
             pattern || (pattern = /\{([\w_\-]+)\}/g)
 
-            return Str(this.replace(pattern, function (str, match) {
+            return this.replace(pattern, function (str, match) {
                 return undefined == values[match] ? '' : values[match]
-            }))
+            })
         }
 
+        /**
+         * @method escape
+         * @return {String}
+         */
         ,escape:function () {
-            return Str(this.replace(/[&<>"']/g, function (m) {
+            return this.replace(/[&<>"']/g, function (m) {
                 return '&' + escapeChars[m] + ';';
-            }))
+            })
         }
-    }
-
-    $.str = Str
+    })
 })(one);
+/**
+ * @class arr
+ */
 (function ($) {
     "use strict"
 
-    $.arr = function (arr) {
-        $.extend(arr, $.arr.fn)
-        return arr
-    }
-
-    $.arr.fn = {
+    $.extend(Array.prototype, {
+        /**
+         * @method pad
+         * @param {Int} size
+         * @param {Mixed} value
+         * @return {Array}
+         */
         pad: function (size, value) {
+            var result = this
+
             if (size > 0) {
-                for (var i = 0, len = size - this.length; i < len; ++i) {
-                    this.push(value)
+                for (var i = 0, len = size - result.length; i < len; ++i) {
+                    result.push(value)
                 }
             } else {
-                for (var i = 0, len = -size - this.length; i < len; ++i) {
-                    this.unshift(value)
+                for (var i = 0, len = -size - result.length; i < len; ++i) {
+                    result.unshift(value)
                 }
             }
 
-            return this
+            return result
         }
 
+        /**
+         * @method padLEft
+         * @param {Int} size
+         * @param {Mixed} value
+         * @return {Array}
+         */
         ,padLeft: function (size, value) {
             return this.pad(-size, value)
         }
 
+        /**
+         * @method uniq
+         * @return {Array}
+         */
         ,uniq: function () {
-            var result = []
-            for (var i = 0, len = this.length; i < len; ++i) {
-                if (-1 == result.indexOf(this[i])) {
-                    result.push(this[i])
-                }
-            }
-
-            return $.arr(result)
+            return this.filter(function(item, i, me) {
+                return i == me.indexOf(item)
+            })
         }
 
+        /**
+         * @method truthy
+         * @return {Array}
+         */
         ,truthy: function () {
-            var result = this.filter(function (item) {
+            return this.filter(function (item) {
                 return !!item
             })
-            return $.arr(result)
         }
 
+        /**
+         * @method falsy
+         * @return {Array}
+         */
         ,falsy: function () {
-            var result = this.filter(function (item) {
+            return this.filter(function (item) {
                 return !item
             })
-            return $.arr(result)
         }
 
+        /**
+         * @method exclude
+         * @param {Mixed|Array} items*
+         * @return {Array}
+         */
         ,exclude: function () {
-            var arg, index
+            var arg, index, result = this
+
             for (var i = 0, len = arguments.length; i < len; ++i) {
                 arg = $.isArray(arguments[i]) ? arguments[i] : [arguments[i]]
                 for (var j = 0, jlen = arg.length; j < jlen; ++j) {
-                    if (-1 != (index = this.indexOf(arg[j]))) {
-                        this.splice(index, 1)
+                    if (-1 != (index = result.indexOf(arg[j]))) {
+                        result.splice(index, 1)
                     }
                 }
             }
-            return this
-        }
 
-        ,toArray: function () {
-            var result = []
-            for (var i = 0, len = this.length; i < len; ++i) {
-                result.push(this[i])
-            }
             return result
         }
-    }
+    })
 })(one);
+/**
+ * @class fn
+ */
 (function ($) {
     "use strict"
 
-    $.fn = function (fn) {
-        $.extend(fn, $.fn.fn)
-        return fn
-    }
-
-    $.extend($.fn, {
-        createAlias: function (obj, fnName) {
-            return function () {
-                return obj[fnName].apply(obj, arguments)
-            }
-        }
-    })
-
-    $.fn.fn = {
+    $.extend(Function.prototype,  {
+        /**
+         * @method createBuffered
+         * @param {Int} buffer
+         * @return {Function}
+         */
         createBuffered: function (buffer) {
             var timeoutId
                 ,fn = this
@@ -545,7 +780,12 @@ window.$ || (window.$ = one)
             }
         }
 
-        ,createRepeated:function (interval) {
+        /**
+         * @method createRepeated
+         * @param {Int} interval
+         * @return {Function}
+         */
+        ,createRepeated: function (interval) {
             var intervalId
                 ,fn = this
                 ,result = function () {
@@ -564,6 +804,11 @@ window.$ || (window.$ = one)
             return result
         }
 
+        /**
+         * @method createInterceptor
+         * @param {Function} passedFn
+         * @return {Function}
+         */
         ,createInterceptor: function (passedFn) {
             var fn = this
             return function () {
@@ -577,14 +822,19 @@ window.$ || (window.$ = one)
             }
         }
 
+        /**
+         * @method defer
+         * @param {Int} miliseconds
+         * @return {Int}
+         */
         ,defer: function (miliseconds) {
             var fn = this
 
             return setTimeout(function () {
                 fn.call(this)
-            }, miliseconds || 0)
+            }, miliseconds)
         }
-    }
+    })
 })(one);
 (function ($) {
     "use strict"
@@ -868,15 +1118,7 @@ window.$ || (window.$ = one)
             var me = this
 
             $.each(arguments, function (index, item) {
-                if ($.isString(item)) {
-                    me.concat.apply(me, $.toArray($.query(item)))
-
-                } else if ($.isLikeArray(item)) {
-                    me.concat.apply(me, $.toArray(item))
-
-                } else if ($.isNode(item)) {
-                    me.push(item)
-                }
+                me.push.apply(me, $.toArray($(item)))
             })
 
             return this
@@ -905,6 +1147,8 @@ window.$ || (window.$ = one)
                 })
                 $(parent).destroy()
             })
+
+            return this
         }
 
         ,destroy: function () {
@@ -1086,10 +1330,10 @@ window.$ || (window.$ = one)
         ,css: function (name, value) {
             if (undefined == value && $.isString(name)) {
                 var node = this[0]
-                if (undefined === document.body.style[$.str(name).camelize()]) {
+                if (undefined === document.body.style[name.camelize()]) {
                     name = '-' + $.vendorPrefix + '-' + name
                 }
-                name = $.str(name).camelize()
+                name = name.camelize()
                 return node.style[name] || document.defaultView.getComputedStyle(node, '').getPropertyValue(name)
             }
 
@@ -1103,9 +1347,9 @@ window.$ || (window.$ = one)
                 ,property
 
             for (var i in name) {
-                property = $.str(i).underscore().dasherize()
+                property = i.underscore().dasherize()
 
-                if (undefined === document.body.style[$.str(property).camelize()]) {
+                if (undefined === document.body.style[property.camelize()]) {
                     property = '-' + $.vendorPrefix + '-' + property
                 }
 
@@ -1266,7 +1510,7 @@ window.$ || (window.$ = one)
         if (!this.domListeners[eventName]) {
             var me = this
                 ,callback = function (e) {
-                    me.trigger(eventName, e)
+                    me.trigger(eventName, e, this)
                 }
 
             this.each(function () {
@@ -1331,11 +1575,19 @@ window.$ || (window.$ = one)
                 return this
             }
 
+            if (!node) {
+                e instanceof Event || (e = new CustomEvent(eventName, e))
+                this.each(function() {
+                    this.dispatchEvent(e)
+                })
+                return this
+            }
+
             var me = this
-                ,target = $(e.target)
+                ,target = e.target
 
             $.each(this.listeners[eventName], function (index, event) {
-                if (event.selector && !target.is(event.selector)) {
+                if (event.selector && !$(target).is(event.selector)) {
                     return
                 }
                 event.callback.call(target, e, node)
@@ -1355,6 +1607,9 @@ window.$ || (window.$ = one)
         }
     })
 })(one);
+/**
+ * @class ajax
+ */
 (function ($) {
     "use strict"
 
@@ -1369,6 +1624,12 @@ window.$ || (window.$ = one)
         loadend:            {alias:'Complete'}
     }
 
+    /**
+     * @method ajax
+     * @param {String} url
+     * @param {Object} options
+     * @return {XMLHttpRequest}
+     */
     $.ajax = function (url, options) {
         if (!$.isString(url)) {
             options = url
@@ -1554,6 +1815,12 @@ window.$ || (window.$ = one)
     }
 
     $.extend($, {
+        /**
+         * @method param
+         * @param {Object} obj
+         * @param {Boolean} [traditional=false]
+         * @return {String}
+         */
         param: function (obj, traditional) {
             var params = []
             params.add = function (k, v) {
@@ -1563,6 +1830,12 @@ window.$ || (window.$ = one)
             return params.join('&').replace('%20', '+')
         }
 
+        /**
+         * @method appendQuery
+         * @param {String} url
+         * @param {String|Object|HTMLFormElement} params
+         * @return {String}
+         */
         ,appendQuery: function (url, params) {
             if (-1 == url.indexOf('?')) {
                 url += '?'
@@ -1581,6 +1854,13 @@ window.$ || (window.$ = one)
             return url
         }
 
+        /**
+         * @method get
+         * @param {String} url
+         * @param {Function|Object} onSuccess
+         * @param {String} [responseType]
+         * @return {XMLHttpRequest}
+         */
         ,get: function (url, onSuccess, responseType) {
             var options = {
                 url: url
@@ -1593,14 +1873,33 @@ window.$ || (window.$ = one)
             return $.ajax(options)
         }
 
+        /**
+         * @method getJson
+         * @param {String} url
+         * @param {Function|Object} onSuccess
+         * @return {XMLHttpRequest}
+         */
         ,getJson: function (url, onSuccess) {
             return $.get(url, onSuccess, 'json')
         }
 
+        /**
+         * @method getXml
+         * @param {String} url
+         * @param {Function|Object} onSuccess
+         * @return {XMLHttpRequest}
+         */
         ,getXml: function (url, onSuccess) {
             return $.get(url, onSuccess, 'xml')
         }
 
+        /**
+         * @method post
+         * @param {String} url
+         * @param {Function|Object} onSuccess
+         * @param {String} [responseType]
+         * @return {XMLHttpRequest}
+         */
         ,post: function (url, data, onSuccess, responseType) {
             if ($.isFunction(data)) {
                 responseType = onSuccess
@@ -1629,6 +1928,12 @@ window.$ || (window.$ = one)
             return $.ajax(options)
         }
 
+        /**
+         * @method pool
+         * @param {String} url
+         * @param {Object|Function} [options]
+         * @return {XMLHttpRequest}
+         */
         ,pool: function (url, options) {
             if (!$.isString(url)) {
                 options = url
@@ -1663,6 +1968,22 @@ window.$ || (window.$ = one)
         }
     })
 
+    /**
+     * @attribute defaultOptions
+     * @type {Object}
+     * @default {
+            method:                 'GET'
+            ,url:                   '.'
+            ,timeout:               60000
+            ,async:                 true
+            ,withCredentials:       false
+            ,responseType:          ''
+            ,disableCaching:        '_dc'
+            ,requestHeaders: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        }
+     */
     $.ajax.defaultOptions = {
         method:                 'GET'
         ,url:                   '.'
@@ -1796,6 +2117,49 @@ window.$ || (window.$ = one)
 (function ($) {
     "use strict"
 
+    var compile = function(me) {
+        if (me.compiledFn) {
+            return me
+        }
+
+        var escapes = {
+            '\\':'\\',
+            "'":"'",
+            r:'\r',
+            n:'\n',
+            t:'\t',
+            u2028:'\u2028',
+            u2029:'\u2029'
+        };
+
+        for (var key in escapes) escapes[escapes[key]] = key
+        var escaper = /\\|'|\r|\n|\t|\u2028|\u2029/g
+        var unescaper = /\\(\\|'|r|n|t|u2028|u2029)/g
+
+        var unescape = function (code) {
+            return code.replace(unescaper, function (match, escape) {
+                return escapes[escape];
+            })
+        };
+
+        var source = '';
+
+        source += "var _t=''; _t+='" + me.template
+            .replace(escaper, function (match) {
+                return '\\' + escapes[match]
+            })
+            .replace(me.exprRegex, function (match, code) {
+                return "'+\n(" + unescape(code) + ")+\n'"
+            })
+            .replace(me.evaluateRegex, function (match, code) {
+                return "';\n" + unescape(code) + "\n;_t+='"
+            })
+            + "';\nreturn _t;\n"
+
+        me.compiledFn = new Function(source)
+        return me.compiledFn
+    }
+
     var Template = function () {
         if (arguments.length) {
             this.setTemplate.apply(this, arguments)
@@ -1820,60 +2184,15 @@ window.$ || (window.$ = one)
             return this
         }
 
-        ,compile: function () {
-            if (this.compiledFn) {
-                return this;
-            }
-
-            var escapes = {
-                '\\':'\\',
-                "'":"'",
-                r:'\r',
-                n:'\n',
-                t:'\t',
-                u2028:'\u2028',
-                u2029:'\u2029'
-            };
-
-            for (var key in escapes) escapes[escapes[key]] = key
-            var escaper = /\\|'|\r|\n|\t|\u2028|\u2029/g
-            var unescaper = /\\(\\|'|r|n|t|u2028|u2029)/g
-
-            var unescape = function (code) {
-                return code.replace(unescaper, function (match, escape) {
-                    return escapes[escape];
-                })
-            };
-
-            var source = '';
-
-            source += "var _t=''; _t+='" + this.template
-                .replace(escaper, function (match) {
-                    return '\\' + escapes[match]
-                })
-                .replace(this.exprRegex, function (match, code) {
-                    return "'+\n(" + unescape(code) + ")+\n'"
-                })
-                .replace(this.evaluateRegex, function (match, code) {
-                    return "';\n" + unescape(code) + "\n;_t+='"
-                })
-                + "';\nreturn _t;\n"
-
-            this.compiledFn = new Function(source)
-            return this
-        }
-
         ,render: function (data) {
-            this.compile()
             $.extend(data, Template.helpers)
-
-            return this.compiledFn.bind(data)()
+            return compile(this).bind(data)()
         }
     })
 
     Template.helpers = {
         escape: function (str) {
-            return $.str(str).escape() + ''
+            return str.escape() + ''
         }
     }
     $.Template = Template
@@ -1896,11 +2215,7 @@ window.$ || (window.$ = one)
 (function ($) {
     "use strict"
 
-    var transitionEndEventName = 'transitionend'
-
-    if ($.isWebkit) {
-        transitionEndEventName = 'webkitTransitionEnd'
-    }
+    var transitionEndEventName = $.isFirefox? 'transitionend' : $.vendorPrefix + 'TransitionEnd'
 
     $.extend($.nodes.fn, {
         transit: function (properties, duration, easing, callback) {
@@ -1937,7 +2252,7 @@ window.$ || (window.$ = one)
 
             var me = this
             this.one(transitionEndEventName, function (e) {
-                !callback || options.callback.call(e.target, e, me)
+                !options.callback || options.callback.call(e.target, e, me)
 
                 node.isFxPlaying = false
                 var args = node.fxQueue.shift()
@@ -1950,9 +2265,9 @@ window.$ || (window.$ = one)
                 ,len = keys.length
 
             var transitionProperty = keys.join()
-                ,transitionDuration = $.arr([]).pad(len, options.duration + 's')
-                ,transitionTimingFunction = $.arr([]).pad(len, options.easing)
-                ,transitionDelay = $.arr([]).pad(len, options.delay + 's')
+                ,transitionDuration = [].pad(len, options.duration + 's')
+                ,transitionTimingFunction = [].pad(len, options.easing)
+                ,transitionDelay = [].pad(len, options.delay + 's')
                 ,fixFirefox = false
                 ,has = properties.hasOwnProperty.bind(properties)
                 ,hasLeft = has('left')
@@ -2027,9 +2342,13 @@ window.$ || (window.$ = one)
                     ,transitionDelay:           transitionDelay
                 })
 
-                $(function() {
+                if (fixFirefox) {
+                    (function() {
+                        el.css(properties)
+                    }).defer(10)
+                } else {
                     el.css(properties)
-                }).defer(fixFirefox ? 10 : 0)
+                }
             })
 
             return this
@@ -2067,6 +2386,12 @@ window.$ || (window.$ = one)
             if (undefined === options) {
                 this.css('display', 'none')
             } else {
+                options || (options = {})
+
+                options.callback || (options.callback = $.noop)
+                options.callback = options.callback.createInterceptor(function() {
+                    $(this).css('display', 'none')
+                })
                 this.transit({opacity: 0}, options)
             }
 
@@ -2169,7 +2494,7 @@ window.$ || (window.$ = one)
 
         ,moveX: function (x, options) {
             return this.transit({
-                left:x
+                left: x
             }, options)
         }
 
@@ -2181,7 +2506,8 @@ window.$ || (window.$ = one)
 
         ,move: function (x, y, options) {
             return this.transit({
-                left:x, top:y
+                left: x
+                ,top: y
             }, options)
         }
     })
@@ -2213,6 +2539,22 @@ if ($.isIphone) {
   })
 }
 ;
+$.ready(function() {
+    $('.toggle-nav').on('click', function() {
+        var aside = $('#container > aside')
+        if (aside.height() > 40) {
+            aside.transit({height: 30})
+        } else {
+            aside.transit({height: '100%'})
+        }
+    })
+
+    $('#container > aside a').on('click', function() {
+        $('#container > aside').transit({height: 30})
+    })
+})
+;
+
 
 
 

@@ -84,17 +84,49 @@ describe('$.nodes event', function() {
         var node = document.createElement('div')
             ,child = document.createElement('div')
             ,nodes = $(node)
-            ,e = {target: child}
+            ,e = new CustomEvent('click', {bubbles: true})
             ,callback = jasmine.createSpy()
 
         child.className = 'foo'
         node.appendChild(child)
 
-        nodes.on('click', '.foo', callback)
-        nodes.trigger('click', e, node)
+        var flag = false
+        waitsFor(function() {
+            return flag
+        })
 
-        expect(callback).toHaveBeenCalled()
-        expect(callback.calls.length).toEqual(1)
+        $.ready(function() {
+            document.body.appendChild(node)
+            flag = true
+        })
+
+        runs(function() {
+            nodes.on('click', '.foo', callback)
+            child.dispatchEvent(e)
+
+            expect(callback).toHaveBeenCalled()
+            expect(callback.calls.length).toEqual(1)
+        })
+    })
+
+    it('should work with custom event', function() {
+        var node = document.createElement('div')
+            ,nodes = $(node)
+
+        var expectedEvent
+            ,expectedContext
+            ,eventOption = {detail: {foo: 1, bar: 2}}
+
+        nodes.on('custom-event', function(e) {
+            expectedEvent = e
+            expectedContext = this
+        })
+
+        nodes.trigger('custom-event', eventOption)
+
+        expect(expectedEvent instanceof CustomEvent).toBeTruthy()
+        expect(expectedEvent.detail).toEqual(eventOption.detail)
+        expect(expectedContext).toBe(node)
     })
 })
 ;
