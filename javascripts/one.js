@@ -616,10 +616,15 @@ window.$ || (window.$ = one)
          * @method camelize
          * @return {String}
          */
-        camelize: function () {
-            return this.replace(/[-_\s]+(.)?/g, function (match, c) {
+        camelize: function (lowerFirst) {
+            var result = this.replace(/[-_\s]+(.)?/g, function (match, c) {
                 return c.toUpperCase()
             })
+
+            if (lowerFirst) {
+                result = result[0].toLowerCase() + result.substr(1)
+            }
+            return result
         }
 
         /**
@@ -1328,13 +1333,21 @@ window.$ || (window.$ = one)
         }
 
         ,css: function (name, value) {
-            if (undefined == value && $.isString(name)) {
+            if ($.isString(name)) {
                 var node = this[0]
-                if (undefined === document.body.style[name.camelize()]) {
+                if (undefined === document.body.style[name.camelize(true)]) {
                     name = '-' + $.vendorPrefix + '-' + name
                 }
-                name = name.camelize()
-                return node.style[name] || document.defaultView.getComputedStyle(node, '').getPropertyValue(name)
+                name = name.camelize(true)
+
+                if (undefined === value && $.isString(name)) {
+                    return node.style[name] || document.defaultView.getComputedStyle(node, '').getPropertyValue(name)
+                }
+
+                if (null === value) {
+                    node.style[name] = null
+                    return this
+                }
             }
 
             !$.isString(name) || function () {
