@@ -490,13 +490,21 @@
         }
 
         ,css: function (name, value) {
-            if (undefined == value && $.isString(name)) {
+            if ($.isString(name)) {
                 var node = this[0]
-                if (undefined === document.body.style[name.camelize()]) {
+                if (undefined === document.body.style[name.camelize(true)]) {
                     name = '-' + $.vendorPrefix + '-' + name
                 }
-                name = name.camelize()
-                return node.style[name] || document.defaultView.getComputedStyle(node, '').getPropertyValue(name)
+                name = name.camelize(true)
+
+                if (undefined === value && $.isString(name)) {
+                    return node.style[name] || document.defaultView.getComputedStyle(node, '').getPropertyValue(name)
+                }
+
+                if (null === value) {
+                    node.style[name] = null
+                    return this
+                }
             }
 
             !$.isString(name) || function () {

@@ -19,10 +19,15 @@
          * @method camelize
          * @return {String}
          */
-        camelize: function () {
-            return this.replace(/[-_\s]+(.)?/g, function (match, c) {
+        camelize: function (lowerFirst) {
+            var result = this.replace(/[-_\s]+(.)?/g, function (match, c) {
                 return c.toUpperCase()
             })
+
+            if (lowerFirst) {
+                result = result[0].toLowerCase() + result.substr(1)
+            }
+            return result
         }
 
         /**

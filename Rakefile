@@ -48,16 +48,16 @@ task :build do
 end
 
 task :ghpages do
-  Dir.chdir('gh-pages') do
-    system "middleman build"
-  end
-  
   # copy js to gh-pages
   system "cp build/one.js gh-pages/source/javascripts/one.js"
 
   # copy spec to gh-pages
   system "rm -rf gh-pages/source/javascript/spec/"
   system "cp -r spec/ gh-pages/source/javascripts/spec/"
+
+  #Dir.chdir('gh-pages') do
+  #  system "bundle exec middleman build"
+  #end
 
   # copy to one-gh-pages
   system "cp -r gh-pages/build/ ../one-gh-pages/"
