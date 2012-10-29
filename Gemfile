@@ -3,4 +3,6 @@ source :rubygems
 gem "jasmine"
 gem "rake"
 gem "closure-compiler"
-gem "middleman"
+gem "middleman", "~>3.0.6"
+gem "coderay"
+gem "kramdown"

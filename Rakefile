@@ -55,9 +55,9 @@ task :ghpages do
   system "rm -rf gh-pages/source/javascript/spec/"
   system "cp -r spec/ gh-pages/source/javascripts/spec/"
 
-  #Dir.chdir('gh-pages') do
-  #  system "bundle exec middleman build"
-  #end
+  Dir.chdir('gh-pages') do
+    system "middleman build"
+  end
 
   # copy to one-gh-pages
   system "cp -r gh-pages/build/ ../one-gh-pages/"
