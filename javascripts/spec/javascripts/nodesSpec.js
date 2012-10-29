@@ -1112,6 +1112,13 @@ describe('$.Nodes', function() {
       node.css('transition-property', 'width')
       expect(node.css('transition-property')).toBe('width')
     })
+
+    it ('remove property', function() {
+        node.css('color', 'red')
+        expect(node.css('color')).toBe('red')
+        node.css('color', null)
+        expect(node.css('color')).toBe('');
+    })
   })
   
   // width()

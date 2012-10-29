@@ -1333,20 +1333,22 @@ window.$ || (window.$ = one)
         }
 
         ,css: function (name, value) {
-            if ($.isString(name)) {
-                var node = this[0]
-                if (undefined === document.body.style[name.camelize(true)]) {
+            if ($.isString(name) && (undefined === value || null === value)) {
+
+                if (undefined === document.body.style[name.camelize()]) {
                     name = '-' + $.vendorPrefix + '-' + name
                 }
-                name = name.camelize(true)
 
-                if (undefined === value && $.isString(name)) {
-                    return node.style[name] || document.defaultView.getComputedStyle(node, '').getPropertyValue(name)
+                name = name.camelize()
+
+                if (undefined === value) {
+                    return this[0].style[name] // || document.defaultView.getComputedStyle(node, '').getPropertyValue(name)
                 }
 
                 if (null === value) {
-                    node.style[name] = null
-                    return this
+                    this.each(function() {
+                        this.style[name] = null
+                    })
                 }
             }
 
@@ -1362,7 +1364,7 @@ window.$ || (window.$ = one)
             for (var i in name) {
                 property = i.underscore().dasherize()
 
-                if (undefined === document.body.style[property.camelize()]) {
+                if (undefined === document.body.style[property.camelize(true)]) {
                     property = '-' + $.vendorPrefix + '-' + property
                 }
 
