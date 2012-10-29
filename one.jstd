@@ -1,8 +1,0 @@
-load:
-  - vendors/jasmine-1.2.0.js
-  - vendors/JsTestDriver-JasmineAdapter-1.1.2.js
-  - spec/javascripts/helpers/mock-ajax.js
-  - src/one.js
-  - src/nodes.js
-  - src/*.js
-  - spec/javascripts/*.js

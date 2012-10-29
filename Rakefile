@@ -47,7 +47,7 @@ task :build do
   min_file.close()
 end
 
-task :ghpages do
+task "gh-pages" do
   # copy js to gh-pages
   system "cp build/one.js gh-pages/source/javascripts/one.js"
 
@@ -66,5 +66,5 @@ end
 task :default do
   Rake::Task['jasmine:ci'].invoke
   Rake::Task['build'].invoke
-  Rake::Task['ghpages'].invoke
+  Rake::Task['gh-pages'].invoke
 end
